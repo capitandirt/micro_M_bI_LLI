@@ -10,20 +10,20 @@ void CycloWorker::doCyclogram(){
     _cur_time = millis();
     _sensors.time = _cur_time - _last_time;
 
-    _Actions_funcs[
-        static_cast<uint8_t>(_cyclo_program[_CYCLO_COUNTER])](&_motion_states, &_sensors);
-
+    _Actions_funcs[static_cast<uint8_t>(_cyclo_program[_CYCLO_COUNTER])](&_motion_states, &_sensors);
+    
     mixer->setMouseVelocity(_motion_states.theta_i0, _motion_states.v_f0);
 
     if(_motion_states.isComplete){
         _CYCLO_COUNTER = (_CYCLO_COUNTER + 1) % _CYCLO_END;
         _last_time = _cur_time; 
-        
+        _sensors.robotState->reset();
         _motion_states.isComplete = 0;
+
     }
 }
 
-void CycloWorker::load_Actions_funcs(){
+void CycloWorker::loadActionsFuncs(){
     _Actions_funcs[static_cast<uint8_t>(SmartCycloAction_t::STOP    )] = STOP    ;
     _Actions_funcs[static_cast<uint8_t>(SmartCycloAction_t::IDLE    )] = IDLE    ;
     _Actions_funcs[static_cast<uint8_t>(SmartCycloAction_t::FWD     )] = FWD     ;

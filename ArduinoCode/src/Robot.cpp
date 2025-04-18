@@ -10,37 +10,47 @@ void Robot::calcRelativeCycloAction(uint8_t ind){
             + DIRECTION_SIZE) % DIRECTION_SIZE);
 }
 
+void Robot::convertPrimitiveToCyclogram()
+{
+    switch (_buf_relative_cyclo_action)
+    {
+    case PrimitiveCycloAction_t::FORWARD:
+        _cycloWorker->addAction(SmartCycloAction_t::FWD);
+        break;
+
+    case PrimitiveCycloAction_t::LEFT:
+        _cycloWorker->addAction(SmartCycloAction_t::SS90SL);
+        break;
+
+    case PrimitiveCycloAction_t::RIGHT:
+        _cycloWorker->addAction(SmartCycloAction_t::SS90SR);
+        break;
+
+    case PrimitiveCycloAction_t::STOP:
+        _cycloWorker->addAction(SmartCycloAction_t::FWD_HALF);
+        _cycloWorker->addAction(SmartCycloAction_t::STOP);
+        break;
+
+    case PrimitiveCycloAction_t::BLANK: 
+        _cycloWorker->addAction(SmartCycloAction_t::IDLE);
+        break;
+    }
+}
+
 void Robot::convertPathToCyclogram(){
     _cycloWorker->addAction(SmartCycloAction_t::FWD_HALF);
     for(uint8_t i = 0; i < _Maze->GetPathSize(); i++){
         calcRelativeCycloAction(i);
-        
-        // Serial.print((int)_buf_relative_cyclo_action);
-        // Serial.print(' ');
-
-        switch (_buf_relative_cyclo_action)
-        {
-        case PrimitiveCycloAction_t::FORWARD:
-            _cycloWorker->addAction(SmartCycloAction_t::FWD);
-            break;
-
-        case PrimitiveCycloAction_t::LEFT:
-            _cycloWorker->addAction(SmartCycloAction_t::SS90SL);
-            break;
-
-        case PrimitiveCycloAction_t::RIGHT:
-            _cycloWorker->addAction(SmartCycloAction_t::SS90SR);
-            break;
-
-        case PrimitiveCycloAction_t::STOP:
-            _cycloWorker->addAction(SmartCycloAction_t::FWD_HALF);
-            _cycloWorker->addAction(SmartCycloAction_t::STOP);
-            break;
-
-        case PrimitiveCycloAction_t::BLANK: 
-            _cycloWorker->addAction(SmartCycloAction_t::IDLE);
-            break;
-        }
+        convertPrimitiveToCyclogram();
     }
     // Serial.println();
+}
+
+void Robot::loadNextMoveFloodFill()
+{
+    Cell CellFromSensors = _optocoupler->getCellFromSensors(_odometry->getDir());
+    _Maze->SetCell(CellFromSensors, _odometry->getMazeCoordX(), _odometry->getMazeCoordY());
+    _solver->SolveBfsMaze(_odometry->getMazeCoordX(), _odometry->getMazeCoordY(), MAZE_FINISH_LENGHT, MAZE_FINISH_LENGHT);
+    calcRelativeCycloAction(0);
+    convertPrimitiveToCyclogram();
 }

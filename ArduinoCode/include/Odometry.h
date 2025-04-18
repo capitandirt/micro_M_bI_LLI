@@ -2,28 +2,14 @@
 #define _ODOMETRY_H_
 
 #include "Encoder.h"
+#include "Maze.h"
 
-// struct OdometryConnectionParams{
-//     Encoder* l_encoder;
-//     Encoder* r_encoder;
-// };
-
-// class Odometry : public OdometryConnectionParams{
-// private:
-//     float dS_r, dS_l, dS_f, dAngle;
-
-//     float x, y, angle;
-// public:
-
-//     Odometry(OdometryConnectionParams *ocp) : OdometryConnectionParams(*ocp){}
-//     void tick();
-// };
 class Integrator
 {
 private:
     float private_out = 0;
 public:
-    const float& out = private_out;
+    float out() {return private_out;}  
     void tick(float in)
     {
         private_out += in * Ts_s;
@@ -49,13 +35,17 @@ private:
     vX,
     vY,
     v;
-
+    int mazeCoordX, mazeCoordY;
+    Direction dir;
 public:
     
-    float getX() {return X.out;}
-    float getY() {return Y.out;}
-    float getTheta() {return Theta.out;}
-    float getDist() {return Distance.out;}
+    float getX() {return X.out();}
+    float getY() {return Y.out();}
+    float getTheta() {return Theta.out();}
+    float getDist() {return Distance.out();}
+    int getMazeCoordX() {return mazeCoordX;}
+    int getMazeCoordY() {return mazeCoordY;}
+    Direction getDir() {return dir;}
 
     void update(float omegaL, float omegaR);
     void reset();

@@ -1,6 +1,21 @@
 #ifndef _CONFIG_H_
 #define _CONFIG_H_
 
+/*==GLOBAL SERIAL SHUT DEFINE BEGIN==*/
+#define GLOBAL_OUTPUT 1
+#if GLOBAL_OUTPUT
+
+#define PRINT(x) Serial.print(x)
+#define PRINTLN(x) Serial.println(x)
+
+#else
+
+#define PRINT(x)
+#define PRINTLN(x)
+
+#endif
+/*==GLOBAL SERIAL SHUT DEFINE END==*/
+
 /*==UTILITY DEFINES BEGIN==*/
 #define HALF(x)  ((x) / 2)
 /*==UITILITY DEFINES END==*/
@@ -75,6 +90,7 @@
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
 #define MAZE_SIDE_LENGTH 11
+#define MAZE_FINISH_LENGHT (MAZE_SIDE_LENGTH / 2)
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)
 #define MAZE_MEM_SIZE (((MAZE_SIDE_LENGTH + MAZE_SIDE_LENGTH) + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH))

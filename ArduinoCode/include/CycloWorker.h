@@ -9,23 +9,31 @@
 #include "CycloUtilits/CycloActions.h"
 
 struct CycloWorkerConnectionParams{
-    Mixer* mixer;   
+    Mixer* mixer; 
+    Odometry* odometry;  
 };
 
 class CycloWorker : public CycloWorkerConnectionParams{
 public:
     CycloWorker(CycloWorkerConnectionParams* cwcp) : CycloWorkerConnectionParams(*cwcp), 
-                    _sensors({       .time = 0}),
-                    _motion_states({ .v_f0 = 0,
-                                     .theta_i0 = 0,
-                                     .isComplete = 0}){}
+                    _sensors(
+                        {       
+                            .time = 0,
+                            .robotState = cwcp->odometry
+                        }),
+                    _motion_states(
+                        {   
+                            .v_f0 = 0,
+                            .theta_i0 = 0,
+                            .isComplete = 0
+                        }){}
 
     void addAction(SmartCycloAction_t action);
     void doCyclogram();
 
     void printCycloProgram();
-private:
-    void load_Actions_funcs();
+    
+    void loadActionsFuncs();
     
 private:
     static constexpr uint8_t CYCLO_PROG_SIZE = 64;

@@ -10,9 +10,9 @@ void Odometry::update(float omegaL, float omegaR)
     Theta.tick(theta_i);
 
     v = (vR + vL) / 2;
-    vX = v * cos(Theta.out);
-    vY = v * sin(Theta.out);
-
+    vX = v * cos(Theta.out());
+    vY = v * sin(Theta.out());
+    //PRINTLN(v);
     Distance.tick(v);
     X.tick(vX);
     Y.tick(vY);
@@ -25,6 +25,9 @@ void Odometry::reset()
     vX = 0;
     vY = 0;
     v = 0;
+    mazeCoordX = 0;
+    mazeCoordY = 0;
+    dir = Direction::N;
     X.reset();
     Y.reset();
     Theta.reset();

@@ -30,7 +30,7 @@ void Mixer::setMouseVelocity(float _theta, float _forward_velocity)
 
     w_left_motor = rad_forward_velocity - HALF(rad_theta);
     w_right_motor = rad_forward_velocity + HALF(rad_theta);
-
+    
     leftServo->SetW(w_left_motor);
     rightServo->SetW(w_right_motor);
 }

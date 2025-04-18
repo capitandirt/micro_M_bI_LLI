@@ -1,19 +1,21 @@
 #include <Arduino.h>
-#include "Config.h"
 #include "Devices.h"
+#include "DevicesMethods.h"
 
 void setup()
 {
-    // DEVICES::INIT();
+    DEVICES::TEST::SET_SERIAL();
+    DEVICES::INIT();
     // DEVICES::TEST::CYCLOGRAMS();
     // DEVICES::TEST::BFS();
-    DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
+    // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
 }
 
 void loop(){
-    // static uint32_t timer = micros();
-    // while(micros() - timer < Ts_us)
-    //   ;
-    // timer = micros();
-    // DEVICES::TICK(); 
+    static uint32_t timer = micros();
+    while(micros() - timer < Ts_us)
+      ;
+    timer = micros();
+    // Serial.print("yes");
+    DEVICES::TICK(); 
 }

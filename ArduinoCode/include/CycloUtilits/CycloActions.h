@@ -2,7 +2,7 @@
 #define _CYCLO_ACTIONS_H
 
 #include "Config.h"
-#include "CycloStructs.h"
+#include "CycloTypes.h"
 /* РАСШИФРОВКА НАЗВАНИЙ ПОВОРОТОВ
 SS90EL
 S - from straight (0 / 90... градусов поворот) или D - from diagonal
@@ -68,7 +68,10 @@ CYCLOGRAM(SS90EL)
 
     if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDis) ms->isComplete = true;
+    if(s->robotState->getDist() > 2 * forwDist + circleDis)
+    {
+        ms->isComplete = true;
+    } 
 }
 CYCLOGRAM(SS90ER)
 {
@@ -80,7 +83,10 @@ CYCLOGRAM(SS90ER)
     const float circleDis = (2 * PI * R) / 4; // 90 = четверть окружности
     if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDis) ms->isComplete = true;
+    if(s->robotState->getDist() > 2 * forwDist + circleDis) 
+    {
+        ms->isComplete = true;
+    }
 }
 
 //45 turns
