@@ -36,7 +36,7 @@ void Encoder::tick()
     phi += dphi;
 }
 
-void Encoder::isr_callback()
+void Encoder::isrCallback()
 {
     const uint8_t B = digitalRead(B_PIN);
     const uint8_t CLK_A = digitalRead(CLK_A_PIN);

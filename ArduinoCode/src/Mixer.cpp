@@ -1,36 +1,36 @@
 #include "Mixer.h"
 
 void Mixer::calc_forward_movement(){
-    rad_forward_velocity = forward_velocity / WHEEL_RADIUS;
+    _rad_forward_velocity = _forward_velocity / WHEEL_RADIUS;
 }
 
 void Mixer::calc_angular_movement(){
-    rad_theta = (ROBOT_WIDTH / WHEEL_RADIUS) * theta;
+    _rad_theta = (ROBOT_WIDTH / WHEEL_RADIUS) * _theta;
 }
 
 void Mixer::set_theta(float& _theta){
-    theta = _theta;
+    _theta = _theta;
 
     calc_angular_movement();
 }
 
 void Mixer::set_forward_velocity(float& _forward_velocity){
-    forward_velocity = _forward_velocity;
+    _forward_velocity = _forward_velocity;
 
     calc_forward_movement();
 }
 
-void Mixer::setMouseVelocity(float _theta, float _forward_velocity)
+void Mixer::impactVelocity(float _theta, float _forward_velocity)
 {   
-    theta = _theta;
-    forward_velocity = _forward_velocity;
+    _theta = _theta;
+    _forward_velocity = _forward_velocity;
 
     calc_angular_movement();
     calc_forward_movement();
 
-    w_left_motor = rad_forward_velocity - HALF(rad_theta);
-    w_right_motor = rad_forward_velocity + HALF(rad_theta);
+    _w_left_motor = _rad_forward_velocity - HALF(_rad_theta);
+    _w_right_motor = _rad_forward_velocity + HALF(_rad_theta);
     
-    leftServo->SetW(w_left_motor);
-    rightServo->SetW(w_right_motor);
+    leftServo->setW(_w_left_motor);
+    rightServo->setW(_w_right_motor);
 }

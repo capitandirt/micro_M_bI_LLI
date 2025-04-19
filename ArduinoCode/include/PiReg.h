@@ -11,27 +11,27 @@ struct PiRegConnectionParams{
 };
 
 class PiReg : public PiRegConnectionParams{
-private:
-    float integrator = 0;
-    
-    float set = 0;
-    float cur = 0;
-
-    float err = 0;
-    float P = 0;
-    float I = 0;
-
-    float u = 0;
-    float constrain_u = 0;
 public:
     PiReg(PiRegConnectionParams *prcp) : PiRegConnectionParams(*prcp){}     
 
-    void init();
-    void passSet(float& _set);
-    void passCur(float& _cur);  
+    void passSet(float& set);
+    void passCur(float& cur);  
     float getU() const;
 
     void tick(); 
+
+private:
+    float _integrator = 0;
+    
+    float _set = 0;
+    float _cur = 0;
+
+    float _err = 0;
+    float _P = 0;
+    float _I = 0;
+
+    float _u = 0;
+    float _constrained_u = 0;
 };
 
 #endif // !_PI_REGULATOR_H_

@@ -26,15 +26,16 @@ public:
                             .v_f0 = 0,
                             .theta_i0 = 0,
                             .isComplete = 0
-                        }){}
+                        }){load_Actions_funcs();}
 
     void addAction(SmartCycloAction_t action);
     void doCyclogram();
 
-    void printCycloProgram();
+    void printCycloProgram() const;
     
-    void loadActionsFuncs();
-    
+private:
+    void load_Actions_funcs();
+
 private:
     static constexpr uint8_t CYCLO_PROG_SIZE = 64;
 

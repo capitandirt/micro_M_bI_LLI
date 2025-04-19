@@ -13,6 +13,17 @@ struct EncoderConnectionParams
 };
 
 class Encoder : public EncoderConnectionParams{
+public:
+    Encoder(EncoderConnectionParams *ecp) : EncoderConnectionParams(*ecp){}
+
+    void init();
+    void tick();
+    
+    void isrCallback();
+
+    float GetPhi() const;
+    float GetDPhi() const;
+    
 private:
     int8_t ett[4][4];
     
@@ -21,17 +32,6 @@ private:
 
     float phi = 0;
     float dphi = 0;
-
-public:
-    Encoder(EncoderConnectionParams *ecp) : EncoderConnectionParams(*ecp){}
-
-    void init();
-    void tick();
-    
-    void isr_callback();
-
-    float GetPhi() const;
-    float GetDPhi() const ;
 };
 
 #endif // !_ENCODER_H_

@@ -13,19 +13,16 @@ struct ServoConnectionParams{
 
 class Servo : public ServoConnectionParams{
 private:
-    float w;
+    float _w;
     float cur_w;
 
-    void plan();
     void act();
 public:
     Servo(ServoConnectionParams *scp) : ServoConnectionParams(*scp){}
     
-    void init();
-    
     void tick();
 
-    void SetW(float _w);
+    void setW(const float _w);
 };
 
 #endif // !_SERVO_H_ 

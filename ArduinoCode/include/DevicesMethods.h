@@ -37,14 +37,10 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
-        leftServo.init();
-        leftServo.init();
-
-        cycloWorker.loadActionsFuncs();
         cycloWorker.addAction(SmartCycloAction_t::FWD);
         cycloWorker.addAction(SmartCycloAction_t::SS90EL);
         cycloWorker.addAction(SmartCycloAction_t::SS90ER);
-        // cycloWorker.printCycloProgram();
+        cycloWorker.printCycloProgram();
     }
 
     void TICK(){
@@ -57,9 +53,10 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
-        odometry.update(leftVelocityEstimator.GetW(), rightVelocityEstimator.GetW());
+        odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
     }
+
     namespace TEST{
         void SET_SERIAL(){
             Serial.begin(115200);
@@ -74,7 +71,7 @@ namespace DEVICES{
             solver.MazeTestConfig();
             
             maze.PrimaryFill();
-            solver.SolveBfsMaze(0, 0, 5, 5);
+            solver.SolveBfsMaze({0, 0}, {10, 10});
             
             maze.PrintDirPath();
             maze.Print();
@@ -95,7 +92,7 @@ namespace DEVICES{
             SET_SERIAL();
 
             solver.MazeTestConfig();
-            solver.SolveBfsMaze(0, 0, 5, 5);
+            solver.SolveBfsMaze({0, 0}, {5, 5});
             
             // maze.Print();
             // maze.PrintDirPath();

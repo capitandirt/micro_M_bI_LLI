@@ -10,7 +10,7 @@ public:
     Solver(Maze* maze) : _Maze(maze){}
     
     void MazeTestConfig() noexcept;
-    void SolveBfsMaze(const uint8_t x_s, const uint8_t y_s, const uint8_t x_f, const uint8_t y_f);
+    void SolveBfsMaze(const Vec2 start, const Vec2 finish);
 
 private:
     void calc_path(const uint8_t ind_s, const uint8_t ind_f);

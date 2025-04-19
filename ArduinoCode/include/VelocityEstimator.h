@@ -10,18 +10,14 @@ struct VelocityEstimatorConnectionParams
 };
 
 class VelocityEstimator : public VelocityEstimatorConnectionParams{
-private:
-    float w = 0;
-
-    float phi; 
-    float phi_old = 0;
 public:
     VelocityEstimator(VelocityEstimatorConnectionParams *vecp) : VelocityEstimatorConnectionParams(*vecp){}
 
-    void init();    
     void tick();
+    float getW() const;
 
-    float GetW();
+private:
+    float _w = 0;
 };
 
 

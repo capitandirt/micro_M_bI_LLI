@@ -49,8 +49,8 @@ void Robot::convertPathToCyclogram(){
 void Robot::loadNextMoveFloodFill()
 {
     Cell CellFromSensors = _optocoupler->getCellFromSensors(_odometry->getDir());
-    _Maze->SetCell(CellFromSensors, _odometry->getMazeCoordX(), _odometry->getMazeCoordY());
-    _solver->SolveBfsMaze(_odometry->getMazeCoordX(), _odometry->getMazeCoordY(), MAZE_FINISH_LENGHT, MAZE_FINISH_LENGHT);
+    _Maze->SetCell(CellFromSensors, _odometry->getMazeCoord());
+    _solver->SolveBfsMaze(_odometry->getMazeCoord(), {MAZE_FINISH_CELLS_X, MAZE_FINISH_CELLS_Y});
     calcRelativeCycloAction(0);
     convertPrimitiveToCyclogram();
 }

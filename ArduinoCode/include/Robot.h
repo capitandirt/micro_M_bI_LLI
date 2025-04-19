@@ -16,8 +16,7 @@ struct RobotConnectionParams{
 
 class Robot : public RobotConnectionParams{
 public:
-    Robot(RobotConnectionParams* rcp) :
-        RobotConnectionParams(*rcp){}
+    Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
     void calcRelativeCycloAction(uint8_t ind);
     void convertPathToCyclogram();

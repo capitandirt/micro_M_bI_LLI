@@ -35,12 +35,12 @@ Encoder rightEncoder(&right_ecp);
 
 void left_encoder_ISR()
 {
-    leftEncoder.isr_callback();
+    leftEncoder.isrCallback();
 }
 
 void right_encoder_ISR()
 {
-    rightEncoder.isr_callback();
+    rightEncoder.isrCallback();
 }
 
 VelocityEstimatorConnectionParams left_vecp {

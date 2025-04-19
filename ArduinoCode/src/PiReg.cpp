@@ -1,34 +1,30 @@
 #include "PiReg.h"
 
-void PiReg::init(){
-    return;
+void PiReg::passSet(float& set){
+    _set = set;
 }
 
-void PiReg::passSet(float& _set){
-    set = _set;
-}
-
-void PiReg::passCur(float& _cur){
-    cur = _cur;
+void PiReg::passCur(float& cur){
+    _cur = cur;
 }
 
 float PiReg::getU() const{
-    return u;
+    return _u;
 }
 
 void PiReg::tick(){
-    err = set - cur;
+    _err = _set - _cur;
 
-    P = err * Kp;
-    I = integrator * Ki;
+    _P = _err * Kp;
+    _I = _integrator * Ki;
 
-    u = P + I;
+    _u = _P + _I;
 
-    constrain_u = constrain(u, NEG_MAX_U, MAX_U);
-    if(u == constrain_u){
-        integrator += err * Ts_s;
+    _constrained_u = constrain(_u, NEG_MAX_U, MAX_U);
+    if(_u == _constrained_u){
+        _integrator += _err * Ts_s;
     }
     else{
-        u = constrain_u;
+        _u = _constrained_u;
     }
 }

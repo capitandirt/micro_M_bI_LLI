@@ -17,12 +17,12 @@ public:
         _is_full = 0;
     }
 
-    bool isEmpty()
+    bool isEmpty() const
     {
         return _is_empty;
     }
 
-    bool isFull()
+    bool isFull() const
     {
         return _is_full;
     }

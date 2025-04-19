@@ -2,7 +2,7 @@
 #define _OPTOCOUPLER_H_
 
 #include "Arduino.h"
-#include "Maze.h"
+#include "CellsTypes.h"
 
 struct OprocouplecConnectionParams{
     
@@ -23,6 +23,7 @@ public:
     void update();
     void getDist(float* dist); //дист - массив из 4 значений на каждый датчик
     Cell getCellFromSensors(Direction robotDir);
+
 private:
     float _dist[static_cast<uint8_t>(OptocouplerSensorsState::SENSORS_NUMBER)];
 };

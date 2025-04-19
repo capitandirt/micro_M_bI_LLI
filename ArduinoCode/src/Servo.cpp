@@ -1,12 +1,8 @@
 #include "Servo.h"
 
-void Servo::SetW(float _w){
-    w = _w;
+void Servo::setW(const float w){
+    _w = w;
     w_PiReg->passSet(_w);
-}
-
-void Servo::init(){
-    w_PiReg->init();
 }
 
 void Servo::act(){
@@ -16,7 +12,7 @@ void Servo::act(){
 void Servo::tick(){
     w_PiReg->tick();
 
-    cur_w = velocityEstimator->GetW();
+    cur_w = velocityEstimator->getW();
     w_PiReg->passCur(cur_w);
 
     act();
