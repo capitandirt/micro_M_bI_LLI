@@ -4,8 +4,6 @@
 #include "Arduino.h"
 #include "Config.h"
 
-#define MAX_SIZE (MAZE_SIDE_LENGTH * 4)
-
 template<typename T>
 class Queue {
 public:
@@ -31,7 +29,7 @@ public:
     {
         if(!_is_full){
             _storage[_end] = x;
-            _end = (_end + 1) % MAX_SIZE;
+            _end = (_end + 1) % MAX_SIZE_QUEUE;
             
             _is_empty = 0;
         }
@@ -44,7 +42,7 @@ public:
     {
         if(!_is_empty){
             T x = _storage[_begin];
-            _begin = (_begin + 1) % MAX_SIZE;
+            _begin = (_begin + 1) % MAX_SIZE_QUEUE;
             
             _is_full = 0;
             
@@ -62,7 +60,7 @@ public:
     }
 
 private:
-    T _storage[MAX_SIZE];
+    T _storage[MAX_SIZE_QUEUE];
     int8_t _begin;
     int8_t _end;
 

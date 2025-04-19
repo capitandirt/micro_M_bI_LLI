@@ -11,6 +11,7 @@
 #define BLANK_HORIZ_WALL "   "
 #define BLANK_VERTIC_WALL "   "
 
+#define VOID "   "
 #define ANGLE " + "
 #define LEFT_ANGLE "* "
 #define RIGHT_ANGLE " *"
@@ -22,6 +23,13 @@
 #define E_DIR " E "
 #define S_DIR " S "
 #define W_DIR " W "
+
+inline void PRINT_N_SPACES(uint8_t n){
+    for (size_t i = 0; i < n; i++)
+    {
+        Serial.print(" ");
+    }
+}
 
 class Maze{
 public:
@@ -49,6 +57,8 @@ public:
     void PrintCell(const Vec2 v) const noexcept;
     void Print() const noexcept;
 
+    uint8_t static Vec2ToInd(Vec2 v);
+    Vec2 static IndToVec2(uint8_t ind);
 private:
     bool cell_request_is_out_of_range_cell_blocks(const Vec2& v) const noexcept;
 

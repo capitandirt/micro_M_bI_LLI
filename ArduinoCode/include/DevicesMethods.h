@@ -71,7 +71,7 @@ namespace DEVICES{
             solver.MazeTestConfig();
             
             maze.PrimaryFill();
-            solver.SolveBfsMaze({0, 0}, {10, 10});
+            solver.SolveBfsMaze({0, 0}, {5, 5});
             
             maze.PrintDirPath();
             maze.Print();

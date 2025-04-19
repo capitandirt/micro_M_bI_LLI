@@ -96,8 +96,8 @@ void Solver::MazeTestConfig(){
 }
 
 void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
-    uint8_t ind_s = start.x + start.y * MAZE_SIDE_LENGTH;   
-    uint8_t ind_f = finish.x + finish.y * MAZE_SIDE_LENGTH;   
+    uint8_t ind_s = Maze::Vec2ToInd(start);    
+    uint8_t ind_f = Maze::Vec2ToInd(finish);
     
     _queue.pushBack(ind_f);
 
@@ -108,14 +108,13 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
             break;
         }
 
-        uint8_t cur_x = cur_cell_ind % MAZE_SIDE_LENGTH;
-        uint8_t cur_y = cur_cell_ind / MAZE_SIDE_LENGTH;
+        Vec2 cur_vec2 = Maze::IndToVec2(cur_cell_ind);
 
         Cell cur_cell;
-        _Maze->GetCell(cur_cell, {cur_x, cur_y});
+        _Maze->GetCell(cur_cell, cur_vec2);
 
         if(cur_cell.north_wall != WallState::HI){
-            Vec2 checked_cell_vec = {cur_x, cur_y - 1};
+            Vec2 checked_cell_vec = {cur_vec2.x, cur_vec2.y - 1};
 
             _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
             
@@ -127,7 +126,7 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
         }
 
         if(cur_cell.east_wall != WallState::HI){
-            Vec2 checked_cell_vec = {cur_x + 1, cur_y};
+            Vec2 checked_cell_vec = {cur_vec2.x + 1, cur_vec2.y};
 
             _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
 
@@ -138,7 +137,7 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
         }
 
         if(cur_cell.south_wall != WallState::HI){
-            Vec2 checked_cell_vec = {cur_x, cur_y + 1};
+            Vec2 checked_cell_vec = {cur_vec2.x, cur_vec2.y + 1};
 
             _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
 
@@ -149,12 +148,12 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
         }
 
         if(cur_cell.west_wall != WallState::HI){
-            Vec2 checked_cell_vel = {cur_x - 1, cur_y};
+            Vec2 checked_cell_vec = {cur_vec2.x - 1, cur_vec2.y};
 
-            _Maze->GetCellDir(_buf_cell_dir, checked_cell_vel);
+            _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
 
             if(_buf_cell_dir.is_def_cell_dir != DirectionState::DEF){
-                _Maze->SetCellDir(Direction::E, checked_cell_vel);
+                _Maze->SetCellDir(Direction::E, checked_cell_vec);
                 _queue.pushBack(cur_cell_ind - 1); // cur_x--
             }
         }

@@ -15,6 +15,7 @@ struct Vec2
     uint8_t x, y;
 };
 
+/*useless struct*/
 template<uint8_t N>
 struct Vec2Array{
 public:
@@ -30,6 +31,10 @@ public:
         }
     }
     
+    uint8_t len() const{
+        return _size;
+    }
+
     bool operator==(const Vec2Array& other) const{
         if(other._size != this->_size) return false;
 
