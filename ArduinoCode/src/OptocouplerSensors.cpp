@@ -5,12 +5,9 @@ void OptocouplerSensors::update()
     
 }
 
-void OptocouplerSensors::getDist(float* dist)
+Sense_t OptocouplerSensors::getSense()
 {
-    dist[0] = _dist[0];
-    dist[1] = _dist[1];
-    dist[2] = _dist[2]; 
-    dist[3] = _dist[3];
+    return sense.get();
 }
 
 Cell OptocouplerSensors::getCellFromSensors(Direction robotDir)
