@@ -37,10 +37,10 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
-        cycloWorker.addAction(SmartCycloAction_t::FWD);
-        cycloWorker.addAction(SmartCycloAction_t::SS90EL);
-        cycloWorker.addAction(SmartCycloAction_t::SS90ER);
-        cycloWorker.printCycloProgram();
+        // cycloWorker.addAction(SmartCycloAction_t::FWD);
+        // cycloWorker.addAction(SmartCycloAction_t::SS90EL);
+        // cycloWorker.addAction(SmartCycloAction_t::SS90ER);
+        //cycloWorker.printCycloProgram();
     }
 
     void TICK(){
@@ -96,7 +96,6 @@ namespace DEVICES{
             
             // maze.Print();
             // maze.PrintDirPath();
-
             
             robot.convertPathToCyclogram();
             cycloWorker.printCycloProgram();

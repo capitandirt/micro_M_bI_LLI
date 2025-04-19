@@ -20,7 +20,8 @@ public:
 
     void calcRelativeCycloAction(uint8_t ind);
     void convertPathToCyclogram();
-    void convertPrimitiveToCyclogram();
+    void convertPrimitiveToExplorerCyclogram();
+    void convertPrimitiveToFastCyclogram();
 
     void loadNextMoveFloodFill();
 private:

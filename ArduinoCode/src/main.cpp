@@ -5,11 +5,11 @@
 void setup()
 {
     DEVICES::TEST::SET_SERIAL();
-    DEVICES::INIT();
+    //DEVICES::INIT();
 
     // DEVICES::TEST::CYCLOGRAMS();
-    DEVICES::TEST::BFS();
-    // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
+    // DEVICES::TEST::BFS();
+    DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
 }
 
 void loop(){
