@@ -28,7 +28,7 @@ public:
     
     Sense_t get() const {return _from; }
 
-    float& operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
+    float operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
 private:
     static constexpr uint8_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(float);
     union{
