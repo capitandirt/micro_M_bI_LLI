@@ -19,21 +19,36 @@ enum class SmartCycloAction_t : uint8_t{
     DS45SR,
     SD135SL,
     SD135SR,
-    SS180S,
+    SS180L,
+    SS180R,
+    IP180,
     IP90L,
     IP90R,
 
     CYCLO_ACTION_SIZE
 };
 
-// constexpr char* Str_SmartCyclogramAction[]{
-//     "STOP",
-//     "IDLE",
-//     "FWDF",
-//     "FWDH",
-//     "SS90SL",
-//     "SS90SR"
-// };
+constexpr char* Str_SmartCyclogramAction[]{
+    "STOP",
+    "IDLE",
+    "FWD",
+    "FWD_HALF",
+    "SS90SL",
+    "SS90EL",
+    "SS90SR",
+    "SS90ER",
+    "SD45SL",
+    "SD45SR",
+    "DS45SL",
+    "DS45SR",
+    "SD135SL",
+    "SD135SR",
+    "SS180L",
+    "SS180R",
+    "IP180",
+    "IP90L",
+    "IP90R"
+};
 
 enum class PrimitiveCycloAction_t : uint8_t{
     FORWARD = 0,

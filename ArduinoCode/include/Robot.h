@@ -18,10 +18,11 @@ class Robot : public RobotConnectionParams{
 public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
-    void calcRelativeCycloAction(uint8_t ind);
+    const PrimitiveCycloAction_t calcRelativeCycloAction(const uint8_t ind);
+    
+    void convertPrimitiveToFastCyclogram(uint8_t& ind);
+    void convertPrimitiveToExplorerCyclogram(uint8_t& ind);
     void convertPathToCyclogram();
-    void convertPrimitiveToExplorerCyclogram();
-    void convertPrimitiveToFastCyclogram();
 
     void loadNextMoveFloodFill();
 private:

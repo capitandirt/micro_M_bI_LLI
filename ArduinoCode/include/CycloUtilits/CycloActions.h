@@ -41,6 +41,7 @@ CYCLOGRAM(FWD)
     }
     else ms->isComplete = false;
 }
+
 CYCLOGRAM(FWD_HALF)
 {
     ms->v_f0 = FORWARD_SPEED;
@@ -73,6 +74,7 @@ CYCLOGRAM(SS90EL)
         ms->isComplete = true;
     } 
 }
+
 CYCLOGRAM(SS90ER)
 {
     const float R = 0.07; //радиус поворота
@@ -89,7 +91,6 @@ CYCLOGRAM(SS90ER)
     }
 }
 
-//45 turns
 CYCLOGRAM(SD45SL)
 {
     const float forwDist = CELL_SIZE / 4; // путь до начала поворота, максимум - CELL_SIZE / 2
@@ -105,6 +106,7 @@ CYCLOGRAM(SD45SL)
 
     if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
 }
+
 CYCLOGRAM(SD45SR)
 {
     const float forwDist = CELL_SIZE / 4; // путь до начала поворота, максимум - CELL_SIZE / 2
@@ -120,6 +122,7 @@ CYCLOGRAM(SD45SR)
 
     if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
 }
+
 CYCLOGRAM(DS45SL)
 {
     const float forwDist = CELL_SIZE / 4; // путь до начала поворота, максимум - CELL_SIZE / 2
@@ -135,6 +138,7 @@ CYCLOGRAM(DS45SL)
 
     if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
 }
+
 CYCLOGRAM(DS45SR)
 {
     const float forwDist = CELL_SIZE / 4; // путь до начала поворота, максимум - CELL_SIZE / 2
@@ -150,8 +154,6 @@ CYCLOGRAM(DS45SR)
 
     if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
 }
-
-
 
 CYCLOGRAM(SD135SR)
 {
@@ -182,14 +184,17 @@ CYCLOGRAM(SD135SL)
     if(s->robotState->getDist() > forwDist1 + circleDis + forwDist2) ms->isComplete = true;
 }
 
+CYCLOGRAM(SS180R){}
+CYCLOGRAM(SS180L){}
 
-CYCLOGRAM(SS180S)
+CYCLOGRAM(IP180)
 {
     ms->v_f0 = 0;
     float theta_i = FORWARD_SPEED / ROBOT_WIDTH / 2;
     ms->theta_i0 = theta_i;
     if(s->robotState->getTheta() > PI) ms->isComplete = true;
 }
+
 CYCLOGRAM(IP90L)
 {
     ms->v_f0 = 0;
@@ -197,6 +202,7 @@ CYCLOGRAM(IP90L)
     ms->theta_i0 = theta_i;
     if(s->robotState->getTheta() > HALF_PI) ms->isComplete = true;
 }
+
 CYCLOGRAM(IP90R)
 {
     ms->v_f0 = 0;

@@ -37,7 +37,7 @@ private:
     void load_Actions_funcs();
 
 private:
-    static constexpr uint8_t CYCLO_PROG_SIZE = 64;
+    static constexpr uint8_t CYCLO_PROG_SIZE = 128;
 
     SmartCycloAction_t _cyclo_program[CYCLO_PROG_SIZE];  
     

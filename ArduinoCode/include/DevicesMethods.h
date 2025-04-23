@@ -55,6 +55,7 @@ namespace DEVICES{
         
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
+        robot.loadNextMoveFloodFill();
     }
 
     namespace TEST{
@@ -63,23 +64,19 @@ namespace DEVICES{
         }
 
         void BFS(){
-            SET_SERIAL();
-
             maze.PrimaryFill();
-            maze.Print();
+            // maze.Print();
             
             solver.MazeTestConfig();
             
             maze.PrimaryFill();
-            solver.SolveBfsMaze({0, 0}, {5, 5});
+            solver.SolveBfsMaze({10, 0}, {0, 10});
             
             maze.PrintDirPath();
             maze.Print();
         }
     
         void CYCLOGRAMS(){
-            SET_SERIAL();
-            
             cycloWorker.addAction(SmartCycloAction_t::IDLE);
             cycloWorker.addAction(SmartCycloAction_t::FWD);
             cycloWorker.addAction(SmartCycloAction_t::SS90SL);
@@ -89,10 +86,8 @@ namespace DEVICES{
         }
 
         void CONVERT_PATH_TO_CYCLOGRAMS(){
-            SET_SERIAL();
-
-            solver.MazeTestConfig();
-            solver.SolveBfsMaze({0, 0}, {5, 5});
+            // solver.MazeTestConfig();
+            solver.SolveBfsMaze({10, 0}, {0, 10});
             
             // maze.Print();
             // maze.PrintDirPath();
