@@ -6,11 +6,12 @@
 #include "Mixer.h"
 #include "Config.h"
 
-#include "CycloUtilits/CycloActions.h"
+#include "CycloUtilits/CycloStore.h"
 
 struct CycloWorkerConnectionParams{
     Mixer* mixer; 
     Odometry* odometry;  
+    CycloStore* cycloStore;
 };
 
 class CycloWorker : public CycloWorkerConnectionParams{
@@ -26,26 +27,14 @@ public:
                             .v_f0 = 0,
                             .theta_i0 = 0,
                             .isComplete = 0
-                        }){load_Actions_funcs();}
+                        }){}
 
-    void addAction(SmartCycloAction_t action);
+
     void doCyclogram();
-
-    void printCycloProgram() const;
-    
+    // void printCycloProgram() const;
 private:
-    void load_Actions_funcs();
+    Cyclogram _cur_cyclogram = IDLE;
 
-private:
-    static constexpr uint8_t CYCLO_PROG_SIZE = 128;
-
-    SmartCycloAction_t _cyclo_program[CYCLO_PROG_SIZE];  
-    
-    CycloAction _Actions_funcs[static_cast<uint8_t>(SmartCycloAction_t::CYCLO_ACTION_SIZE)];
-    
-    uint8_t _CYCLO_COUNTER = 0;
-    uint8_t _CYCLO_END = 0;
-      
     uint32_t _cur_time = 0;
     uint32_t _last_time = 0;
     

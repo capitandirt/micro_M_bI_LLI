@@ -5,8 +5,7 @@
 #include "Odometry.h"
 
 enum class SmartCycloAction_t : uint8_t{
-    STOP = 0,
-    IDLE,
+    IDLE = 0,
     FWD,
     FWD_HALF,
     SS90SL,
@@ -25,11 +24,33 @@ enum class SmartCycloAction_t : uint8_t{
     IP90L,
     IP90R,
 
-    CYCLO_ACTION_SIZE
+    STOP,
 };
 
+enum class PrimitiveCycloAction_t : uint8_t{
+    FORWARD = 0,
+    
+    LEFT = 1,
+    RIGHT = 3,
+    
+    STOP = 2,
+    BLANK = 4
+};
+
+struct RawCycloActionStore{
+    PrimitiveCycloAction_t primitive : 3;
+    SmartCycloAction_t smart : 5;
+};
+
+inline constexpr uint8_t toInt(SmartCycloAction_t sca){
+    return static_cast<uint8_t>(sca);
+}
+
+inline constexpr uint8_t toInt(PrimitiveCycloAction_t pca){
+    return static_cast<uint8_t>(pca);
+}
+
 constexpr char* Str_SmartCyclogramAction[]{
-    "STOP",
     "IDLE",
     "FWD",
     "FWD_HALF",
@@ -47,17 +68,8 @@ constexpr char* Str_SmartCyclogramAction[]{
     "SS180R",
     "IP180",
     "IP90L",
-    "IP90R"
-};
-
-enum class PrimitiveCycloAction_t : uint8_t{
-    FORWARD = 0,
-    
-    LEFT = 1,
-    RIGHT = 3,
-    
-    STOP = 2,
-    BLANK = 4
+    "IP90R",
+    "STOP"
 };
 
 struct Sensors
@@ -73,7 +85,9 @@ struct MotionStates
     bool isComplete;
 };
 
-typedef void (*CycloAction)(MotionStates*, Sensors*);
+typedef void (*Cyclogram)(MotionStates*, Sensors*);
 
+typedef void (*Cyclogram)(MotionStates*, Sensors*);
+#define CYCLOGRAM(name) inline void name(MotionStates* ms, Sensors* s)
 
 #endif // !_CYCLO_STRUCTS_H_

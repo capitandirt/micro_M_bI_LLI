@@ -99,6 +99,7 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
     uint8_t ind_s = Maze::Vec2ToInd(start);    
     uint8_t ind_f = Maze::Vec2ToInd(finish);
     
+    _queue.clear();
     _queue.pushBack(ind_f);
 
     while(!_queue.isEmpty()){

@@ -13,9 +13,6 @@ L - левый или R - правый
 */
 //исключение - IP90 - In Place
 
-typedef void (*Cyclogram)(MotionStates*, Sensors);
-#define CYCLOGRAM(name) inline void name(MotionStates* ms, Sensors* s)
-
 CYCLOGRAM(STOP)
 {
     ms->v_f0 = 0;

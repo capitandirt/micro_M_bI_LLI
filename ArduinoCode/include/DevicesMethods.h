@@ -1,14 +1,3 @@
-#include "Config.h"
-#include "Encoder.h"
-#include "VelocityEstimator.h"
-#include "Motor.h"
-#include "Odometry.h"
-#include "PiReg.h"
-#include "Servo.h"
-#include "Mixer.h"
-#include "Maze.h"
-#include "Solver.h"         
-#include "CycloWorker.h"
 #include "Robot.h"
 
 extern Encoder leftEncoder;
@@ -23,6 +12,7 @@ extern Servo rightServo;
 extern VelocityEstimator leftVelocityEstimator;
 extern VelocityEstimator rightVelocityEstimator;
 
+extern CycloStore cycloStore;
 extern CycloWorker cycloWorker;
 
 extern Maze maze;
@@ -55,7 +45,7 @@ namespace DEVICES{
         
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
-        robot.loadNextMoveFloodFill();
+        robot.moveFloodFill();
     }
 
     namespace TEST{
@@ -64,36 +54,40 @@ namespace DEVICES{
         }
 
         void BFS(){
-            maze.PrimaryFill();
-            // maze.Print();
-            
             solver.MazeTestConfig();
             
-            maze.PrimaryFill();
-            solver.SolveBfsMaze({10, 0}, {0, 10});
+            solver.SolveBfsMaze({0, 0}, {5, 5});
             
             maze.PrintDirPath();
             maze.Print();
         }
     
         void CYCLOGRAMS(){
-            cycloWorker.addAction(SmartCycloAction_t::IDLE);
-            cycloWorker.addAction(SmartCycloAction_t::FWD);
-            cycloWorker.addAction(SmartCycloAction_t::SS90SL);
-            cycloWorker.addAction(SmartCycloAction_t::SS90SR);
-            cycloWorker.addAction(SmartCycloAction_t::STOP);
-            cycloWorker.printCycloProgram();
+            cycloStore.addSmart(SmartCycloAction_t::IDLE);
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::SS90SL);
+            cycloStore.addSmart(SmartCycloAction_t::SS90SR);
+            cycloStore.addSmart(SmartCycloAction_t::STOP);
+
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::BLANK);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
+
+            cycloStore.printSmarts();
+            cycloStore.printPrimitives();
         }
 
         void CONVERT_PATH_TO_CYCLOGRAMS(){
-            // solver.MazeTestConfig();
-            solver.SolveBfsMaze({10, 0}, {0, 10});
+            solver.MazeTestConfig();
+            solver.SolveBfsMaze({10, 10}, {0, 10});
+
+            maze.Print();
+            maze.PrintDirPath();
             
-            // maze.Print();
-            // maze.PrintDirPath();
-            
-            robot.convertPathToCyclogram();
-            cycloWorker.printCycloProgram();
+            robot.pathToCyclogram();
+            cycloStore.printSmarts();
         }
     }
 }

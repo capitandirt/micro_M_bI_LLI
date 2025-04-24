@@ -1,13 +1,13 @@
 #ifndef _ROBOT_H_
 #define _ROBOT_H_
 
-#include "CycloWorker.h"
+#include "CycloUtilits/CycloStore.h"
 #include "Solver.h"
 #include "Maze.h"
 #include "OptocouplerSensors.h"
 
 struct RobotConnectionParams{
-    CycloWorker* _cycloWorker;
+    CycloStore* _cycloStore;
     Solver* _solver;
     Maze* _Maze;
     OptocouplerSensors* _optocoupler;
@@ -18,14 +18,16 @@ class Robot : public RobotConnectionParams{
 public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
-    const PrimitiveCycloAction_t calcRelativeCycloAction(const uint8_t ind);
+    const PrimitiveCycloAction_t calcPrimitiveCycloAction(const uint8_t ind);
     
-    void convertPrimitiveToFastCyclogram(uint8_t& ind);
-    void convertPrimitiveToExplorerCyclogram(uint8_t& ind);
-    void convertPathToCyclogram();
+    void primitiveToFast(uint8_t& ind);
+    void primitiveToExplorer(uint8_t ind);
+    void pathToCyclogram();
 
-    void loadNextMoveFloodFill();
+    void moveFloodFill();
 private:
+    static constexpr uint8_t FIRST = 0;
+
     PrimitiveCycloAction_t _buf_relative_cyclo_action;
 };
 

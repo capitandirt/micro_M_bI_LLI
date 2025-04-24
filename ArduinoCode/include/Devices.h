@@ -1,17 +1,6 @@
 #ifndef _DEVICES_H_
 #define _DEVICES_H_
 
-#include "Config.h"
-#include "Encoder.h"
-#include "VelocityEstimator.h"
-#include "Motor.h"
-#include "Odometry.h"
-#include "PiReg.h"
-#include "Servo.h"
-#include "Mixer.h"
-#include "Maze.h"
-#include "Solver.h"
-#include "CycloWorker.h"
 #include "Robot.h"
 
 void left_encoder_ISR();
@@ -108,9 +97,12 @@ MotionControlConnectionParams mccp{
 
 Mixer mixer(&mccp);
 
+CycloStore cycloStore;
+
 CycloWorkerConnectionParams cwcp{
     .mixer = &mixer,
-    .odometry = &odometry
+    .odometry = &odometry,
+    .cycloStore = &cycloStore
 };
 
 CycloWorker cycloWorker(&cwcp);
@@ -120,7 +112,7 @@ Maze maze;
 Solver solver(&maze);
 
 RobotConnectionParams rcp{
-    ._cycloWorker = &cycloWorker,
+    ._cycloStore = &cycloStore,
     ._solver = &solver,
     ._Maze = &maze
 };
