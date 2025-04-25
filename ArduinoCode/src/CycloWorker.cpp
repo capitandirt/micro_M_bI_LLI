@@ -12,7 +12,7 @@ void CycloWorker::doCyclogram(){
         _last_time = _cur_time; 
 
         _cur_cyclogram = cycloStore->cyclogramFrom();
-
+        
         _motion_states.isComplete = 0;
         _sensors.robotState->reset();
     }

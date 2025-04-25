@@ -8,7 +8,7 @@ void CycloStore::addSmart(SmartCycloAction_t action){
 
 void CycloStore::addPrimitive(PrimitiveCycloAction_t action){
     if(_primitive_cyc_act_counter < CYCLO_PROG_SIZE){
-        _cyclo_program[_primitive_cyc_act_counter++].primitive = action;
+        _cyclo_program[_primitive_cyc_act_end++].primitive = action;
     }
 }
 
@@ -21,7 +21,30 @@ SmartCycloAction_t CycloStore::popFrontSmart(){
 PrimitiveCycloAction_t CycloStore::popFrontPrimitive(){
     if(_primitive_cyc_act_counter >= _primitive_cyc_act_end) return PrimitiveCycloAction_t::BLANK;
     
-    return _cyclo_program[_smart_cyc_act_counter++].primitive;
+    _virtual_primitive_cyc_act_counter++;
+    return _cyclo_program[_primitive_cyc_act_counter++].primitive;
+}
+
+PrimitiveCycloAction_t CycloStore::virtualPopFrontPrimitive(){
+    if(_virtual_primitive_cyc_act_counter >= _primitive_cyc_act_end) return PrimitiveCycloAction_t::BLANK;
+
+    return _cyclo_program[_virtual_primitive_cyc_act_counter++].primitive;
+}
+void CycloStore::virtualGoBack(uint8_t steps){
+    if(_virtual_primitive_cyc_act_counter < steps) _virtual_primitive_cyc_act_counter = 0;
+    else _virtual_primitive_cyc_act_counter -= steps;
+}
+
+void CycloStore::virtualPrimitiveRelease(){
+    _primitive_cyc_act_counter = _virtual_primitive_cyc_act_counter;
+}
+
+bool CycloStore::smartIsEmpty(){
+    return _smart_cyc_act_counter >= _smart_cyc_act_end - 1;
+}
+
+bool CycloStore::primitiveIsEmpty(){
+    return _primitive_cyc_act_counter >= _primitive_cyc_act_end - 1;
 }
 
 void CycloStore::reloadSmarts(){
@@ -40,16 +63,33 @@ Cyclogram CycloStore::cyclogramFrom(){
 
 void CycloStore::printSmarts() const{
     for(uint8_t i = 0; i < _smart_cyc_act_end; i++){
-        // Serial.print(Str_SmartCyclogramAction[toInt(_cyclo_program[i].smart)]);
-        Serial.print(toInt(_cyclo_program[i].smart));
+        Serial.print(Str_SmartCyclogramAction[toInt(_cyclo_program[i].smart)]);
+        // Serial.print(toInt(_cyclo_program[i].smart));
         Serial.print(' ');
     }
     Serial.println();
 }
 
 void CycloStore::printPrimitives() const{
-    for(uint8_t i = 0; i < _smart_cyc_act_end; i++){
-        Serial.print(toInt(_cyclo_program[i].primitive));
+    Serial.println("Primitives:");
+    for(uint8_t i = 0; i < _primitive_cyc_act_end; i++){
+        switch(_cyclo_program[i].primitive){
+        case PrimitiveCycloAction_t::FORWARD:
+            Serial.print("FORWARD");
+            break;
+        case PrimitiveCycloAction_t::LEFT:
+            Serial.print("LEFT");
+            break;
+        case PrimitiveCycloAction_t::RIGHT:
+            Serial.print("RIGHT");
+            break;
+        case PrimitiveCycloAction_t::STOP:
+            Serial.print("STOP");
+            break;
+        case PrimitiveCycloAction_t::BLANK:
+            Serial.print("BLANK");
+            break;
+        };
         // Serial.print(toInt(_cyclo_program[i]));
         Serial.print(' ');
     }

@@ -86,8 +86,9 @@ namespace DEVICES{
             maze.Print();
             maze.PrintDirPath();
             
-            robot.pathToCyclogram();
-            cycloStore.printSmarts();
+            robot.DirsToPrimitives(PrimitiveCycloAction_t::FORWARD);
+            robot.primitivesToExplorers();
+            // cycloStore.printSmarts();
         }
     }
 }

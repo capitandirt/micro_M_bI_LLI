@@ -20,8 +20,10 @@ public:
 
     const PrimitiveCycloAction_t calcPrimitiveCycloAction(const uint8_t ind);
     
-    void primitiveToFast(uint8_t& ind);
-    void primitiveToExplorer(uint8_t ind);
+    void DirsToPrimitives(PrimitiveCycloAction_t first_primitive);
+    void primitivesToExplorers();
+    void primitivesToFasts();
+
     void pathToCyclogram();
 
     void moveFloodFill();

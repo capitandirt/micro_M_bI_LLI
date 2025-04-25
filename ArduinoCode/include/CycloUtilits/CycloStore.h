@@ -16,6 +16,13 @@ public:
 
     SmartCycloAction_t popFrontSmart();
     PrimitiveCycloAction_t popFrontPrimitive();
+    
+    PrimitiveCycloAction_t virtualPopFrontPrimitive();
+    void virtualGoBack(uint8_t steps);
+    void virtualPrimitiveRelease();
+
+    bool smartIsEmpty();
+    bool primitiveIsEmpty();
 
     void reloadSmarts();
     void reloadPrimitives();
@@ -33,6 +40,8 @@ private:
       
     uint8_t _primitive_cyc_act_counter = 0;
     uint8_t _primitive_cyc_act_end = 0;
+
+    uint8_t _virtual_primitive_cyc_act_counter = 0;
 
     RawCycloActionStore _cyclo_program[CYCLO_PROG_SIZE];  
     Cyclogram _cyclograms[CYCLO_ACTION_SIZE];
