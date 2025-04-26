@@ -1,5 +1,6 @@
 #include "Robot.h"
 
+
 extern Encoder leftEncoder;
 extern Encoder rightEncoder;
 
@@ -20,6 +21,24 @@ extern Solver solver;
 extern Robot robot;
 
 namespace DEVICES{
+    void TICK_TO_TIM(){
+        noInterrupts();           
+        TCCR1A = 0;               
+        TCCR1B = 0;
+    
+        TCNT1 = 0;                
+        
+        const int PRESCALER = 64;
+        const int COUNTER = F_CPU / PRESCALER * Ts_s - 1;
+
+        OCR1A = 15624;            
+        TCCR1B |= (1 << WGM12);
+        TCCR1B |= (1 << CS12) | (1 << CS10);
+        TIMSK1 |= (1 << OCIE1A);
+    
+        interrupts();             
+    }
+    
     void INIT(){
         leftEncoder.init();
         rightEncoder.init();
@@ -27,6 +46,11 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
+        TICK_TO_TIM();
+
+        cycloStore.addSmart(SmartCycloAction_t::FWD);
+        cycloStore.addSmart(SmartCycloAction_t::FWD);
+        cycloStore.addSmart(SmartCycloAction_t::FWD);
         // cycloWorker.addAction(SmartCycloAction_t::FWD);
         // cycloWorker.addAction(SmartCycloAction_t::SS90EL);
         // cycloWorker.addAction(SmartCycloAction_t::SS90ER);
@@ -45,7 +69,7 @@ namespace DEVICES{
         
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
-        robot.moveFloodFill();
+        // robot.moveFloodFill();
     }
 
     namespace TEST{
@@ -81,14 +105,18 @@ namespace DEVICES{
 
         void CONVERT_PATH_TO_CYCLOGRAMS(){
             solver.MazeTestConfig();
-            solver.SolveBfsMaze({10, 10}, {0, 10});
+            solver.SolveBfsMaze({0, 0}, {0, 10});
 
             maze.Print();
             maze.PrintDirPath();
             
             robot.DirsToPrimitives(PrimitiveCycloAction_t::FORWARD);
-            robot.primitivesToExplorers();
+            robot.primitivesToFasts();
             // cycloStore.printSmarts();
         }
     }
+}
+
+ISR(TIMER1_COMPA_vect){
+    DEVICES::TICK();   
 }

@@ -62,6 +62,7 @@ Cyclogram CycloStore::cyclogramFrom(){
 }
 
 void CycloStore::printSmarts() const{
+    Serial.println("Smarts");
     for(uint8_t i = 0; i < _smart_cyc_act_end; i++){
         Serial.print(Str_SmartCyclogramAction[toInt(_cyclo_program[i].smart)]);
         // Serial.print(toInt(_cyclo_program[i].smart));
@@ -73,7 +74,7 @@ void CycloStore::printSmarts() const{
 void CycloStore::printPrimitives() const{
     Serial.println("Primitives:");
     for(uint8_t i = 0; i < _primitive_cyc_act_end; i++){
-        switch(_cyclo_program[i].primitive){
+    switch(_cyclo_program[i].primitive){
         case PrimitiveCycloAction_t::FORWARD:
             Serial.print("FORWARD");
             break;

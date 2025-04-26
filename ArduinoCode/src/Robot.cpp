@@ -28,30 +28,25 @@ void Robot::primitivesToExplorers()
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
 
     while(!_cycloStore->primitiveIsEmpty()){
-        switch(_cycloStore->virtualPopFrontPrimitive()){
+        switch(_cycloStore->popFrontPrimitive()){
         case PrimitiveCycloAction_t::FORWARD:
             _cycloStore->addSmart(SmartCycloAction_t::FWD);
-            _cycloStore->virtualPrimitiveRelease();
             break;
 
         case PrimitiveCycloAction_t::LEFT:
             _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
-            _cycloStore->virtualPrimitiveRelease();
             break;
         
         case PrimitiveCycloAction_t::RIGHT:
             _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
-            _cycloStore->virtualPrimitiveRelease();
             break;
 
         case PrimitiveCycloAction_t::STOP:
             _cycloStore->addSmart(SmartCycloAction_t::STOP);
-            _cycloStore->virtualPrimitiveRelease();
             break;
 
         default:
             _cycloStore->addSmart(SmartCycloAction_t::IDLE);
-            _cycloStore->virtualPrimitiveRelease();
         break;
         }
     }
@@ -60,7 +55,33 @@ void Robot::primitivesToExplorers()
 }
 
 void Robot::primitivesToFasts(){
-    
+    _cycloStore->reloadSmarts();
+
+    while(!_cycloStore->primitiveIsEmpty()){
+        switch(_cycloStore->popFrontPrimitive()){
+        case PrimitiveCycloAction_t::FORWARD:
+            _cycloStore->addSmart(SmartCycloAction_t::FWD);
+            break;
+
+        case PrimitiveCycloAction_t::LEFT:
+            _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
+            break;
+        
+        case PrimitiveCycloAction_t::RIGHT:
+            _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+            break;
+
+        case PrimitiveCycloAction_t::STOP:
+            _cycloStore->addSmart(SmartCycloAction_t::STOP);
+            break;
+
+        default:
+            _cycloStore->addSmart(SmartCycloAction_t::IDLE);
+        break;
+        }
+    }
+
+    _cycloStore->printSmarts();
 }
 
 void Robot::pathToCyclogram(){
