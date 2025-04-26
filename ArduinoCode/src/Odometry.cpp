@@ -41,6 +41,11 @@ void Odometry::update(float omegaL, float omegaR)
     Y.tick(vY);
 }
 
+void Odometry::updateDir(Direction dir)
+{
+    this->dir = dir;
+}
+
 void Odometry::reset()
 {
     vL = 0;

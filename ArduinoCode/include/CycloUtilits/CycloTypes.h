@@ -31,10 +31,11 @@ enum class PrimitiveCycloAction_t : uint8_t{
     FORWARD = 0,
     
     LEFT = 1,
+    BACK = 2,
     RIGHT = 3,
     
-    STOP = 2,
-    BLANK = 4
+    STOP = 4,
+    BLANK = 5
 };
 
 struct RawCycloActionStore{

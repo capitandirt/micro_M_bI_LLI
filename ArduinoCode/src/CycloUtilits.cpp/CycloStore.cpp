@@ -116,3 +116,8 @@ void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::IP90L   )] = IP90L   ;
     _cyclograms[toInt(SmartCycloAction_t::IP90R   )] = IP90R   ;
 }
+
+bool CycloStore::checkTranslationTo(String cyc) const
+{
+
+}

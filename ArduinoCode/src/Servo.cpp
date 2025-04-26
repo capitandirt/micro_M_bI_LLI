@@ -13,6 +13,7 @@ void Servo::tick(){
     w_PiReg->tick();
 
     cur_w = velocityEstimator->getW();
+
     w_PiReg->passCur(cur_w);
 
     act();

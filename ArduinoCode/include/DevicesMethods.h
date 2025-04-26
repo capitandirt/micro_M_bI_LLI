@@ -25,17 +25,15 @@ namespace DEVICES{
         noInterrupts();           
         TCCR1A = 0;               
         TCCR1B = 0;
-    
-        TCNT1 = 0;                
-        
-        const int PRESCALER = 64;
-        const int COUNTER = F_CPU / PRESCALER * Ts_s - 1;
 
-        OCR1A = 15624;            
+        const int COUNTER = (Ts_s / (6.4 * 0.00001)) - 1;
+
+        OCR1A = COUNTER;            
         TCCR1B |= (1 << WGM12);
         TCCR1B |= (1 << CS12) | (1 << CS10);
+        
         TIMSK1 |= (1 << OCIE1A);
-    
+
         interrupts();             
     }
     
@@ -46,11 +44,12 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
+        cycloStore.addSmart(SmartCycloAction_t::FWD);
+        cycloStore.addSmart(SmartCycloAction_t::SS90EL);
+        cycloStore.addSmart(SmartCycloAction_t::FWD);
+
         TICK_TO_TIM();
 
-        cycloStore.addSmart(SmartCycloAction_t::FWD);
-        cycloStore.addSmart(SmartCycloAction_t::FWD);
-        cycloStore.addSmart(SmartCycloAction_t::FWD);
         // cycloWorker.addAction(SmartCycloAction_t::FWD);
         // cycloWorker.addAction(SmartCycloAction_t::SS90EL);
         // cycloWorker.addAction(SmartCycloAction_t::SS90ER);
@@ -69,6 +68,12 @@ namespace DEVICES{
         
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
+
+        static uint32_t timer = 0;
+
+        Serial.println(micros() - timer);
+
+        timer = micros();
         // robot.moveFloodFill();
     }
 
@@ -110,7 +115,8 @@ namespace DEVICES{
             maze.Print();
             maze.PrintDirPath();
             
-            robot.DirsToPrimitives(PrimitiveCycloAction_t::FORWARD);
+            PrimitiveCycloAction_t firstPrimitive = PrimitiveCycloAction_t(((int)maze.GetPathDir(0) - (int)odometry.getDir() + DIRECTION_SIZE) % DIRECTION_SIZE);
+            robot.DirsToPrimitives(firstPrimitive);
             robot.primitivesToFasts();
             // cycloStore.printSmarts();
         }

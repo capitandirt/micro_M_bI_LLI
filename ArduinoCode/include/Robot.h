@@ -20,7 +20,9 @@ public:
 
     const PrimitiveCycloAction_t calcPrimitiveCycloAction(const uint8_t ind);
     
+
     void DirsToPrimitives(PrimitiveCycloAction_t first_primitive);
+    void startPrimitiveProcessor(PrimitiveCycloAction_t firstPrimitive);
     void primitivesToExplorers();
     void primitivesToFasts();
 

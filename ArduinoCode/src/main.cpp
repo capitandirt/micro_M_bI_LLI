@@ -13,6 +13,7 @@ void setup()
 }
 
 void loop(){
+    // cycloStore.printSmarts();
     // static uint32_t timer = micros();
     // while(micros() - timer < Ts_us)
     //   ;

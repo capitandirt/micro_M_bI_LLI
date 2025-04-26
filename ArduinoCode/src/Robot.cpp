@@ -4,10 +4,9 @@ const PrimitiveCycloAction_t Robot::calcPrimitiveCycloAction(const uint8_t ind){
     if(ind >= _Maze->GetPathSize() - 1){
         return PrimitiveCycloAction_t::STOP;
     }
-    
-    return static_cast<PrimitiveCycloAction_t>(   
-        (static_cast<int8_t>(_Maze->GetPathDir(ind)) - static_cast<int8_t>(_Maze->GetPathDir(ind + 1))
-            + DIRECTION_SIZE) % DIRECTION_SIZE);
+    int8_t dirNow = static_cast<int8_t>(_Maze->GetPathDir(ind));
+    int8_t dirNext = static_cast<int8_t>(_Maze->GetPathDir(ind + 1));
+    return static_cast<PrimitiveCycloAction_t>((dirNow - dirNext + DIRECTION_SIZE) % DIRECTION_SIZE);
 }
 
 void Robot::DirsToPrimitives(PrimitiveCycloAction_t first_primitive){
@@ -21,10 +20,28 @@ void Robot::DirsToPrimitives(PrimitiveCycloAction_t first_primitive){
     _cycloStore->printPrimitives();
 }
 
+void Robot::startPrimitiveProcessor(PrimitiveCycloAction_t firstPrimitive)
+{
+    switch(firstPrimitive) // установка соответствия направления робота и направлений пути
+    {
+        case PrimitiveCycloAction_t::LEFT:
+            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+            break;
+        case PrimitiveCycloAction_t::RIGHT:
+            _cycloStore->addSmart(SmartCycloAction_t::IP90R);
+            break;
+        case PrimitiveCycloAction_t::BACK:
+            _cycloStore->addSmart(SmartCycloAction_t::IP180);
+        default:
+        break;
+    }
+}
+
 void Robot::primitivesToExplorers()
 {
     _cycloStore->reloadSmarts();
-    _cycloStore->popFrontPrimitive();
+    startPrimitiveProcessor(_cycloStore->popFrontPrimitive());
+
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
 
     while(!_cycloStore->primitiveIsEmpty()){
@@ -54,31 +71,12 @@ void Robot::primitivesToExplorers()
     _cycloStore->printSmarts();
 }
 
-void Robot::primitivesToFasts(){
+void Robot::primitivesToFasts()
+{
     _cycloStore->reloadSmarts();
 
     while(!_cycloStore->primitiveIsEmpty()){
-        switch(_cycloStore->popFrontPrimitive()){
-        case PrimitiveCycloAction_t::FORWARD:
-            _cycloStore->addSmart(SmartCycloAction_t::FWD);
-            break;
-
-        case PrimitiveCycloAction_t::LEFT:
-            _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
-            break;
         
-        case PrimitiveCycloAction_t::RIGHT:
-            _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
-            break;
-
-        case PrimitiveCycloAction_t::STOP:
-            _cycloStore->addSmart(SmartCycloAction_t::STOP);
-            break;
-
-        default:
-            _cycloStore->addSmart(SmartCycloAction_t::IDLE);
-        break;
-        }
     }
 
     _cycloStore->printSmarts();

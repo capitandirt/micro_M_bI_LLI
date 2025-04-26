@@ -40,7 +40,7 @@ private:
         v;
 
     Vec2 mazeCoord;
-    Direction dir;
+    Direction dir = START_DIRECTION;
 
 public:
     float getX() const noexcept;
@@ -51,6 +51,7 @@ public:
     Direction getDir() const noexcept;
 
     void update(float omegaL, float omegaR) noexcept;
+    void updateDir(Direction dir) noexcept;
     void reset() noexcept;
 };
 
