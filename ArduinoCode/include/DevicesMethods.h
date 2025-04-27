@@ -106,7 +106,7 @@ namespace DEVICES{
 
         void CONVERT_PATH_TO_CYCLOGRAMS(){
             solver.MazeTestConfig();
-            solver.SolveBfsMaze({0, 0}, {0, 10});
+            solver.SolveBfsMaze({10, 10}, {0, 10});
 
             maze.Print();
             // maze.PrintDirPath();

@@ -27,6 +27,8 @@ private:
     bool TO_STOP();
     bool TO_FWD();
     bool TO_SS90E();
+    bool TO_SS90S();
+    bool TO_FROM_DIAGS_TO_OP_DIAGS();
 };
 
 #endif

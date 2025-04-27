@@ -23,7 +23,7 @@ void ActionsHandler::dirs_to_primitives(){
 void ActionsHandler::start_primitive_process()
 {
     _cycloStore->reloadSmarts();
-    
+
     const auto from_path_dir = static_cast<int8_t>(_maze->GetPathDir(0));
     const auto from_odom_dir = static_cast<int8_t>(_odometry->getDir());
     const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_path_dir - from_odom_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
@@ -60,7 +60,8 @@ void ActionsHandler::primitivesToExplorers()
     start_primitive_process();
 
     while(!_cycloStore->primitiveIsEmpty()){
-             if (TO_SS90E());
+             if (TO_FROM_DIAGS_TO_OP_DIAGS());
+        else if (TO_SS90E());
         else if (TO_FWD());
         else if (TO_STOP());
         else if (TO_IDLE());
@@ -69,13 +70,15 @@ void ActionsHandler::primitivesToExplorers()
 
 void ActionsHandler::primitivesToFasts()
 {
-    _cycloStore->reloadSmarts();
+    dirs_to_primitives();
+    start_primitive_process();
 
     while(!_cycloStore->primitiveIsEmpty()){
-        
+             if (TO_SS90S());
+        else if (TO_FWD());
+        else if (TO_STOP());
+        else if (TO_IDLE());
     }
-
-    _cycloStore->printSmarts();
 }
 
 bool ActionsHandler::TO_IDLE(){
@@ -122,4 +125,59 @@ bool ActionsHandler::TO_SS90E(){
     else _cycloStore->virtualGoBack(1);
 
     return false;
+}
+
+bool ActionsHandler::TO_SS90S(){
+    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::LEFT){
+        _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
+        _cycloStore->virtualPrimitiveRelease();
+        return true;
+    }
+    else _cycloStore->virtualGoBack(1);
+
+    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
+        _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+        _cycloStore->virtualPrimitiveRelease();
+        return true;
+    }
+    else _cycloStore->virtualGoBack(1);
+
+    return false;
+}
+
+bool ActionsHandler::TO_FROM_DIAGS_TO_OP_DIAGS(){
+    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
+        const PrimitiveCycloAction_t turn = _cycloStore->virtualPopFrontPrimitive();
+
+        if(turn == PrimitiveCycloAction_t::LEFT || turn == PrimitiveCycloAction_t::RIGHT){
+            const PrimitiveCycloAction_t op_turn = _cycloStore->virtualPopFrontPrimitive();
+
+            if(toInt(op_turn) == (toInt(turn) + 2) % 4){
+                if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
+                    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+                    
+                    if(turn == PrimitiveCycloAction_t::LEFT){
+                        _cycloStore->addSmart(SmartCycloAction_t::SD45SL);
+                        _cycloStore->addSmart(SmartCycloAction_t::DS45SR);
+                    }
+                    else{
+                        _cycloStore->addSmart(SmartCycloAction_t::SD45SR);
+                        _cycloStore->addSmart(SmartCycloAction_t::DS45SL);
+                    }
+
+                    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+                    _cycloStore->virtualPrimitiveRelease();
+                    
+                    return true;
+                }
+                else _cycloStore->virtualGoBack(4);
+            }
+            else _cycloStore->virtualGoBack(3);
+        }
+        else _cycloStore->virtualGoBack(2);
+    }
+    else _cycloStore->virtualGoBack(1);
+
+    return false;
+    
 }
