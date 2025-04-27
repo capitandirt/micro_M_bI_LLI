@@ -1,5 +1,5 @@
-#ifndef _CYCLO_ACTIONS_H
-#define _CYCLO_ACTIONS_H
+#ifndef _CYCLOGRAMS_H_
+#define _CYCLOGRAMS_H_
 
 #include "Config.h"
 #include "CycloTypes.h"
@@ -208,4 +208,4 @@ CYCLOGRAM(IP90R)
     if(s->robotState->getTheta() < -HALF_PI) ms->isComplete = true;
 }
 
-#endif // !_CYCLO_ACTIONS_H
+#endif // !_CYCLOGRAMS_H_

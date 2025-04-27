@@ -9,7 +9,7 @@ void setup()
     // DEVICES::TEST::CYCLOGRAMS();
     DEVICES::INIT();
     // DEVICES::TEST::BFS();
-    // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
+    DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
 }
 
 void loop(){

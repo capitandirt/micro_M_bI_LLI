@@ -9,7 +9,7 @@
 struct RobotConnectionParams{
     CycloStore* _cycloStore;
     Solver* _solver;
-    Maze* _Maze;
+    Maze* _maze;
     OptocouplerSensors* _optocoupler;
     Odometry* _odometry;
 };
@@ -21,14 +21,17 @@ public:
     const PrimitiveCycloAction_t calcPrimitiveCycloAction(const uint8_t ind);
     
 
-    void DirsToPrimitives(PrimitiveCycloAction_t first_primitive);
-    void startPrimitiveProcessor(PrimitiveCycloAction_t firstPrimitive);
+    void DirsToPrimitives();
     void primitivesToExplorers();
     void primitivesToFasts();
-
+    
     void pathToCyclogram();
-
+    
     void moveFloodFill();
+
+private:
+    void start_primitive_process();
+
 private:
     static constexpr uint8_t FIRST = 0;
 

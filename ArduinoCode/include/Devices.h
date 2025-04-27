@@ -114,7 +114,7 @@ Solver solver(&maze);
 RobotConnectionParams rcp{
     ._cycloStore = &cycloStore,
     ._solver = &solver,
-    ._Maze = &maze
+    ._maze = &maze
 };
 
 Robot robot(&rcp);

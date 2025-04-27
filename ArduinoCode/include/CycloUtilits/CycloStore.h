@@ -1,7 +1,7 @@
 #ifndef _CYCLO_STORE_H_
 #define _CYCLO_STORE_H_
 
-#include "CycloActions.h"
+#include "Cyclograms.h"
 #include "CycloTypes.h"
 
 class CycloStore{

@@ -26,11 +26,11 @@ namespace DEVICES{
         TCCR1A = 0;               
         TCCR1B = 0;
 
-        const int COUNTER = (Ts_s / (6.4 * 0.00001)) - 1;
+        const int COUNTER = (F_CPU / 64 * Ts_s) - 1;
 
         OCR1A = COUNTER;            
         TCCR1B |= (1 << WGM12);
-        TCCR1B |= (1 << CS12) | (1 << CS10);
+        TCCR1B |= (1 << CS11) | (1 << CS10);
         
         TIMSK1 |= (1 << OCIE1A);
 
@@ -38,15 +38,15 @@ namespace DEVICES{
     }
     
     void INIT(){
-        leftEncoder.init();
-        rightEncoder.init();
+        // leftEncoder.init();
+        // rightEncoder.init();
 
-        leftMotor.init();
-        rightMotor.init();
+        // leftMotor.init();
+        // rightMotor.init();
         
-        cycloStore.addSmart(SmartCycloAction_t::FWD);
-        cycloStore.addSmart(SmartCycloAction_t::SS90EL);
-        cycloStore.addSmart(SmartCycloAction_t::FWD);
+        // cycloStore.addSmart(SmartCycloAction_t::FWD);
+        // cycloStore.addSmart(SmartCycloAction_t::SS90EL);
+        // cycloStore.addSmart(SmartCycloAction_t::FWD);
 
         TICK_TO_TIM();
 
@@ -57,17 +57,17 @@ namespace DEVICES{
     }
 
     void TICK(){
-        leftEncoder.tick();
-        rightEncoder.tick();
+        // leftEncoder.tick();
+        // rightEncoder.tick();
         
-        leftVelocityEstimator.tick();
-        rightVelocityEstimator.tick();
+        // leftVelocityEstimator.tick();
+        // rightVelocityEstimator.tick();
         
-        leftServo.tick();
-        rightServo.tick();
+        // leftServo.tick();
+        // rightServo.tick();
         
-        odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
-        cycloWorker.doCyclogram();
+        // odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
+        // cycloWorker.doCyclogram();
 
         static uint32_t timer = 0;
 
@@ -115,9 +115,8 @@ namespace DEVICES{
             maze.Print();
             maze.PrintDirPath();
             
-            PrimitiveCycloAction_t firstPrimitive = PrimitiveCycloAction_t(((int)maze.GetPathDir(0) - (int)odometry.getDir() + DIRECTION_SIZE) % DIRECTION_SIZE);
-            robot.DirsToPrimitives(firstPrimitive);
-            robot.primitivesToFasts();
+            robot.DirsToPrimitives();
+            robot.primitivesToExplorers();
             // cycloStore.printSmarts();
         }
     }
