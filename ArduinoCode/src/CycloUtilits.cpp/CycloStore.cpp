@@ -30,9 +30,8 @@ PrimitiveCycloAction_t CycloStore::virtualPopFrontPrimitive(){
 
     return _cyclo_program[_virtual_primitive_cyc_act_counter++].primitive;
 }
-void CycloStore::virtualGoBack(uint8_t steps){
-    if(_virtual_primitive_cyc_act_counter < steps) _virtual_primitive_cyc_act_counter = 0;
-    else _virtual_primitive_cyc_act_counter -= steps;
+void CycloStore::virtualGoBack(){
+    _virtual_primitive_cyc_act_counter = _primitive_cyc_act_counter;
 }
 
 void CycloStore::virtualPrimitiveRelease(){

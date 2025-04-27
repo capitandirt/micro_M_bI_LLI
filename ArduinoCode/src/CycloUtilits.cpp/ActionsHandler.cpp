@@ -93,7 +93,7 @@ bool ActionsHandler::TO_STOP(){
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
-    else _cycloStore->virtualGoBack(1);
+    else _cycloStore->virtualGoBack();
 
     return false;
 }
@@ -104,7 +104,7 @@ bool ActionsHandler::TO_FWD(){
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
-    else _cycloStore->virtualGoBack(1);
+    else _cycloStore->virtualGoBack();
 
     return false;
 }
@@ -115,14 +115,14 @@ bool ActionsHandler::TO_SS90E(){
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
-    else _cycloStore->virtualGoBack(1);
+    else _cycloStore->virtualGoBack();
 
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
         _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
-    else _cycloStore->virtualGoBack(1);
+    else _cycloStore->virtualGoBack();
 
     return false;
 }
@@ -133,14 +133,14 @@ bool ActionsHandler::TO_SS90S(){
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
-    else _cycloStore->virtualGoBack(1);
+    else _cycloStore->virtualGoBack();
 
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
         _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
-    else _cycloStore->virtualGoBack(1);
+    else _cycloStore->virtualGoBack();
 
     return false;
 }
@@ -170,14 +170,10 @@ bool ActionsHandler::TO_FROM_DIAGS_TO_OP_DIAGS(){
                     
                     return true;
                 }
-                else _cycloStore->virtualGoBack(4);
             }
-            else _cycloStore->virtualGoBack(3);
         }
-        else _cycloStore->virtualGoBack(2);
     }
-    else _cycloStore->virtualGoBack(1);
 
+    _cycloStore->virtualGoBack();
     return false;
-    
 }

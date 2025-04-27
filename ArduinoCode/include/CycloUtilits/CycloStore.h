@@ -18,7 +18,7 @@ public:
     PrimitiveCycloAction_t popFrontPrimitive();
     
     PrimitiveCycloAction_t virtualPopFrontPrimitive();
-    void virtualGoBack(uint8_t steps);
+    void virtualGoBack();
     void virtualPrimitiveRelease();
 
     bool smartIsEmpty();
