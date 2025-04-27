@@ -23,10 +23,14 @@ void ActionsHandler::dirs_to_primitives(){
 void ActionsHandler::start_primitive_process()
 {
     _cycloStore->reloadSmarts();
-
+    
     const auto from_path_dir = static_cast<int8_t>(_maze->GetPathDir(0));
     const auto from_odom_dir = static_cast<int8_t>(_odometry->getDir());
-    const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_path_dir - from_odom_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
+    const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_odom_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
+    
+    Serial.println((int)first_primitive);
+
+    _cycloStore->printPrimitives();
 
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {

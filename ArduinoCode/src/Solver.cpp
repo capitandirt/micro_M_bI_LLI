@@ -109,13 +109,12 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
             break;
         }
 
-        Vec2 cur_vec2 = Maze::IndToVec2(cur_cell_ind);
-
         Cell cur_cell;
-        _Maze->GetCell(cur_cell, cur_vec2);
+        Vec2 cur_cell_vec2 = Maze::IndToVec2(cur_cell_ind);
+        _Maze->GetCell(cur_cell, cur_cell_vec2);
 
         if(cur_cell.north_wall != WallState::HI){
-            Vec2 checked_cell_vec = {cur_vec2.x, cur_vec2.y - 1};
+            Vec2 checked_cell_vec = {cur_cell_vec2.x, cur_cell_vec2.y - 1};
 
             _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
             
@@ -127,7 +126,7 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
         }
 
         if(cur_cell.east_wall != WallState::HI){
-            Vec2 checked_cell_vec = {cur_vec2.x + 1, cur_vec2.y};
+            Vec2 checked_cell_vec = {cur_cell_vec2.x + 1, cur_cell_vec2.y};
 
             _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
 
@@ -138,7 +137,7 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
         }
 
         if(cur_cell.south_wall != WallState::HI){
-            Vec2 checked_cell_vec = {cur_vec2.x, cur_vec2.y + 1};
+            Vec2 checked_cell_vec = {cur_cell_vec2.x, cur_cell_vec2.y + 1};
 
             _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
 
@@ -149,7 +148,7 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
         }
 
         if(cur_cell.west_wall != WallState::HI){
-            Vec2 checked_cell_vec = {cur_vec2.x - 1, cur_vec2.y};
+            Vec2 checked_cell_vec = {cur_cell_vec2.x - 1, cur_cell_vec2.y};
 
             _Maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
 

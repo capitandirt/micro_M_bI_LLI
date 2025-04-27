@@ -31,7 +31,6 @@ public:
 
     void printSmarts() const;
     void printPrimitives() const;
-    bool checkTranslationTo(String cyc) const;
 private:
     void load_cyclograms();
 

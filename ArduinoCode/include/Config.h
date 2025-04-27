@@ -106,7 +106,7 @@
 
 
 /*==DIRECTION BEGIN==*/
-#define START_DIRECTION Direction::E
+#define START_DIRECTION Direction::W
 /*==DIRECTION END==*/
 
 
