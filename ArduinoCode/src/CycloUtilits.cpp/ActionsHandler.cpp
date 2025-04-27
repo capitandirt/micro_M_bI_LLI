@@ -60,8 +60,7 @@ void ActionsHandler::primitivesToExplorers()
     start_primitive_process();
 
     while(!_cycloStore->primitiveIsEmpty()){
-             if (TO_FROM_DIAGS_TO_OP_DIAGS());
-        else if (TO_SS90E());
+             if (TO_SS90E());
         else if (TO_FWD());
         else if (TO_STOP());
         else if (TO_IDLE());
@@ -74,7 +73,8 @@ void ActionsHandler::primitivesToFasts()
     start_primitive_process();
 
     while(!_cycloStore->primitiveIsEmpty()){
-             if (TO_SS90S());
+             if (TO_FROM_DIAGS_TO_OP_DIAGS());
+        else if (TO_SS90S());
         else if (TO_FWD());
         else if (TO_STOP());
         else if (TO_IDLE());
