@@ -2,6 +2,7 @@
 #define _DEVICES_H_
 
 #include "Robot.h"
+#include "CycloWorker.h"
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -20,6 +21,7 @@ EncoderConnectionParams right_ecp {
     .ENC_DIR = RIGHT_ENC_DIR,
     .ISR = right_encoder_ISR
 };
+
 Encoder rightEncoder(&right_ecp);
 
 void left_encoder_ISR()
@@ -64,14 +66,12 @@ PiRegConnectionParams left_w_prcp{
     .Kp = W_KP,
     .Ki = W_KI
 };
-
 PiReg left_w_PiReg(&left_w_prcp);
 
 PiRegConnectionParams right_w_prcp{
     .Kp = W_KP,
     .Ki = W_KI
 };
-
 PiReg right_w_PiReg(&right_w_prcp);
 
 ServoConnectionParams left_scp{
@@ -79,7 +79,6 @@ ServoConnectionParams left_scp{
     .motor = &leftMotor,
     .velocityEstimator = &leftVelocityEstimator
 };
-
 Servo leftServo(&left_scp);
 
 ServoConnectionParams right_scp{
@@ -87,14 +86,12 @@ ServoConnectionParams right_scp{
     .motor = &rightMotor,
     .velocityEstimator = &rightVelocityEstimator
 };
-
 Servo rightServo(&right_scp);
 
 MotionControlConnectionParams mccp{
     .leftServo = &leftServo,
     .rightServo = &rightServo
 };
-
 Mixer mixer(&mccp);
 
 CycloStore cycloStore;
@@ -104,19 +101,29 @@ CycloWorkerConnectionParams cwcp{
     .odometry = &odometry,
     .cycloStore = &cycloStore
 };
-
 CycloWorker cycloWorker(&cwcp);
 
 Maze maze;
 
 Solver solver(&maze);
 
-RobotConnectionParams rcp{
-    ._cycloStore = &cycloStore,
-    ._solver = &solver,
-    ._maze = &maze
+ActionsHandlerConnectionParams ahcp{
+    ._maze = &maze,
+    ._odometry = &odometry,
+    ._cycloStore = &cycloStore
 };
+ActionsHandler actionsHandler(&ahcp);
 
+OprocouplerConnectionParams ocp{};
+OptocouplerSensors optocoupler(&ocp);
+
+RobotConnectionParams rcp{
+    ._actionsHandler = &actionsHandler,
+    ._maze = &maze,
+    ._solver = &solver,
+    ._optocoupler = &optocoupler,
+    ._odometry = &odometry
+};
 Robot robot(&rcp);
 
 #endif // !_DEVICES_H_

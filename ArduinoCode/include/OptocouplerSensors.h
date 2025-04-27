@@ -4,7 +4,7 @@
 #include "Arduino.h"
 #include "CellsTypes.h"
 
-struct OprocouplecConnectionParams{
+struct OprocouplerConnectionParams{
     
 };
 
@@ -37,8 +37,10 @@ private:
     };
 };
 
-class OptocouplerSensors : public OprocouplecConnectionParams{ 
+class OptocouplerSensors : public OprocouplerConnectionParams{ 
 public:
+    OptocouplerSensors(OprocouplerConnectionParams* ocp) : OprocouplerConnectionParams(*ocp){}
+
     void update();
     Sense_t getSense();
     Cell getCellFromSensors(Direction robotDir);

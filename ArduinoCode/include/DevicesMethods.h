@@ -44,15 +44,8 @@ namespace DEVICES{
         // leftMotor.init();
         // rightMotor.init();
         
-        // cycloStore.addSmart(SmartCycloAction_t::FWD);
-        // cycloStore.addSmart(SmartCycloAction_t::SS90EL);
-        // cycloStore.addSmart(SmartCycloAction_t::FWD);
+        // TICK_TO_TIM();
 
-        TICK_TO_TIM();
-
-        // cycloWorker.addAction(SmartCycloAction_t::FWD);
-        // cycloWorker.addAction(SmartCycloAction_t::SS90EL);
-        // cycloWorker.addAction(SmartCycloAction_t::SS90ER);
         //cycloWorker.printCycloProgram();
     }
 
@@ -67,13 +60,16 @@ namespace DEVICES{
         // rightServo.tick();
         
         // odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
+
+        // robot.moveFloodFill();
+
         // cycloWorker.doCyclogram();
 
-        static uint32_t timer = 0;
+        // static uint32_t timer = 0;
 
-        Serial.println(micros() - timer);
+        // Serial.println(micros() - timer);
 
-        timer = micros();
+        // timer = micros();
         // robot.moveFloodFill();
     }
 
@@ -113,15 +109,16 @@ namespace DEVICES{
             solver.SolveBfsMaze({0, 0}, {0, 10});
 
             maze.Print();
-            maze.PrintDirPath();
+            // maze.PrintDirPath();
+
+            actionsHandler.primitivesToExplorers();
+            cycloStore.printSmarts();
             
-            robot.DirsToPrimitives();
-            robot.primitivesToExplorers();
             // cycloStore.printSmarts();
         }
     }
 }
 
-ISR(TIMER1_COMPA_vect){
-    DEVICES::TICK();   
-}
+// ISR(TIMER1_COMPA_vect){
+//     DEVICES::TICK();   
+// }
