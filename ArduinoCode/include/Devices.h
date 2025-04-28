@@ -114,7 +114,16 @@ ActionsHandlerConnectionParams ahcp{
 };
 ActionsHandler actionsHandler(&ahcp);
 
-OprocouplerConnectionParams ocp{};
+OprocouplerConnectionParams ocp{
+    .EMITERS_A = OPTOCOUPLER_EMITERS_A,
+    .EMITERS_B = OPTOCOUPLER_EMITERS_B,
+    .SENSOR_0 = OPTOCOUPLER_SENSOR_0,
+    .SENSOR_1 = OPTOCOUPLER_SENSOR_1,
+    .SENSOR_2 = OPTOCOUPLER_SENSOR_2,
+    .SENSOR_3 = OPTOCOUPLER_SENSOR_3,
+    .SENSOR_4 = OPTOCOUPLER_SENSOR_4,
+    .SENSOR_5 = OPTOCOUPLER_SENSOR_5
+};
 OptocouplerSensors optocoupler(&ocp);
 
 RobotConnectionParams rcp{

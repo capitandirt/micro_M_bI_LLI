@@ -5,7 +5,14 @@
 #include "CellsTypes.h"
 
 struct OprocouplerConnectionParams{
-    
+    uint8_t const EMITERS_A;
+    uint8_t const EMITERS_B;
+    const uint8_t SENSOR_0;
+    const uint8_t SENSOR_1;
+    const uint8_t SENSOR_2;
+    const uint8_t SENSOR_3;
+    const uint8_t SENSOR_4;
+    const uint8_t SENSOR_5;
 };
 
 struct Sense_t{
@@ -41,6 +48,7 @@ class OptocouplerSensors : public OprocouplerConnectionParams{
 public:
     OptocouplerSensors(OprocouplerConnectionParams* ocp) : OprocouplerConnectionParams(*ocp){}
 
+    void init();
     void update();
     Sense_t getSense();
     Cell getCellFromSensors(Direction robotDir);
