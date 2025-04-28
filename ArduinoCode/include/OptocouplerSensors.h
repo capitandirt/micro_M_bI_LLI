@@ -5,14 +5,12 @@
 #include "CellsTypes.h"
 
 struct OprocouplerConnectionParams{
-    uint8_t const EMITERS_A;
-    uint8_t const EMITERS_B;
+    const uint8_t EMITERS_FWD;
+    const uint8_t EMITERS_SIDE;
     const uint8_t SENSOR_0;
     const uint8_t SENSOR_1;
     const uint8_t SENSOR_2;
     const uint8_t SENSOR_3;
-    const uint8_t SENSOR_4;
-    const uint8_t SENSOR_5;
 };
 
 struct Sense_t{
@@ -35,7 +33,7 @@ public:
     
     Sense_t get() const {return _from; }
 
-    float operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
+    float& operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
 private:
     static constexpr uint8_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(float);
     union{
@@ -49,7 +47,7 @@ public:
     OptocouplerSensors(OprocouplerConnectionParams* ocp) : OprocouplerConnectionParams(*ocp){}
 
     void init();
-    void update();
+    void tick();
     Sense_t getSense();
     Cell getCellFromSensors(Direction robotDir);
 

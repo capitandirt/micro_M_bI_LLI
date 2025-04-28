@@ -21,7 +21,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 10000
+#define Ts_us 2000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 
@@ -69,7 +69,7 @@
 /*==W MOTOT PIREG END==*/
 
 /*==CYCLOGRAM BEGIN==*/
-#define FORWARD_SPEED 0.18
+#define FORWARD_SPEED 0.10
 #define CELL_SIZE 0.18
 /*==CYCLOGRAM END==*/
 
@@ -130,7 +130,6 @@
 #define OPTOCOUPLER_SENSOR_2 (16)
 #define OPTOCOUPLER_SENSOR_3 (17)
 #define OPTOCOUPLER_SENSOR_4 (18)
-#define OPTOCOUPLER_SENSOR_5 (19)
 /*==OPTOCOUPLER END==*/
 
 #endif // !_CONFIG_H_

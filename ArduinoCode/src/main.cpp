@@ -7,21 +7,20 @@ void setup()
 	DEVICES::TEST::SET_SERIAL();
 
     // DEVICES::TEST::CYCLOGRAMS();
-    // DEVICES::INIT();
+    DEVICES::INIT();
     // DEVICES::TEST::BFS();
     // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
 
-    optocoupler.init();
+    // optocoupler.init();
 }
 
 void loop(){
-    optocoupler.update();
-
-    // cycloStore.printSmarts();
-    // static uint32_t timer = micros();
-    // while(micros() - timer < Ts_us)
-    //   ;
-    // timer = micros();
-    // // Serial.print("yes");
-    // DEVICES::TICK(); 
+    Sense_t sense = optocoupler.getSense();
+    Serial.print(sense.forward_l);
+    Serial.print(' ');
+    Serial.print(sense.forward_r);
+    Serial.print(' ');
+    Serial.print(sense.left);
+    Serial.print(' ');
+    Serial.println(sense.right);
 }

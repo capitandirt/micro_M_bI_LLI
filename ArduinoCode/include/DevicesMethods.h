@@ -1,5 +1,5 @@
 #include "Robot.h"
-
+#include "TIM2_HANDLER.h"
 
 extern Encoder leftEncoder;
 extern Encoder rightEncoder;
@@ -18,58 +18,37 @@ extern CycloWorker cycloWorker;
 
 extern Maze maze;
 extern Solver solver;
+extern OptocouplerSensors optocoupler;
 extern Robot robot;
 
-namespace DEVICES{
-    void TICK_TO_TIM(){
-        noInterrupts();           
-        TCCR1A = 0;               
-        TCCR1B = 0;
-
-        const int COUNTER = (F_CPU / 64 * Ts_s) - 1;
-
-        OCR1A = COUNTER;            
-        TCCR1B |= (1 << WGM12);
-        TCCR1B |= (1 << CS11) | (1 << CS10);
-        
-        TIMSK1 |= (1 << OCIE1A);
-
-        interrupts();             
-    }
-    
+namespace DEVICES{  
     void INIT(){
-        // leftEncoder.init();
-        // rightEncoder.init();
+        leftEncoder.init();
+        rightEncoder.init();
 
-        // leftMotor.init();
-        // rightMotor.init();
+        leftMotor.init();
+        rightMotor.init();
         
-        // TICK_TO_TIM();
+        // cycloStore.addSmart(SmartCycloAction_t::FWD);
 
-        //cycloWorker.printCycloProgram();
+        TIM2::INIT();
     }
 
     void TICK(){
-        // leftEncoder.tick();
-        // rightEncoder.tick();
+        leftEncoder.tick();
+        rightEncoder.tick();
         
-        // leftVelocityEstimator.tick();
-        // rightVelocityEstimator.tick();
+        leftVelocityEstimator.tick();
+        rightVelocityEstimator.tick();
         
-        // leftServo.tick();
-        // rightServo.tick();
-        
-        // odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
+        leftServo.tick();
+        rightServo.tick();
 
-        // robot.moveFloodFill();
+        optocoupler.tick();
+        
+        odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
         // cycloWorker.doCyclogram();
-
-        // static uint32_t timer = 0;
-
-        // Serial.println(micros() - timer);
-
-        // timer = micros();
         // robot.moveFloodFill();
     }
 
@@ -121,6 +100,6 @@ namespace DEVICES{
     }
 }
 
-// ISR(TIMER1_COMPA_vect){
-//     DEVICES::TICK();   
-// }
+ISR(TIMER2_COMPA_vect){
+    DEVICES::TICK();   
+}

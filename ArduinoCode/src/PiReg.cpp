@@ -2,6 +2,7 @@
 
 void PiReg::passSet(float& set){
     _set = set;
+
 }
 
 void PiReg::passCur(float& cur){
