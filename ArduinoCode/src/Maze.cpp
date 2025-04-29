@@ -1,5 +1,12 @@
 #include "Maze.h"
 
+void PRINT_N_SPACES(uint8_t n){
+    for (size_t i = 0; i < n; i++)
+    {
+        Serial.print(" ");
+    }
+}
+
 bool Maze::cell_request_is_out_of_range_cell_blocks(const Vec2& v) const{
     return v.x >= MAZE_SIDE_LENGTH || v.y >= MAZE_SIDE_LENGTH;
 }
@@ -116,6 +123,11 @@ void Maze::PrimaryFill(){
     for(uint16_t i = (MAZE_TOTAL_SIZE - MAZE_SIDE_LENGTH); i < MAZE_TOTAL_SIZE; i++){
         _cell_blocks[i].s_wall = WallState::HI;   
     }
+}
+
+void Maze::Clear(){
+    PrimaryFill();
+    ClearPath();
 }
 
 void Maze::SetCellDir(const Direction direction, const Vec2 v){

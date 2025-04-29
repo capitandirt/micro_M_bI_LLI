@@ -7,17 +7,25 @@
 struct OprocouplerConnectionParams{
     const uint8_t EMITERS_FWD;
     const uint8_t EMITERS_SIDE;
-    const uint8_t SENSOR_0;
-    const uint8_t SENSOR_1;
-    const uint8_t SENSOR_2;
-    const uint8_t SENSOR_3;
+    const uint8_t REC_RIGHT;
+    const uint8_t REC_LEFT;
+    const uint8_t REC_FWD_LEFT;
+    const uint8_t REC_FWD_RIGHT;
+    const uint8_t SENSE_THRESHOLD;
 };
 
 struct Sense_t{
-    float left;
-    float forward_l;
-    float forward_r;
-    float right;
+    uint8_t left;
+    uint8_t forward_l;
+    uint8_t forward_r;
+    uint8_t right;
+};
+
+struct Sense_mask_t{
+    bool left;
+    bool forward_l;
+    bool forward_r;
+    bool right;
 };
 
 struct OptocouplerSense{
@@ -29,16 +37,17 @@ public:
         FORWARD_R,
         RIGHT,
     };
+
     static constexpr uint8_t getSenseSize(){ return SENSORS_NUMBER; }
     
     Sense_t get() const {return _from; }
+    uint8_t& operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
 
-    float& operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
 private:
-    static constexpr uint8_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(float);
+    static constexpr uint8_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(uint8_t);
     union{
         Sense_t _from;
-        float _sense[SENSORS_NUMBER];
+        uint8_t _sense[SENSORS_NUMBER];
     };
 };
 
@@ -49,9 +58,15 @@ public:
     void init();
     void tick();
     Sense_t getSense();
-    Cell getCellFromSensors(Direction robotDir);
+    Cell getCell(Direction robotDir);
+
+    void printMask();
+    void printSense();
+private:
+    void calc_sense_mask();
 
 private:
+    Sense_mask_t sense_mask;
     OptocouplerSense sense;
 };
 

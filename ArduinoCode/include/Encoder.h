@@ -21,17 +21,17 @@ public:
     
     void isrCallback();
 
-    float GetPhi() const;
-    float GetDPhi() const;
+    float getPhi() const;
+    float getDPhi() const;
     
 private:
-    int8_t ett[4][4];
+    int8_t _ett[4][4];
     
-    volatile int counter;
-    volatile int enc_old = 0;
+    volatile int _counter;
+    volatile int _enc_old = 0;
 
-    float phi = 0;
-    float dphi = 0;
+    float _phi = 0;
+    float _dphi = 0;
 };
 
 #endif // !_ENCODER_H_

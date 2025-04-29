@@ -19,7 +19,11 @@ class Robot : public RobotConnectionParams{
 public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
-    void moveFloodFill();
+    void stepFloodFill();
+
+private:
+    Vec2 _buf_robot_coords;
+    Direction _buf_robot_dir;
 };
 
 #endif // !_ROBOT_H_

@@ -51,7 +51,7 @@ inline constexpr uint8_t toInt(PrimitiveCycloAction_t pca){
     return static_cast<uint8_t>(pca);
 }
 
-constexpr char* Str_SmartCyclogramAction[]{
+inline const char* Str_SmartCyclogramAction[]{
     "IDLE",
     "FWD",
     "FWD_HALF",

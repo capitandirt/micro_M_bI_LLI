@@ -86,6 +86,9 @@ void CycloStore::printPrimitives() const{
         case PrimitiveCycloAction_t::STOP:
             Serial.print("STOP");
             break;
+        case PrimitiveCycloAction_t::BACK:
+            Serial.print("BACK");
+            break;
         case PrimitiveCycloAction_t::BLANK:
             Serial.print("BLANK");
             break;

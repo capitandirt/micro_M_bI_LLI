@@ -18,6 +18,7 @@ extern CycloWorker cycloWorker;
 
 extern Maze maze;
 extern Solver solver;
+extern Odometry odometry;
 extern OptocouplerSensors optocoupler;
 extern Robot robot;
 
@@ -64,6 +65,8 @@ namespace DEVICES{
             
             maze.PrintDirPath();
             maze.Print();
+
+            maze.Clear();
         }
     
         void CYCLOGRAMS(){
@@ -79,23 +82,39 @@ namespace DEVICES{
             cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
 
-            cycloStore.printSmarts();
             cycloStore.printPrimitives();
+            cycloStore.printSmarts();
+
+            cycloStore.reloadPrimitives();
+            cycloStore.reloadSmarts();
         }
 
         void CONVERT_PATH_TO_CYCLOGRAMS(){
             solver.MazeTestConfig();
 
-            solver.SolveBfsMaze({0, 0}, {10, 0});
+            // unnamed namespace
+            {
+                Vec2 __s = {0, 0}; Vec2 __f = {5, 5};    
+                solver.SolveBfsMaze(__s, __f);
+            }
 
             maze.Print();
 
-            // maze.PrintDirPath();
+            {   
+                auto __sd = Direction::N; Vec2 __sv = {0, 0};
+                Direction __d; Vec2 __v;
+                actionsHandler.primitivesToExplorers(__sd, __sv, __d, __v);
+            }
 
-            actionsHandler.primitivesToExplorers();
             cycloStore.printSmarts();
-            
+            cycloStore.reloadSmarts();
             // cycloStore.printSmarts();
+        }
+
+        void OPTOCOUPLER(){
+            optocoupler.printSense();
+            optocoupler.printMask();
+            Serial.println();
         }
     }
 }

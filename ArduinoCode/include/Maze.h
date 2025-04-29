@@ -24,17 +24,11 @@
 #define S_DIR " S "
 #define W_DIR " W "
 
-inline void PRINT_N_SPACES(uint8_t n){
-    for (size_t i = 0; i < n; i++)
-    {
-        Serial.print(" ");
-    }
-}
-
 class Maze{
 public:
     void PrimaryFill() noexcept;
-    
+    void Clear() noexcept;
+
     void SetCell(const Cell set_cell, const Vec2 v) noexcept;
     void UndefCell(const Vec2 vec2) noexcept;
 

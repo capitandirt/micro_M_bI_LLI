@@ -12,15 +12,15 @@ void Encoder::init()
         CHANGE
     );
 
-    ett[0b00][0b01] = ENC_DIR;
-    ett[0b01][0b11] = ENC_DIR;
-    ett[0b11][0b10] = ENC_DIR;
-    ett[0b10][0b00] = ENC_DIR;
+    _ett[0b00][0b01] = ENC_DIR;
+    _ett[0b01][0b11] = ENC_DIR;
+    _ett[0b11][0b10] = ENC_DIR;
+    _ett[0b10][0b00] = ENC_DIR;
     
-    ett[0b00][0b10] = -ENC_DIR;
-    ett[0b10][0b11] = -ENC_DIR;
-    ett[0b11][0b01] = -ENC_DIR;
-    ett[0b01][0b00] = -ENC_DIR;
+    _ett[0b00][0b10] = -ENC_DIR;
+    _ett[0b10][0b11] = -ENC_DIR;
+    _ett[0b11][0b01] = -ENC_DIR;
+    _ett[0b01][0b00] = -ENC_DIR;
     
     interrupts();
 }
@@ -28,12 +28,12 @@ void Encoder::init()
 void Encoder::tick()
 {
     noInterrupts();
-    const int counter_inc = counter;
-    counter = 0;
+    const int counter_inc = _counter;
+    _counter = 0;
     interrupts();
 
-    dphi = counter_inc * TICK2RAD;
-    phi += dphi;
+    _dphi = counter_inc * TICK2RAD;
+    _phi += _dphi;
 }
 
 void Encoder::isrCallback()
@@ -43,14 +43,14 @@ void Encoder::isrCallback()
     const uint8_t A = CLK_A ^ B;
     const uint8_t enc = (A << 1) | B;
 
-    counter += ett[enc_old][enc];
-    enc_old = enc;
+    _counter += _ett[_enc_old][enc];
+    _enc_old = enc;
 }
 
-float Encoder::GetPhi() const{
-    return phi;
+float Encoder::getPhi() const{
+    return _phi;
 }
 
-float Encoder::GetDPhi() const{
-    return dphi;
+float Encoder::getDPhi() const{
+    return _dphi;
 }

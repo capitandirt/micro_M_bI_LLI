@@ -12,7 +12,7 @@ namespace TIM2{
 
         const int MAX_COUNTER = 256;
         const int PRESCALER = 1024;
-        const int COUNTER = Ts_us / (F_CPU / PRESCALER / 256 ) - 1;
+        const int COUNTER = Ts_us / (F_CPU / PRESCALER / MAX_COUNTER ) - 1;
 
         OCR2A = COUNTER;            
         TCCR2A |= (1 << WGM21);

@@ -17,21 +17,19 @@ void ActionsHandler::dirs_to_primitives(){
     }
 
     _cycloStore->addPrimitive(PrimitiveCycloAction_t::STOP);
-    // _cycloStore->printPrimitives();
 }
 
-void ActionsHandler::start_primitive_process()
+void ActionsHandler::start_explorer_process(Direction robot_dir, Vec2 robot_coords, Direction& changed_dir, Vec2& changed_coords)
 {
     _cycloStore->reloadSmarts();
     
     const auto from_path_dir = static_cast<int8_t>(_maze->GetPathDir(0));
-    const auto from_odom_dir = static_cast<int8_t>(_odometry->getDir());
+    const auto from_odom_dir = static_cast<int8_t>(robot_dir);
+
+    changed_dir = static_cast<Direction>(from_path_dir);
+    changed_coords = robot_coords.dependingOnDirection(changed_dir);
+
     const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_odom_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
-    
-    Serial.println((int)first_primitive);
-
-    _cycloStore->printPrimitives();
-
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {
         case PrimitiveCycloAction_t::LEFT:
@@ -58,10 +56,10 @@ void ActionsHandler::start_primitive_process()
     }
 }
 
-void ActionsHandler::primitivesToExplorers()
+void ActionsHandler::primitivesToExplorers(Direction robot_dir, Vec2 robot_coord, Direction& changed_dir, Vec2& changed_coords)
 {
     dirs_to_primitives();
-    start_primitive_process();
+    start_explorer_process(robot_dir, robot_coord, changed_dir, changed_coords);
 
     while(!_cycloStore->primitiveIsEmpty()){
              if (TO_SS90E());
@@ -71,10 +69,11 @@ void ActionsHandler::primitivesToExplorers()
     }
 }
 
+// !UNWORKABLE CODE
 void ActionsHandler::primitivesToFasts()
 {
     dirs_to_primitives();
-    start_primitive_process();
+    // start_primitive_process();
 
     while(!_cycloStore->primitiveIsEmpty()){
              if (TO_FROM_DIAGS_TO_OP_DIAGS());
@@ -93,6 +92,7 @@ bool ActionsHandler::TO_IDLE(){
 
 bool ActionsHandler::TO_STOP(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::STOP){
+        _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
         _cycloStore->addSmart(SmartCycloAction_t::STOP);
         _cycloStore->virtualPrimitiveRelease();
         return true;

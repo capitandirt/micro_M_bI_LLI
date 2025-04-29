@@ -46,6 +46,10 @@ void Odometry::updateDir(Direction dir)
     this->dir = dir;
 }
 
+void Odometry::updateMazeCoords(Vec2 coords_){
+    mazeCoord = coords_;
+}
+
 void Odometry::reset()
 {
     vL = 0;

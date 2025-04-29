@@ -8,56 +8,39 @@
     \S/
 */
 
-struct Vec2
-{
-    Vec2(){};
-    Vec2(uint8_t x, uint8_t y) : x(x), y(y){}
-    uint8_t x, y;
-};
-
-/*useless struct*/
-template<uint8_t N>
-struct Vec2Array{
-public:
-    Vec2Array(){
-        for (uint8_t i = 0; i < N; i++) {
-            _data[i] = {0, 0};
-        }
-    }
-
-    Vec2Array(const Vec2 (&arr)[N]){
-        for(uint8_t i = 0; i < N; i++){
-            _data[i] = arr[i];
-        }
-    }
-    
-    uint8_t len() const{
-        return _size;
-    }
-
-    bool operator==(const Vec2Array& other) const{
-        if(other._size != this->_size) return false;
-
-        for(uint8_t i = 0; i < _size; i++){
-            if(this->_data[i].x != other._data[i].x) return false;
-            if(this->_data[i].y != other._data[i].y) return false;
-        }
-
-        return true;
-    }
-
-    Vec2 operator[](uint8_t index){ return _data[index]; }
-    const Vec2 operator[](uint8_t index) const{ return _data[index]; }
-
-private:
-    Vec2 _data[N];
-    const uint8_t _size = N;
-};
-
 constexpr uint8_t DIRECTION_SIZE = 4;
 enum class Direction : uint8_t{
     N = 0, E, S, W
 };
+
+struct Vec2
+{
+    Vec2(){};
+    Vec2(uint8_t x, uint8_t y) : x(x), y(y){}
+
+    Vec2 dependingOnDirection(Direction dir){
+             if(dir == Direction::N) y--;
+        else if(dir == Direction::S) y++;
+        else if(dir == Direction::W) x++;
+        else if(dir == Direction::E) x--;
+        
+        return *this;
+    }
+
+    uint8_t x, y;
+};
+
+inline uint8_t toInt(Direction dir){
+    return static_cast<uint8_t>(dir);
+}
+
+inline Direction incDir(Direction dir){
+    return static_cast<Direction>((toInt(dir) + 1) % DIRECTION_SIZE);
+}
+
+inline Direction decDir(Direction dir){
+    return static_cast<Direction>((toInt(dir) - 1 + DIRECTION_SIZE) % DIRECTION_SIZE);
+}
 
 enum class DirectionState : uint8_t{
     UNDEF = 0,
@@ -67,6 +50,15 @@ enum class DirectionState : uint8_t{
 enum class WallState : uint8_t{
     UNDEF = 0, LO, HI
 };
+
+inline WallState toWallState(bool exp){
+    return exp? WallState::HI : WallState::LO;
+}
+
+inline bool toBool(WallState exp){
+    if(exp == WallState::HI) return true;
+    return false;
+}
 
 struct RawCellStore{
     enum class PathDirStore : uint8_t{

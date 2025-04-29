@@ -6,7 +6,7 @@ void Servo::setW(const float w){
 }
 
 void Servo::act(){
-    motor->drive(w_PiReg->getU());
+    // motor->drive(w_PiReg->getU());
 }
 
 void Servo::tick(){

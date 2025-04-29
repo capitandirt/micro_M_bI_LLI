@@ -109,7 +109,6 @@ Solver solver(&maze);
 
 ActionsHandlerConnectionParams ahcp{
     ._maze = &maze,
-    ._odometry = &odometry,
     ._cycloStore = &cycloStore
 };
 ActionsHandler actionsHandler(&ahcp);
@@ -117,10 +116,11 @@ ActionsHandler actionsHandler(&ahcp);
 OprocouplerConnectionParams ocp{
     .EMITERS_FWD = OPTOCOUPLER_EMITERS_A,
     .EMITERS_SIDE = OPTOCOUPLER_EMITERS_B,
-    .SENSOR_0 = OPTOCOUPLER_SENSOR_0,
-    .SENSOR_1 = OPTOCOUPLER_SENSOR_1,
-    .SENSOR_2 = OPTOCOUPLER_SENSOR_2,
-    .SENSOR_3 = OPTOCOUPLER_SENSOR_3,
+    .REC_RIGHT = OPTOCOUPLER_SENSOR_1,
+    .REC_LEFT = OPTOCOUPLER_SENSOR_2,
+    .REC_FWD_LEFT = OPTOCOUPLER_SENSOR_3,
+    .REC_FWD_RIGHT = OPTOCOUPLER_SENSOR_0,
+    .SENSE_THRESHOLD = OPTOCOUPLER_SENSE_THRESHOLD
 };
 OptocouplerSensors optocoupler(&ocp);
 
