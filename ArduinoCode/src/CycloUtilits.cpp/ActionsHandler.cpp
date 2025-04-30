@@ -23,13 +23,13 @@ void ActionsHandler::start_explorer_process(Direction robot_dir, Vec2 robot_coor
 {
     _cycloStore->reloadSmarts();
     
-    const auto from_path_dir = static_cast<int8_t>(_maze->GetPathDir(0));
-    const auto from_odom_dir = static_cast<int8_t>(robot_dir);
+    const int8_t from_path_dir = static_cast<int8_t>(_maze->GetPathDir(0));
+    const int8_t from_robot_dir = static_cast<int8_t>(robot_dir);
 
-    changed_dir = static_cast<Direction>(from_path_dir);
+    changed_dir = robot_dir;
     changed_coords = robot_coords.dependingOnDirection(changed_dir);
 
-    const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_odom_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
+    const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {
         case PrimitiveCycloAction_t::LEFT:
@@ -152,11 +152,11 @@ bool ActionsHandler::TO_SS90S(){
 bool ActionsHandler::TO_FROM_DIAGS_TO_OP_DIAGS(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
         const PrimitiveCycloAction_t turn = _cycloStore->virtualPopFrontPrimitive();
-
+        
         if(turn == PrimitiveCycloAction_t::LEFT || turn == PrimitiveCycloAction_t::RIGHT){
             const PrimitiveCycloAction_t op_turn = _cycloStore->virtualPopFrontPrimitive();
 
-            if(toInt(op_turn) == (toInt(turn) + 2) % 4){
+            if(toInt(op_turn) == (toInt(turn) + 2) % DIRECTION_SIZE){
                 if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
                     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                     
@@ -177,7 +177,6 @@ bool ActionsHandler::TO_FROM_DIAGS_TO_OP_DIAGS(){
             }
         }
     }
-
     _cycloStore->virtualGoBack();
     return false;
 }

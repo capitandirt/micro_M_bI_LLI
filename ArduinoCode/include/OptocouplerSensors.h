@@ -11,7 +11,10 @@ struct OprocouplerConnectionParams{
     const uint8_t REC_LEFT;
     const uint8_t REC_FWD_LEFT;
     const uint8_t REC_FWD_RIGHT;
-    const uint8_t SENSE_THRESHOLD;
+    const uint8_t SENSE_THRESHOLD_FWD_L;
+    const uint8_t SENSE_THRESHOLD_FWD_R;
+    const uint8_t SENSE_THRESHOLD_RIGHT;
+    const uint8_t SENSE_THRESHOLD_LEFT;
 };
 
 struct Sense_t{

@@ -35,7 +35,7 @@ void Solver::calc_path(const uint8_t ind_s, const uint8_t ind_f){
 
 void Solver::MazeTestConfig(){
     _Maze->SetCell({WallState::LO, WallState::HI, WallState::LO, WallState::HI}, {0, 0});
-    _Maze->SetCell({WallState::LO, WallState::LO, WallState::HI, WallState::LO}, {2, 0});
+    _Maze->SetCell({WallState::LO, WallState::LO, WallState::LO, WallState::LO}, {2, 0});
     _Maze->SetCell({WallState::HI, WallState::LO, WallState::HI, WallState::LO}, {4, 0});
     _Maze->SetCell({WallState::LO, WallState::LO, WallState::LO, WallState::HI}, {6, 0});
     _Maze->SetCell({WallState::HI, WallState::LO, WallState::HI, WallState::LO}, {8, 0});
@@ -104,7 +104,7 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
 
     while(!_queue.isEmpty()){
         uint8_t cur_cell_ind = _queue.popFront();
-        
+
         if(cur_cell_ind == ind_s){
             break;
         }

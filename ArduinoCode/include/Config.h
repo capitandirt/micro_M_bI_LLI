@@ -21,7 +21,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 2000 // 0 < Ts_us <= 10000
+#define Ts_us 10000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 
@@ -89,15 +89,15 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 11
-#define MAZE_FINISH_CELLS_X (MAZE_SIDE_LENGTH / 2)
-#define MAZE_FINISH_CELLS_Y (MAZE_SIDE_LENGTH / 2)
+#define MAZE_SIDE_LENGTH 3
+#define MAZE_FINISH_CELLS_X (2)
+#define MAZE_FINISH_CELLS_Y (2)
 
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)
 #define MAZE_MEM_SIZE (((MAZE_SIDE_LENGTH + MAZE_SIDE_LENGTH) + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH))
 
-#define MAZE_PATH_SIZE ((MAZE_TOTAL_SIZE - (MAZE_TOTAL_SIZE % 2)) / 2)
+#define MAZE_PATH_SIZE ((MAZE_TOTAL_SIZE - (MAZE_TOTAL_SIZE % 2)))
 /*==MAZE END==*/
 
 /*==QUEUE BEGIN==*/
@@ -106,7 +106,7 @@
 
 
 /*==ROBOT START PLACE BEGIN==*/
-#define START_ROBOT_DIRECTION (Direction::W)
+#define START_ROBOT_DIRECTION (Direction::S)
 #define START_ROBOT_COORDS {0, 0}
 /*==ROBOT START PLACE END==*/
 
@@ -139,7 +139,10 @@
 #define OPTOCOUPLER_SENSOR_3 (17)
 #define OPTOCOUPLER_SENSOR_4 (18)
 
-#define OPTOCOUPLER_SENSE_THRESHOLD (2)
+#define OPTOCOUPLER_SENSE_THRESHOLD_LEFT (11)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_L (23)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (23)
+#define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (6)
 /*==OPTOCOUPLER END==*/
 
 #endif // !_CONFIG_H_

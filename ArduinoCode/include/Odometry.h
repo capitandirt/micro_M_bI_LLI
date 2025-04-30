@@ -47,7 +47,7 @@ public:
     float getY() const noexcept;
     float getTheta() const noexcept;
     float getDist() const noexcept;
-    Vec2 getMazeCoord() const noexcept;
+    Vec2 getMazeCoords() const noexcept;
     Direction getDir() const noexcept;
 
     void update(float omegaL, float omegaR) noexcept;

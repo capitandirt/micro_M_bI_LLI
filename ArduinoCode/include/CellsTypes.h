@@ -48,7 +48,7 @@ enum class DirectionState : uint8_t{
 };
 
 enum class WallState : uint8_t{
-    UNDEF = 0, LO, HI
+    LO = 0, HI
 };
 
 inline WallState toWallState(bool exp){
@@ -65,11 +65,12 @@ struct RawCellStore{
         first = 0, second
     };
 
-    WallState s_wall : 2;
-    WallState e_wall : 2;
+    WallState s_wall : 1;
+    WallState e_wall : 1;
     Direction cell_dir : 2;
     DirectionState is_def_cell_dir : 1;
-    PathDirStore path_dir : 1; 
+    PathDirStore path_dir : 1;
+    bool is_cell_passed : 1; 
 
     /** it may be both LO_PATH_DIR and HI_PATH_DIR. it depend by current element
       * so, take maze 2x2 

@@ -1,4 +1,4 @@
-#ifndef _CYCLOGRAMS_H_
+    #ifndef _CYCLOGRAMS_H_
 #define _CYCLOGRAMS_H_
 
 #include "Config.h"
@@ -57,6 +57,7 @@ CYCLOGRAM(SS90SR){};
 //search turns 90
 CYCLOGRAM(SS90EL)
 {
+    
     const float R = 0.07; //радиус поворота
     ms->v_f0 = FORWARD_SPEED;
     float theta_i = FORWARD_SPEED / R;

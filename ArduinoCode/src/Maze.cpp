@@ -103,6 +103,10 @@ void Maze::PrimaryFill(){
         _cell_blocks[i].is_def_cell_dir = DirectionState::UNDEF;
     }
 
+    for(uint16_t i = 0; i < MAZE_TOTAL_SIZE; i++){
+        _cell_blocks[i].is_cell_passed = false;
+    }
+
     /*fill north wall fronts*/
     for(uint16_t i = 0; i < MAZE_SIDE_LENGTH; i++){
         _cell_blocks[i].s_wall = WallState::HI;
@@ -185,6 +189,19 @@ Direction Maze::GetPathDir(uint8_t ind) const{
         static_cast<uint8_t>(_cell_blocks[ind*2 + 1].path_dir));
     return _buf_path_direction_store;
 }
+
+bool Maze::CellIsPassed(const Vec2 v) const{
+    if(cell_request_is_out_of_range_cell_blocks(v)) return true;
+
+    return _cell_blocks[MAZE_SIDE_LENGTH_ADD_ONE + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].is_cell_passed;
+}
+
+void Maze::PassCell(const Vec2 v) noexcept{
+    if(cell_request_is_out_of_range_cell_blocks(v)) return;
+
+    _cell_blocks[MAZE_SIDE_LENGTH_ADD_ONE + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].is_cell_passed = true;
+}
+
 
 void Maze::ClearPath(){
     _path_ind = 0;

@@ -26,11 +26,14 @@ public:
                         {   
                             .v_f0 = 0,
                             .theta_i0 = 0,
-                            .isComplete = 0
+                            .isComplete = 1
                         }){}
 
 
     void doCyclogram();
+
+    bool isComplete() const noexcept;
+    void checkIsComplete();
     // void printCycloProgram() const;
 private:
     Cyclogram _cur_cyclogram = IDLE;

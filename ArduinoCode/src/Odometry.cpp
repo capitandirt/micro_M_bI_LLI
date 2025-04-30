@@ -16,7 +16,7 @@ float Odometry::getDist() const{
     return Distance.getOut();
 }
 
-Vec2 Odometry::getMazeCoord() const{
+Vec2 Odometry::getMazeCoords() const{
     return mazeCoord;
 }
 

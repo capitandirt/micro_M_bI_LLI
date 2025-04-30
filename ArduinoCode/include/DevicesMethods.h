@@ -30,8 +30,6 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
-        // cycloStore.addSmart(SmartCycloAction_t::FWD);
-
         TIM2::INIT();
     }
 
@@ -48,9 +46,16 @@ namespace DEVICES{
         optocoupler.tick();
         
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
+        cycloWorker.doCyclogram();
 
-        // cycloWorker.doCyclogram();
-        // robot.moveFloodFill();
+        if(cycloWorker.isComplete()){
+            if(!maze.CellIsPassed(odometry.getMazeCoords())){
+                maze.PassCell(odometry.getMazeCoords());
+                robot.stepFloodFill();
+            }
+        }
+
+        cycloWorker.checkIsComplete();
     }
 
     namespace TEST{
@@ -94,27 +99,29 @@ namespace DEVICES{
 
             // unnamed namespace
             {
-                Vec2 __s = {0, 0}; Vec2 __f = {5, 5};    
+                Vec2 __s = {0, 0}; Vec2 __f = {2, 2};    
                 solver.SolveBfsMaze(__s, __f);
             }
 
             maze.Print();
 
             {   
-                auto __sd = Direction::N; Vec2 __sv = {0, 0};
+                Direction __sd = Direction::S; Vec2 __sv = {0, 0};
                 Direction __d; Vec2 __v;
                 actionsHandler.primitivesToExplorers(__sd, __sv, __d, __v);
             }
 
+            maze.PrintDirPath();
+            cycloStore.printPrimitives();
             cycloStore.printSmarts();
             cycloStore.reloadSmarts();
             // cycloStore.printSmarts();
         }
 
         void OPTOCOUPLER(){
-            optocoupler.printSense();
+            // optocoupler.printSense();
             optocoupler.printMask();
-            Serial.println();
+            // Serial.println();
         }
     }
 }

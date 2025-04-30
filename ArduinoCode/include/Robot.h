@@ -15,12 +15,13 @@ struct RobotConnectionParams{
     Odometry* _odometry;
 };
 
+
 class Robot : public RobotConnectionParams{
 public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
     void stepFloodFill();
-
+    
 private:
     Vec2 _buf_robot_coords;
     Direction _buf_robot_dir;

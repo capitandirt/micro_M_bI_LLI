@@ -61,6 +61,8 @@ Cell OptocouplerSensors::getCell(Direction robot_dir){
 }
 
 void OptocouplerSensors::printMask(){
+    calc_sense_mask();
+
     Serial.println( String(sense_mask.left) + " " + 
                     String(sense_mask.forward_l) + " " +
                     String(sense_mask.forward_r) + " " + 
@@ -75,8 +77,8 @@ void OptocouplerSensors::printSense(){
 }
 
 void OptocouplerSensors::calc_sense_mask(){
-    sense_mask.forward_l = sense[OptocouplerSense::From::FORWARD_L] > SENSE_THRESHOLD;
-    sense_mask.forward_r = sense[OptocouplerSense::From::FORWARD_R] > SENSE_THRESHOLD;
-    sense_mask.left = sense[OptocouplerSense::From::LEFT] > SENSE_THRESHOLD;
-    sense_mask.right = sense[OptocouplerSense::From::RIGHT] > SENSE_THRESHOLD;
+    sense_mask.forward_l = sense[OptocouplerSense::From::FORWARD_L] > SENSE_THRESHOLD_FWD_L;
+    sense_mask.forward_r = sense[OptocouplerSense::From::FORWARD_R] > SENSE_THRESHOLD_FWD_R;
+    sense_mask.left = sense[OptocouplerSense::From::LEFT] > SENSE_THRESHOLD_LEFT;
+    sense_mask.right = sense[OptocouplerSense::From::RIGHT] > SENSE_THRESHOLD_RIGHT;
 }
