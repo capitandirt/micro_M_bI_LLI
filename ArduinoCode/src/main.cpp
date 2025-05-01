@@ -4,11 +4,12 @@
 
 void setup()
 {
-    DEVICES::INIT();
+    // DEVICES::INIT();
 	DEVICES::TEST::SET_SERIAL();
 
-    // Direction d = Direction::S;
-    // actionsHandler.primitivesToExplorers(Direction::S, {0, 0}, Direction::N, {0, 0});
+    Direction d = Direction::S;
+    Vec2 v = {0, 0};
+    actionsHandler.primitivesToExplorers(Direction::W, {0, 0}, v);
 
     // DEVICES::TEST::CYCLOGRAMS();
     // DEVICES::TEST::BFS();

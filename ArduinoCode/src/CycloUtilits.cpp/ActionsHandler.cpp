@@ -19,15 +19,14 @@ void ActionsHandler::dirs_to_primitives(){
     _cycloStore->addPrimitive(PrimitiveCycloAction_t::STOP);
 }
 
-void ActionsHandler::start_explorer_process(Direction robot_dir, Vec2 robot_coords, Direction& changed_dir, Vec2& changed_coords)
+void ActionsHandler::start_explorer_process(Direction robot_dir, Vec2 robot_coords, Vec2& changed_coords)
 {
     _cycloStore->reloadSmarts();
     
     const int8_t from_path_dir = static_cast<int8_t>(_maze->GetPathDir(0));
     const int8_t from_robot_dir = static_cast<int8_t>(robot_dir);
 
-    changed_dir = robot_dir;
-    changed_coords = robot_coords.dependingOnDirection(changed_dir);
+    changed_coords = robot_coords.dependingOnDirection(robot_dir);
 
     const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
     switch(first_primitive) // установка соответствия направления робота и направлений пути
@@ -56,10 +55,10 @@ void ActionsHandler::start_explorer_process(Direction robot_dir, Vec2 robot_coor
     }
 }
 
-void ActionsHandler::primitivesToExplorers(Direction robot_dir, Vec2 robot_coord, Direction& changed_dir, Vec2& changed_coords)
+void ActionsHandler::primitivesToExplorers(Direction robot_dir, Vec2 robot_coord, Vec2& changed_coords)
 {
     dirs_to_primitives();
-    start_explorer_process(robot_dir, robot_coord, changed_dir, changed_coords);
+    start_explorer_process(robot_dir, robot_coord, changed_coords);
 
     while(!_cycloStore->primitiveIsEmpty()){
              if (TO_SS90E());

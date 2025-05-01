@@ -14,13 +14,13 @@ class ActionsHandler : ActionsHandlerConnectionParams{
 public:
     ActionsHandler(ActionsHandlerConnectionParams* ahcp) : ActionsHandlerConnectionParams(*ahcp){}
     
-    void primitivesToExplorers(Direction robot_dir, Vec2 robot_coords, Direction& changed_dir, Vec2& changed_coords);
+    void primitivesToExplorers(Direction robot_dir, Vec2 robot_coords, Vec2& changed_coords);
     void primitivesToFasts();
 
 private:
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
     void dirs_to_primitives();
-    void start_explorer_process(Direction robot_dir, Vec2 robot_coords, Direction& changed_dir, Vec2& changed_coords);
+    void start_explorer_process(Direction robot_dir, Vec2 robot_coords, Vec2& changed_coords);
 
     bool TO_IDLE();
     bool TO_STOP();

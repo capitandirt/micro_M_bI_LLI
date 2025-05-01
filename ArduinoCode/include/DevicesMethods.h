@@ -107,8 +107,8 @@ namespace DEVICES{
 
             {   
                 Direction __sd = Direction::S; Vec2 __sv = {0, 0};
-                Direction __d; Vec2 __v;
-                actionsHandler.primitivesToExplorers(__sd, __sv, __d, __v);
+                Vec2 __v;
+                actionsHandler.primitivesToExplorers(__sd, __sv, __v);
             }
 
             maze.PrintDirPath();

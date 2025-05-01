@@ -21,8 +21,8 @@ struct Vec2
     Vec2 dependingOnDirection(Direction dir){
              if(dir == Direction::N) y--;
         else if(dir == Direction::S) y++;
-        else if(dir == Direction::W) x++;
-        else if(dir == Direction::E) x--;
+        else if(dir == Direction::W) x--;
+        else if(dir == Direction::E) x++;
         
         return *this;
     }
