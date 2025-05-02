@@ -46,8 +46,8 @@ void Odometry::updateDir(Direction dir)
     this->dir = dir;
 }
 
-void Odometry::updateMazeCoords(Vec2 coords_){
-    mazeCoord = coords_;
+void Odometry::updateMazeCoords(Direction dir){
+    mazeCoord.plusOrtVector(dir);
 }
 
 void Odometry::reset()
@@ -65,15 +65,8 @@ void Odometry::reset()
     Distance.reset();
 }
 
-void Odometry::resetRelative()
+void Odometry::resetCyclogramNeeds()
 {
-    vL = 0;
-    vR = 0;
-    vX = 0;
-    vY = 0;
-    v = 0;
     Distance.reset();
-    X.reset();
-    Y.reset();
     Theta.reset();
 }

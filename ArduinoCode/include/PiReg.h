@@ -18,6 +18,7 @@ public:
     void passCur(float& cur);  
     float getU() const;
 
+    void reload();
     void tick(); 
 
 private:

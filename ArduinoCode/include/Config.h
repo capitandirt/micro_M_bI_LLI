@@ -21,7 +21,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 10000 // 0 < Ts_us <= 10000
+#define Ts_us 7000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 
@@ -36,15 +36,14 @@
 /*==ENCODER CONNECTION PINS END==*/
 
 /*==ROBOT PARAMS BEGIN==*/
-#define ROBOT_WIDTH 0.0725f
+#define ROBOT_WIDTH 0.077f
+#define WHEEL_RADIUS 0.0163f
 /*==ROBOT PARAMS END*/
 
 /*==WHEELS PARAMS BEGIN==*/
 #define ENC_PPR 48
 #define GEAR_RATIO 30
 #define TICK2RAD (2.f * M_PI / (ENC_PPR * GEAR_RATIO))
-
-#define WHEEL_RADIUS 0.017f
 /*==WHEELS PARAMS END==*/
 
 /*==MOTOR PINS BEGIN==*/
@@ -64,12 +63,16 @@
 /*==POWER END==*/
 
 /*==W MOTOT PIREG BEGIN==*/
-#define W_KP 0.12f
-#define W_KI (W_KP / 0.21f) 
+#define W_K_MOTOR (6 / 1.5) //он выдаёт примерно 6.5 рад/с на 1.5 Волта
+#define W_T_MOTOR 0.21 //210 мс - 70% времени от разгона от 0 до некой постоянной скорости при напряжении
+#define W_T_u (32 * Ts_s)
+
+#define W_KP (0.12f) // Kp = K
+#define W_KI (W_KP / 0.23f) // Ki = K / T
 /*==W MOTOT PIREG END==*/
 
 /*==CYCLOGRAM BEGIN==*/
-#define FORWARD_SPEED 0.10
+#define FORWARD_SPEED 0.20
 #define CELL_SIZE 0.18
 /*==CYCLOGRAM END==*/
 
@@ -89,7 +92,7 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 3
+#define MAZE_SIDE_LENGTH 4
 #define MAZE_FINISH_CELLS_X (2)
 #define MAZE_FINISH_CELLS_Y (2)
 
@@ -139,10 +142,10 @@
 #define OPTOCOUPLER_SENSOR_3 (17)
 #define OPTOCOUPLER_SENSOR_4 (18)
 
-#define OPTOCOUPLER_SENSE_THRESHOLD_LEFT (11)
-#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_L (23)
-#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (23)
-#define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (6)
+#define OPTOCOUPLER_SENSE_THRESHOLD_LEFT (22)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_L (14)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (14)
+#define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (10)
 /*==OPTOCOUPLER END==*/
 
 #endif // !_CONFIG_H_

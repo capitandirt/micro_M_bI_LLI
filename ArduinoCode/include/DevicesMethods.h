@@ -30,7 +30,7 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
-        TIM2::INIT();
+        // TIM2::INIT();
     }
 
     void TICK(){
@@ -94,6 +94,15 @@ namespace DEVICES{
             cycloStore.reloadSmarts();
         }
 
+        void EXPLORER_CYC()
+        {
+            cycloStore.addSmart(SmartCycloAction_t::IP90L);
+            cycloStore.addSmart(SmartCycloAction_t::IP90R);
+            cycloStore.addSmart(SmartCycloAction_t::IP90R);
+            cycloStore.addSmart(SmartCycloAction_t::IP180);
+            cycloStore.addSmart(SmartCycloAction_t::SS90EL);
+        }
+
         void CONVERT_PATH_TO_CYCLOGRAMS(){
             solver.MazeTestConfig();
 
@@ -108,7 +117,7 @@ namespace DEVICES{
             {   
                 Direction __sd = Direction::S; Vec2 __sv = {0, 0};
                 Vec2 __v;
-                actionsHandler.primitivesToExplorers(__sd, __sv, __v);
+                actionsHandler.primitivesToExplorers(__sd);
             }
 
             maze.PrintDirPath();
@@ -118,14 +127,15 @@ namespace DEVICES{
             // cycloStore.printSmarts();
         }
 
-        void OPTOCOUPLER(){
-            // optocoupler.printSense();
-            optocoupler.printMask();
+        void OPTOCOUPLERS(){
+            optocoupler.tick();
+            optocoupler.printSense();
+            // optocoupler.printMask();
             // Serial.println();
         }
     }
 }
 
-ISR(TIMER2_COMPA_vect){
-    DEVICES::TICK();   
-}
+// ISR(TIMER2_COMPA_vect){
+//     DEVICES::TICK();   
+// }

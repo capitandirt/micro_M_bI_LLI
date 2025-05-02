@@ -18,7 +18,9 @@ void CycloWorker::checkIsComplete(){
         _last_time = _cur_time; 
 
         _cur_cyclogram = cycloStore->cyclogramFrom();
-        _sensors.robotState->resetRelative();
+        _sensors.robotState->resetCyclogramNeeds();
+
+        _reset_pi();
         _motion_states.isComplete = 0;
     }
 };

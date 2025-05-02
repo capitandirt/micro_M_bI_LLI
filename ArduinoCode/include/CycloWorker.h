@@ -12,6 +12,7 @@ struct CycloWorkerConnectionParams{
     Mixer* mixer; 
     Odometry* odometry;  
     CycloStore* cycloStore;
+    void (*_reset_pi)();
 };
 
 class CycloWorker : public CycloWorkerConnectionParams{

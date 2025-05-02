@@ -52,9 +52,9 @@ public:
 
     void update(float omegaL, float omegaR) noexcept;
     void updateDir(Direction dir) noexcept;
-    void updateMazeCoords(Vec2 coords_);
+    void updateMazeCoords(Direction dir);
     void reset() noexcept;
-    void resetRelative() noexcept;
+    void resetCyclogramNeeds() noexcept;
 };
 
 #endif // !_ODOMETRY_H_

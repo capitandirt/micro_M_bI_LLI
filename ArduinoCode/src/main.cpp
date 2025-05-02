@@ -4,22 +4,23 @@
 
 void setup()
 {
-    // DEVICES::INIT();
+    DEVICES::INIT();
 	DEVICES::TEST::SET_SERIAL();
-
-    Direction d = Direction::S;
-    Vec2 v = {0, 0};
-    actionsHandler.primitivesToExplorers(Direction::W, {0, 0}, v);
-
+    // DEVICES::TEST::EXPLORER_CYC();
     // DEVICES::TEST::CYCLOGRAMS();
     // DEVICES::TEST::BFS();
     // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
 }
 
-void loop(){
-    // DEVICES::TEST::OPTOCOUPLER();
-    // cycloStore.printSmarts();
+uint32_t last_time = 0;
 
-    // Serial.println((int)odometry.getDir()); 
+void loop(){
+    while(micros() - last_time < Ts_us)
+        ;
+    last_time = micros();
+
+    DEVICES::TEST::OPTOCOUPLERS();
+    // DEVICES::TICK();
+    // cycloStore.printSmarts();
 }
 //программа выполняет функцию tick через прерывание по таймеру каждые Ts_s секунд

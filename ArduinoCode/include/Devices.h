@@ -96,10 +96,16 @@ Mixer mixer(&mccp);
 
 CycloStore cycloStore;
 
+void reset_pi(){
+    left_w_PiReg.reload();
+    right_w_PiReg.reload();
+}
+
 CycloWorkerConnectionParams cwcp{
     .mixer = &mixer,
     .odometry = &odometry,
-    .cycloStore = &cycloStore
+    .cycloStore = &cycloStore,
+    ._reset_pi = reset_pi
 };
 CycloWorker cycloWorker(&cwcp);
 
@@ -132,7 +138,7 @@ RobotConnectionParams rcp{
     ._maze = &maze,
     ._solver = &solver,
     ._optocoupler = &optocoupler,
-    ._odometry = &odometry
+    ._odometry = &odometry,
 };
 Robot robot(&rcp);
 
