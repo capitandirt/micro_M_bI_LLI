@@ -27,7 +27,9 @@ private:
     bool TO_FWD();
     bool TO_SS90E();
     bool TO_SS90S();
-    bool TO_FROM_DIAGS_TO_OP_DIAGS();
+    bool TO_SD45S_DS45S();
+    bool TO_SD135S_DS45S();
+    void convertToSmart(); //экспериментальное 
 };
 
 #endif

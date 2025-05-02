@@ -18,7 +18,7 @@ struct Vec2
     Vec2(){};
     Vec2(uint8_t x, uint8_t y) : x(x), y(y){}
 
-    Vec2 dependingOnDirection(Direction dir){
+    Vec2 getOrtVector(Direction dir){
              if(dir == Direction::N) y--;
         else if(dir == Direction::S) y++;
         else if(dir == Direction::W) x--;

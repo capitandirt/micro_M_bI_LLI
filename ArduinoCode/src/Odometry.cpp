@@ -64,3 +64,16 @@ void Odometry::reset()
     Theta.reset();
     Distance.reset();
 }
+
+void Odometry::resetRelative()
+{
+    vL = 0;
+    vR = 0;
+    vX = 0;
+    vY = 0;
+    v = 0;
+    Distance.reset();
+    X.reset();
+    Y.reset();
+    Theta.reset();
+}

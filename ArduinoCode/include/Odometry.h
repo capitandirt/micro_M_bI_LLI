@@ -54,6 +54,7 @@ public:
     void updateDir(Direction dir) noexcept;
     void updateMazeCoords(Vec2 coords_);
     void reset() noexcept;
+    void resetRelative() noexcept;
 };
 
 #endif // !_ODOMETRY_H_
