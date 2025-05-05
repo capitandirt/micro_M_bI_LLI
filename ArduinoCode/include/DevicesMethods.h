@@ -30,6 +30,17 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
+
+        maze.PrimaryFill();
+        maze.SetCell(START_CELL, START_ROBOT_COORDS);
+        // maze.PassCell(START_ROBOT_COORDS);
+
+        maze.Print();
+
+        cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
+        cycloWorker.init();
+        
+        // odometry.updateMazeCoords(START_ROBOT_DIRECTION);
         // TIM2::INIT();
     }
 
@@ -49,10 +60,12 @@ namespace DEVICES{
         cycloWorker.doCyclogram();
 
         if(cycloWorker.isComplete()){
-            if(!maze.CellIsPassed(odometry.getMazeCoords())){
-                maze.PassCell(odometry.getMazeCoords());
-                robot.stepFloodFill();
-            }
+            // maze.PassCell(odometry.getMazeCoords());
+            robot.stepFloodFill();
+
+            // maze.Print();
+            cycloStore.printPrimitives();
+            cycloStore.printSmarts();
         }
 
         cycloWorker.checkIsComplete();
@@ -127,11 +140,14 @@ namespace DEVICES{
             // cycloStore.printSmarts();
         }
 
-        void OPTOCOUPLERS(){
+        void OPTOCOUPLERS_SENSE(){
             optocoupler.tick();
             optocoupler.printSense();
-            // optocoupler.printMask();
-            // Serial.println();
+        }
+        
+        void OPTOCOUPLERS_MASK(){
+            optocoupler.tick();
+            optocoupler.printMask();
         }
     }
 }

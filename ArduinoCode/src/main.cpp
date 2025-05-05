@@ -19,8 +19,13 @@ void loop(){
         ;
     last_time = micros();
 
-    DEVICES::TEST::OPTOCOUPLERS();
-    // DEVICES::TICK();
+    // Serial.print(odometry.getMazeCoords().x);
+    // Serial.print(" ");
+    // Serial.print(odometry.getMazeCoords().y);
+    // Serial.print(" ");
+    // Serial.println((int)maze.GetPathDir(0));
+    // maze.PrintDirPath();
     // cycloStore.printSmarts();
+    DEVICES::TEST::OPTOCOUPLERS_MASK();
+    // DEVICES::TICK();
 }
-//программа выполняет функцию tick через прерывание по таймеру каждые Ts_s секунд

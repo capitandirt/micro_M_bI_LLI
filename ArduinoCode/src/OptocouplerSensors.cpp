@@ -32,7 +32,7 @@ Cell OptocouplerSensors::getCell(Direction robot_dir){
     switch (robot_dir)
     {
     case Direction::N:
-        cell_from_sense.north_wall = toWallState(sense_mask.forward_l && sense_mask.forward_r);
+        cell_from_sense.north_wall = toWallState(sense_mask.forward_l || sense_mask.forward_r);
         cell_from_sense.east_wall  = toWallState(sense_mask.left);
         cell_from_sense.west_wall  = toWallState(sense_mask.right);
         cell_from_sense.south_wall = toWallState(false);
@@ -41,18 +41,18 @@ Cell OptocouplerSensors::getCell(Direction robot_dir){
         cell_from_sense.north_wall = toWallState(false);
         cell_from_sense.east_wall  = toWallState(sense_mask.right);
         cell_from_sense.west_wall  = toWallState(sense_mask.left);
-        cell_from_sense.south_wall = toWallState(sense_mask.forward_l && sense_mask.forward_r);
+        cell_from_sense.south_wall = toWallState(sense_mask.forward_l || sense_mask.forward_r);
         break;
     case Direction::E:
         cell_from_sense.north_wall = toWallState(sense_mask.right);
-        cell_from_sense.east_wall  = toWallState(sense_mask.forward_l && sense_mask.forward_r);
+        cell_from_sense.east_wall  = toWallState(sense_mask.forward_l || sense_mask.forward_r);
         cell_from_sense.west_wall  = toWallState(false);
         cell_from_sense.south_wall = toWallState(sense_mask.left);
         break;
     case Direction::W:
         cell_from_sense.north_wall = toWallState(sense_mask.left);
         cell_from_sense.east_wall  = toWallState(false);
-        cell_from_sense.west_wall  = toWallState(sense_mask.forward_l && sense_mask.forward_r);
+        cell_from_sense.west_wall  = toWallState(sense_mask.forward_l || sense_mask.forward_r);
         cell_from_sense.south_wall = toWallState(sense_mask.right);
         break;
     }

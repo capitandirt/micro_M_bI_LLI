@@ -12,7 +12,7 @@ struct CycloWorkerConnectionParams{
     Mixer* mixer; 
     Odometry* odometry;  
     CycloStore* cycloStore;
-    void (*_reset_pi)();
+    void (*_reset_reg)();
 };
 
 class CycloWorker : public CycloWorkerConnectionParams{
@@ -27,10 +27,11 @@ public:
                         {   
                             .v_f0 = 0,
                             .theta_i0 = 0,
-                            .isComplete = 1
+                            .isComplete = 0
                         }){}
 
 
+    void init();
     void doCyclogram();
 
     bool isComplete() const noexcept;

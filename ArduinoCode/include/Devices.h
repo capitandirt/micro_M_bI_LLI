@@ -105,7 +105,7 @@ CycloWorkerConnectionParams cwcp{
     .mixer = &mixer,
     .odometry = &odometry,
     .cycloStore = &cycloStore,
-    ._reset_pi = reset_pi
+    ._reset_reg = reset_pi
 };
 CycloWorker cycloWorker(&cwcp);
 

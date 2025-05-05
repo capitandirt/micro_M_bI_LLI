@@ -15,36 +15,60 @@ void ActionsHandler::dirs_to_primitives(){
     for(uint8_t i = 0; i < _maze->GetPathSize(); i++){
         _cycloStore->addPrimitive(calc_primitive_cyclo_action(i));
     }
-
-    _cycloStore->addPrimitive(PrimitiveCycloAction_t::STOP);
 }
 
 void ActionsHandler::start_explorer_process(Direction robot_dir)
 {
     _cycloStore->reloadSmarts();
     
-    const int8_t from_path_dir = static_cast<int8_t>(_maze->GetPathDir(0));
     const int8_t from_robot_dir = static_cast<int8_t>(robot_dir);
+    const int8_t from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
 
     const auto first_primitive = static_cast<PrimitiveCycloAction_t>((from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {
-        case PrimitiveCycloAction_t::LEFT:
+        case PrimitiveCycloAction_t::FORWARD:
+            _cycloStore->addSmart(SmartCycloAction_t::FWD);
+            break;
+
+        case PrimitiveCycloAction_t::BACK:
+            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
             _cycloStore->addSmart(SmartCycloAction_t::IP90L);
             break;
-        case PrimitiveCycloAction_t::RIGHT:
-            _cycloStore->addSmart(SmartCycloAction_t::IP90R);
-            break;
-        case PrimitiveCycloAction_t::BACK:
-            _cycloStore->addSmart(SmartCycloAction_t::IP180);
-            break;
-        case PrimitiveCycloAction_t::FORWARD:
-            break;
+
         default:
             break;
     }
     
-    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+}
+
+void ActionsHandler::loadExplorer(Direction robot_dir){
+    const auto from_robot_dir = static_cast<int8_t>(robot_dir);
+    const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
+    
+    const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
+        (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
+
+    if(first_primitive == PrimitiveCycloAction_t::BACK){
+        _cycloStore->addSmart(SmartCycloAction_t::IP180);
+    }
+
+    dirs_to_primitives();
+
+    switch (_cycloStore->popFrontPrimitive())
+    {
+    case PrimitiveCycloAction_t::FORWARD:
+        _cycloStore->addSmart(SmartCycloAction_t::FWD);
+        break;
+    case PrimitiveCycloAction_t::LEFT:
+        _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
+        break;
+    case PrimitiveCycloAction_t::RIGHT:
+        _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+        break;
+    default:
+        break;
+    }
 }
 
 void ActionsHandler::primitivesToExplorers(Direction robot_dir)

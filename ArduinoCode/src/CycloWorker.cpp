@@ -1,5 +1,9 @@
 #include "CycloWorker.h"
 
+void CycloWorker::init(){
+    _cur_cyclogram = cycloStore->cyclogramFrom();
+}
+
 void CycloWorker::doCyclogram(){
     _cur_time = millis();
     _sensors.time = _cur_time - _last_time;
@@ -20,7 +24,7 @@ void CycloWorker::checkIsComplete(){
         _cur_cyclogram = cycloStore->cyclogramFrom();
         _sensors.robotState->resetCyclogramNeeds();
 
-        _reset_pi();
+        _reset_reg();
         _motion_states.isComplete = 0;
     }
 };

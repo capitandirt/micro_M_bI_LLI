@@ -21,7 +21,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 7000 // 0 < Ts_us <= 10000
+#define Ts_us 10000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 
@@ -72,7 +72,7 @@
 /*==W MOTOT PIREG END==*/
 
 /*==CYCLOGRAM BEGIN==*/
-#define FORWARD_SPEED 0.20
+#define FORWARD_SPEED 0.05
 #define CELL_SIZE 0.18
 /*==CYCLOGRAM END==*/
 
@@ -92,9 +92,7 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 4
-#define MAZE_FINISH_CELLS_X (2)
-#define MAZE_FINISH_CELLS_Y (2)
+#define MAZE_SIDE_LENGTH 3
 
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)
@@ -109,10 +107,15 @@
 
 
 /*==ROBOT START PLACE BEGIN==*/
+#define START_CELL {WallState::HI, WallState::HI, WallState::LO, WallState::HI}
 #define START_ROBOT_DIRECTION (Direction::S)
 #define START_ROBOT_COORDS {0, 0}
 /*==ROBOT START PLACE END==*/
 
+
+/*==ROBOT FINISH PLACE BEGIN==*/
+#define FINISH_ROBOT_COORDS {2, 2}
+/*==ROBOT FINISH PLACE END==*/
 
 /*==CHECK TEST'S CORRECT OUTPUT BEGIN==*/
 /*
@@ -142,10 +145,10 @@
 #define OPTOCOUPLER_SENSOR_3 (17)
 #define OPTOCOUPLER_SENSOR_4 (18)
 
-#define OPTOCOUPLER_SENSE_THRESHOLD_LEFT (22)
-#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_L (14)
-#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (14)
-#define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (10)
+#define OPTOCOUPLER_SENSE_THRESHOLD_LEFT (9)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_L (7)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (7)
+#define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (9)
 /*==OPTOCOUPLER END==*/
 
 #endif // !_CONFIG_H_
