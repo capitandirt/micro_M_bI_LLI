@@ -63,14 +63,18 @@ public:
     Sense_t getSense();
     Cell getCell(Direction robotDir);
 
+    void printAbsCell();
     void printMask();
     void printSense();
 private:
     void calc_sense_mask();
+    void calc_relative_cell();
 
 private:
-    Sense_mask_t sense_mask;
-    OptocouplerSense sense;
+    Cell _relative_cell;
+
+    Sense_mask_t _sense_mask;
+    OptocouplerSense _sense;
 };
 
 #endif // !_OPTOCOUPLER_H_

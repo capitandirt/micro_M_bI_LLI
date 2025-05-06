@@ -28,6 +28,7 @@ class Maze{
 public:
     void PrimaryFill() noexcept;
     void Clear() noexcept;
+    void UndefDirs() noexcept;
 
     void SetCell(const Cell set_cell, const Vec2 v) noexcept;
     void UndefCell(const Vec2 vec2) noexcept;

@@ -59,7 +59,7 @@ namespace DEVICES{
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
 
-        if(cycloWorker.isComplete()){
+        if(cycloWorker.isComplete() && !robot.checkFloodFill()){
             // maze.PassCell(odometry.getMazeCoords());
             robot.stepFloodFill();
 
@@ -148,6 +148,11 @@ namespace DEVICES{
         void OPTOCOUPLERS_MASK(){
             optocoupler.tick();
             optocoupler.printMask();
+        }
+
+        void OPTOCOUPLERS_CELL(){
+            optocoupler.tick();
+            optocoupler.printAbsCell();
         }
     }
 }

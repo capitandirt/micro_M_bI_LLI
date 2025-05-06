@@ -41,9 +41,9 @@ void Odometry::update(float omegaL, float omegaR)
     Y.tick(vY);
 }
 
-void Odometry::updateDir(Direction dir)
+void Odometry::updateDir(Direction dir_)
 {
-    this->dir = dir;
+    dir = dir_;
 }
 
 void Odometry::updateMazeCoords(Direction dir){

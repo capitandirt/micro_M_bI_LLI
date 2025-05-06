@@ -99,6 +99,11 @@ void ActionsHandler::primitivesToFasts()
     }
 }
 
+void ActionsHandler::needStop(){
+    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+    _cycloStore->addSmart(SmartCycloAction_t::STOP);
+}
+
 bool ActionsHandler::TO_IDLE(){
     _cycloStore->popFrontPrimitive();
     _cycloStore->addSmart(SmartCycloAction_t::IDLE);

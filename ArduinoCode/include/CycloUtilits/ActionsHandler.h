@@ -17,7 +17,7 @@ public:
     void loadExplorer(Direction robot_dir);
     void primitivesToExplorers(Direction robot_dir);
     void primitivesToFasts();
-
+    void needStop();
 private:
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
     void dirs_to_primitives();

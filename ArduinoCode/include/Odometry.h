@@ -51,7 +51,7 @@ public:
     Direction getDir() const noexcept;
 
     void update(float omegaL, float omegaR) noexcept;
-    void updateDir(Direction dir) noexcept;
+    void updateDir(Direction dir_) noexcept;
     void updateMazeCoords(Direction dir);
     void reset() noexcept;
     void resetCyclogramNeeds() noexcept;

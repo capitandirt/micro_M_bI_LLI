@@ -26,6 +26,8 @@ void loop(){
     // Serial.println((int)maze.GetPathDir(0));
     // maze.PrintDirPath();
     // cycloStore.printSmarts();
-    DEVICES::TEST::OPTOCOUPLERS_MASK();
-    // DEVICES::TICK();
+
+    // DEVICES::TEST::OPTOCOUPLERS_MASK();
+    // DEVICES::TEST::OPTOCOUPLERS_CELL();
+    DEVICES::TICK();
 }

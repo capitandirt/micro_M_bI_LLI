@@ -21,8 +21,10 @@ public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
     void stepFloodFill();
-    
+    bool checkFloodFill();
 private:
+    bool FLOOD_FILL_IS_FINISH = 0;
+
     Vec2 _buf_robot_coords;
     Direction _buf_robot_dir;
 };

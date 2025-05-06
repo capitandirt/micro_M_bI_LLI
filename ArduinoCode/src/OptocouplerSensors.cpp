@@ -13,72 +13,92 @@ void OptocouplerSensors::tick(){
     digitalWrite(EMITERS_FWD, 1);
     digitalWrite(EMITERS_SIDE, 1);
 
-    sense[OptocouplerSense::From::RIGHT] = analogRead(REC_RIGHT);
-    sense[OptocouplerSense::From::LEFT] = analogRead(REC_LEFT);
+    _sense[OptocouplerSense::From::RIGHT] = analogRead(REC_RIGHT);
+    _sense[OptocouplerSense::From::LEFT] = analogRead(REC_LEFT);
 
-    sense[OptocouplerSense::From::FORWARD_L] = analogRead(REC_FWD_LEFT);
-    sense[OptocouplerSense::From::FORWARD_R] = analogRead(REC_FWD_RIGHT);
+    _sense[OptocouplerSense::From::FORWARD_L] = analogRead(REC_FWD_LEFT);
+    _sense[OptocouplerSense::From::FORWARD_R] = analogRead(REC_FWD_RIGHT);
 }
 
 Sense_t OptocouplerSensors::getSense(){
-    return sense.get();
+    return _sense.get();
 }
 
 Cell OptocouplerSensors::getCell(Direction robot_dir){
-    Cell cell_from_sense;
-
     calc_sense_mask();
+    calc_relative_cell();
 
+    Cell cell_from_sense;
     switch (robot_dir)
     {
     case Direction::N:
-        cell_from_sense.north_wall = toWallState(sense_mask.forward_l || sense_mask.forward_r);
-        cell_from_sense.east_wall  = toWallState(sense_mask.left);
-        cell_from_sense.west_wall  = toWallState(sense_mask.right);
-        cell_from_sense.south_wall = toWallState(false);
-        break;
-    case Direction::S:
-        cell_from_sense.north_wall = toWallState(false);
-        cell_from_sense.east_wall  = toWallState(sense_mask.right);
-        cell_from_sense.west_wall  = toWallState(sense_mask.left);
-        cell_from_sense.south_wall = toWallState(sense_mask.forward_l || sense_mask.forward_r);
+        cell_from_sense.north_wall = _relative_cell.north_wall;
+        cell_from_sense.east_wall  = _relative_cell.east_wall;
+        cell_from_sense.south_wall = _relative_cell.south_wall;
+        cell_from_sense.west_wall  = _relative_cell.west_wall;
         break;
     case Direction::E:
-        cell_from_sense.north_wall = toWallState(sense_mask.right);
-        cell_from_sense.east_wall  = toWallState(sense_mask.forward_l || sense_mask.forward_r);
-        cell_from_sense.west_wall  = toWallState(false);
-        cell_from_sense.south_wall = toWallState(sense_mask.left);
+        cell_from_sense.north_wall = _relative_cell.west_wall;
+        cell_from_sense.east_wall  = _relative_cell.north_wall;
+        cell_from_sense.south_wall = _relative_cell.east_wall;
+        cell_from_sense.west_wall  = _relative_cell.south_wall;
+        break;
+    case Direction::S:
+        cell_from_sense.north_wall = _relative_cell.south_wall;
+        cell_from_sense.east_wall  = _relative_cell.west_wall;
+        cell_from_sense.south_wall = _relative_cell.north_wall;
+        cell_from_sense.west_wall  = _relative_cell.east_wall;
         break;
     case Direction::W:
-        cell_from_sense.north_wall = toWallState(sense_mask.left);
-        cell_from_sense.east_wall  = toWallState(false);
-        cell_from_sense.west_wall  = toWallState(sense_mask.forward_l || sense_mask.forward_r);
-        cell_from_sense.south_wall = toWallState(sense_mask.right);
+        cell_from_sense.north_wall = _relative_cell.east_wall;
+        cell_from_sense.east_wall  = _relative_cell.south_wall;
+        cell_from_sense.south_wall = _relative_cell.west_wall;
+        cell_from_sense.west_wall  = _relative_cell.north_wall;
         break;
     }
 
     return cell_from_sense;
 }
 
+void OptocouplerSensors::printAbsCell(){
+    calc_sense_mask();
+    calc_relative_cell();
+
+    Serial.print((int)_relative_cell.north_wall);
+    Serial.print(" ");
+    Serial.print((int)_relative_cell.east_wall);
+    Serial.print(" ");
+    Serial.print((int)_relative_cell.south_wall);
+    Serial.print(" ");
+    Serial.println((int)_relative_cell.west_wall);
+}
+
 void OptocouplerSensors::printMask(){
     calc_sense_mask();
 
-    Serial.println( String(sense_mask.left) + " " + 
-                    String(sense_mask.forward_l) + " " +
-                    String(sense_mask.forward_r) + " " + 
-                    String(sense_mask.right));
+    Serial.println( String(_sense_mask.left) + " " + 
+                    String(_sense_mask.forward_l) + " " +
+                    String(_sense_mask.forward_r) + " " + 
+                    String(_sense_mask.right));
 }
 
 void OptocouplerSensors::printSense(){
-    Serial.println( String(sense.get().left) + " " + 
-                    String(sense.get().forward_l) + " " +
-                    String(sense.get().forward_r) + " " + 
-                    String(sense.get().right));
+    Serial.println( String(_sense.get().left) + " " + 
+                    String(_sense.get().forward_l) + " " +
+                    String(_sense.get().forward_r) + " " + 
+                    String(_sense.get().right));
 }
 
 void OptocouplerSensors::calc_sense_mask(){
-    sense_mask.forward_l = sense[OptocouplerSense::From::FORWARD_L] > SENSE_THRESHOLD_FWD_L;
-    sense_mask.forward_r = sense[OptocouplerSense::From::FORWARD_R] > SENSE_THRESHOLD_FWD_R;
-    sense_mask.left = sense[OptocouplerSense::From::LEFT] > SENSE_THRESHOLD_LEFT;
-    sense_mask.right = sense[OptocouplerSense::From::RIGHT] > SENSE_THRESHOLD_RIGHT;
+    _sense_mask.forward_l = _sense[OptocouplerSense::From::FORWARD_L] > SENSE_THRESHOLD_FWD_L;
+    _sense_mask.forward_r = _sense[OptocouplerSense::From::FORWARD_R] > SENSE_THRESHOLD_FWD_R;
+    _sense_mask.left = _sense[OptocouplerSense::From::LEFT] > SENSE_THRESHOLD_LEFT;
+    _sense_mask.right = _sense[OptocouplerSense::From::RIGHT] > SENSE_THRESHOLD_RIGHT;
+}
+
+void OptocouplerSensors::calc_relative_cell(){
+    _relative_cell.north_wall = toWallState(_sense_mask.forward_l || _sense_mask.forward_r);
+    _relative_cell.east_wall  = toWallState(_sense_mask.right);
+    _relative_cell.west_wall  = toWallState(_sense_mask.left);
+    _relative_cell.south_wall = toWallState(false);
 }

@@ -134,6 +134,12 @@ void Maze::Clear(){
     ClearPath();
 }
 
+void Maze::UndefDirs(){
+    for(uint8_t i = 0; i < MAZE_TOTAL_SIZE; i++){
+        _cell_blocks[i].is_def_cell_dir = DirectionState::UNDEF;
+    }
+}
+
 void Maze::SetCellDir(const Direction direction, const Vec2 v){
     if(cell_request_is_out_of_range_cell_blocks(v)) return;
 
