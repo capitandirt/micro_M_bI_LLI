@@ -37,7 +37,8 @@ namespace DEVICES{
 
         maze.Print();
 
-        cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
+        // cycloStore.addSmart(SmartCycloAction_t::FWD);
+        // cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
         cycloWorker.init();
         
         // odometry.updateMazeCoords(START_ROBOT_DIRECTION);
@@ -64,8 +65,8 @@ namespace DEVICES{
             robot.stepFloodFill();
 
             // maze.Print();
-            cycloStore.printPrimitives();
-            cycloStore.printSmarts();
+            // cycloStore.printPrimitives();
+            // cycloStore.printSmarts();
         }
 
         cycloWorker.checkIsComplete();
