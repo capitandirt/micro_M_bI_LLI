@@ -36,8 +36,8 @@
 /*==ENCODER CONNECTION PINS END==*/
 
 /*==ROBOT PARAMS BEGIN==*/
-#define ROBOT_WIDTH 0.077f
-#define WHEEL_RADIUS 0.0163f
+#define ROBOT_WIDTH 0.0775f
+#define WHEEL_RADIUS 0.01725f
 /*==ROBOT PARAMS END*/
 
 /*==WHEELS PARAMS BEGIN==*/
@@ -72,7 +72,7 @@
 /*==W MOTOT PIREG END==*/
 
 /*==CYCLOGRAM BEGIN==*/
-#define FORWARD_SPEED 0.05
+#define FORWARD_SPEED 0.10
 #define CELL_SIZE 0.18
 /*==CYCLOGRAM END==*/
 
@@ -92,7 +92,7 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 4
+#define MAZE_SIDE_LENGTH 5
 
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)
@@ -114,8 +114,8 @@
 
 
 /*==ROBOT FINISH PLACE BEGIN==*/
-#define FINISH_ROBOT_COORDS_X (3)
-#define FINISH_ROBOT_COORDS_Y (3)
+#define FINISH_ROBOT_COORDS_X (4)
+#define FINISH_ROBOT_COORDS_Y (4)
 
 #define FINISH_ROBOT_COORDS {FINISH_ROBOT_COORDS_X, FINISH_ROBOT_COORDS_Y}
 /*==ROBOT FINISH PLACE END==*/

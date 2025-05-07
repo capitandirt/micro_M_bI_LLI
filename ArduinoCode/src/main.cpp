@@ -5,7 +5,7 @@
 void setup()
 {
     DEVICES::INIT();
-	DEVICES::TEST::SET_SERIAL();
+	// DEVICES::TEST::SET_SERIAL();
     // DEVICES::TEST::EXPLORER_CYC();
     // DEVICES::TEST::CYCLOGRAMS();
     // DEVICES::TEST::BFS();
@@ -27,6 +27,7 @@ void loop(){
     // maze.PrintDirPath();
     // cycloStore.printSmarts();
 
+    // DEVICES::TEST::OPTOCOUPLERS_SENSE();
     // DEVICES::TEST::OPTOCOUPLERS_MASK();
     // DEVICES::TEST::OPTOCOUPLERS_CELL();
     DEVICES::TICK();
