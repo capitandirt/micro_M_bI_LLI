@@ -78,6 +78,7 @@ struct Sensors
 {
     float time;
     Odometry* robotState;
+    OptocouplerSensors* optocoupler;
 };
 
 struct MotionStates

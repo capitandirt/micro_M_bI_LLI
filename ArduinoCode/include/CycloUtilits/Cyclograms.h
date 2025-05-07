@@ -3,6 +3,7 @@
 
 #include "Config.h"
 #include "CycloTypes.h"
+#include "OptocouplerSensors.h"
 /* РАСШИФРОВКА НАЗВАНИЙ ПОВОРОТОВ
 SS90EL
 S - from straight (0 / 90... градусов поворот) или D - from diagonal
@@ -32,6 +33,24 @@ CYCLOGRAM(FWD)
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
     
+    uint16_t left_sense = s->optocoupler->getSense().left;
+    uint16_t right_sense = s->optocoupler->getSense().right;
+    Cell cell_from_sensors = s->optocoupler->getRelativeCell();
+
+    // W | E
+    uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
+
+    const uint16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
+    const uint16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+
+    float regulatorArray[4] = {
+        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика 
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (RIGHT_TRASHHOLD - right_sense),//стену видит только правый
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD - left_sense),//стену видит только левый
+        0,//ни один не видит стену
+    };
+
+    ms->theta_i0 = regulatorArray[regulatorState];
     if(s->robotState->getDist() > CELL_SIZE)
     {
         ms->isComplete = true;
@@ -63,11 +82,12 @@ CYCLOGRAM(SS90EL)
     float theta_i = FORWARD_SPEED / R;
 
     float forwDist = CELL_SIZE / 2 - R;
-    float circleDis = (2 * PI * R) / 4; // 90 - четверть окружности #КОСТЫЛЬ
+    float circleDist = (2 * PI * R) / 4; // 90 - четверть окружности #КОСТЫЛЬ
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = theta_i;
+    if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = theta_i;
+    //if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDis)
+    if(s->robotState->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     } 
@@ -81,7 +101,9 @@ CYCLOGRAM(SS90ER)
 
     const float forwDist = CELL_SIZE / 2 - R;
     const float circleDis = (2 * PI * R) / 4; // 90 = четверть окружности
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = -theta_i;
+    
+    if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = -theta_i;
+    //if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
     if(s->robotState->getDist() > 2 * forwDist + circleDis) 
     {

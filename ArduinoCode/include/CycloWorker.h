@@ -5,6 +5,7 @@
 
 #include "Mixer.h"
 #include "Config.h"
+#include "OptocouplerSensors.h"
 
 #include "CycloUtilits/CycloStore.h"
 
@@ -22,6 +23,7 @@ public:
                         {       
                             .time = 0,
                             .robotState = cwcp->odometry
+
                         }),
                     _motion_states(
                         {   

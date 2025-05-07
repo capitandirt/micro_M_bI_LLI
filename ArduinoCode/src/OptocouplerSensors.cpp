@@ -24,6 +24,12 @@ Sense_t OptocouplerSensors::getSense(){
     return _sense.get();
 }
 
+Cell OptocouplerSensors::getRelativeCell(){
+    calc_sense_mask();
+    calc_relative_cell();
+
+    return _relative_cell;
+}
 Cell OptocouplerSensors::getCell(Direction robot_dir){
     calc_sense_mask();
     calc_relative_cell();
