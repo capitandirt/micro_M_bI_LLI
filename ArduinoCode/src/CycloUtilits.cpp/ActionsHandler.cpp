@@ -44,7 +44,7 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
 
 void ActionsHandler::loadExplorer(Direction robot_dir){
     const auto from_robot_dir = static_cast<int8_t>(robot_dir);
-    const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
+    const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(1));
     
     const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
         (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
@@ -229,4 +229,14 @@ bool ActionsHandler::TO_SD135S_DS45S()
     }
     _cycloStore->virtualGoBack();
     return false;
+}
+
+void ActionsHandler::convertToSmart()
+{
+    PrimitiveCycloAction_t prim = PrimitiveCycloAction_t::START;
+    while(prim != PrimitiveCycloAction_t::STOP)
+    {
+        prim = _cycloStore->virtualPopFrontPrimitive();
+
+    }
 }
