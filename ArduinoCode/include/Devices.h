@@ -101,10 +101,25 @@ void reset_pi(){
     right_w_PiReg.reload();
 }
 
+OprocouplerConnectionParams ocp{
+    .EMITERS_FWD = OPTOCOUPLER_EMITERS_A,
+    .EMITERS_SIDE = OPTOCOUPLER_EMITERS_B,
+    .REC_RIGHT = OPTOCOUPLER_SENSOR_1,
+    .REC_LEFT = OPTOCOUPLER_SENSOR_2,
+    .REC_FWD_LEFT = OPTOCOUPLER_SENSOR_3,
+    .REC_FWD_RIGHT = OPTOCOUPLER_SENSOR_0,
+    .SENSE_THRESHOLD_FWD_L = OPTOCOUPLER_SENSE_THRESHOLD_FWD_L,
+    .SENSE_THRESHOLD_FWD_R = OPTOCOUPLER_SENSE_THRESHOLD_FWD_R,
+    .SENSE_THRESHOLD_RIGHT = OPTOCOUPLER_SENSE_THRESHOLD_RIGHT,
+    .SENSE_THRESHOLD_LEFT = OPTOCOUPLER_SENSE_THRESHOLD_LEFT
+};
+OptocouplerSensors optocoupler(&ocp);
+
 CycloWorkerConnectionParams cwcp{
     .mixer = &mixer,
     .odometry = &odometry,
     .cycloStore = &cycloStore,
+    .optocoupler = &optocoupler,
     ._reset_reg = reset_pi
 };
 CycloWorker cycloWorker(&cwcp);
@@ -119,19 +134,6 @@ ActionsHandlerConnectionParams ahcp{
 };
 ActionsHandler actionsHandler(&ahcp);
 
-OprocouplerConnectionParams ocp{
-    .EMITERS_FWD = OPTOCOUPLER_EMITERS_A,
-    .EMITERS_SIDE = OPTOCOUPLER_EMITERS_B,
-    .REC_RIGHT = OPTOCOUPLER_SENSOR_1,
-    .REC_LEFT = OPTOCOUPLER_SENSOR_2,
-    .REC_FWD_LEFT = OPTOCOUPLER_SENSOR_3,
-    .REC_FWD_RIGHT = OPTOCOUPLER_SENSOR_0,
-    .SENSE_THRESHOLD_FWD_L = OPTOCOUPLER_SENSE_THRESHOLD_FWD_L,
-    .SENSE_THRESHOLD_FWD_R = OPTOCOUPLER_SENSE_THRESHOLD_FWD_R,
-    .SENSE_THRESHOLD_RIGHT = OPTOCOUPLER_SENSE_THRESHOLD_RIGHT,
-    .SENSE_THRESHOLD_LEFT = OPTOCOUPLER_SENSE_THRESHOLD_LEFT
-};
-OptocouplerSensors optocoupler(&ocp);
 
 RobotConnectionParams rcp{
     ._actionsHandler = &actionsHandler,

@@ -13,6 +13,7 @@ struct CycloWorkerConnectionParams{
     Mixer* mixer; 
     Odometry* odometry;  
     CycloStore* cycloStore;
+    OptocouplerSensors* optocoupler;
     void (*_reset_reg)();
 };
 
@@ -22,8 +23,8 @@ public:
                     _sensors(
                         {       
                             .time = 0,
-                            .robotState = cwcp->odometry
-
+                            .robotState = cwcp->odometry,
+                            .optocoupler = cwcp->optocoupler
                         }),
                     _motion_states(
                         {   

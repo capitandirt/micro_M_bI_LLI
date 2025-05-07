@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Odometry.h"
+#include "OptocouplerSensors.h"
 
 enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,

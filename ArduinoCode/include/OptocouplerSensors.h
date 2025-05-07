@@ -6,7 +6,6 @@
 
 struct OprocouplerConnectionParams{
     const uint16_t EMITERS_FWD;
-    const uint16_t EMITERS_FWD;
     const uint16_t EMITERS_SIDE;
     const uint16_t REC_RIGHT;
     const uint16_t REC_LEFT;
@@ -34,13 +33,13 @@ struct Sense_mask_t{
 
 struct OptocouplerSense{
 public:
-    enum class From : uint16_t
+    enum class From : uint8_t
     {
         LEFT = 0,
         FORWARD_L,
         FORWARD_R,
         RIGHT,
-    };
+    };  
 
     static constexpr uint8_t getSenseSize(){ return SENSORS_NUMBER; }
     
@@ -48,7 +47,7 @@ public:
     uint16_t& operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
 
 private:
-    static constexpr uint16_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(uint16_t);
+    static constexpr uint8_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(uint16_t);
     union{
         Sense_t _from;
         uint16_t _sense[SENSORS_NUMBER];

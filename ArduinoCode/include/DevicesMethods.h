@@ -30,15 +30,16 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
+        optocoupler.init();
 
         maze.PrimaryFill();
-        maze.SetCell(_CELL, START_ROBOT_COORDS);
+        maze.SetCell(START_CELL, START_ROBOT_COORDS);
         // maze.PassCell(START_ROBOT_COORDS);
 
-        maze.Print();
+        // maze.Print();
 
         // cycloStore.addSmart(SmartCycloAction_t::FWD);
-        // cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
+        cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
         cycloWorker.init();
         
         // odometry.updateMazeCoords(START_ROBOT_DIRECTION);
@@ -108,6 +109,17 @@ namespace DEVICES{
             cycloStore.reloadSmarts();
         }
 
+        void EXPLORER_LEFT_RIGHT_SMARTS(){
+            cycloStore.addSmart(SmartCycloAction_t::SS90EL);
+            cycloStore.addSmart(SmartCycloAction_t::SS90ER);
+        }
+        void EXPLORER_FWD_3_SMARTS()
+        {
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
+        }
+        
         void EXPLORER_CYC()
         {
             cycloStore.addSmart(SmartCycloAction_t::IP90L);
