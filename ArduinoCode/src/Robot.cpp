@@ -1,5 +1,12 @@
 #include "Robot.h"
 
+void Robot::init(){
+    _maze->PrimaryFill();
+    _maze->SetCell(START_CELL, START_ROBOT_COORDS);
+    _actionsHandler->needCellAligning();
+    
+}
+
 void Robot::stepFloodFill()
 {
     if(_odometry->getMazeCoords().x == FINISH_ROBOT_COORDS_X &&

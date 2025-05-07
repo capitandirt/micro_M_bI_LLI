@@ -30,16 +30,15 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
-
-        maze.PrimaryFill();
-        maze.SetCell(_CELL, START_ROBOT_COORDS);
+        optocoupler.init();
+        // maze.PrimaryFill();
+        // maze.SetCell(START_CELL, START_ROBOT_COORDS);
         // maze.PassCell(START_ROBOT_COORDS);
 
-        maze.Print();
 
         // cycloStore.addSmart(SmartCycloAction_t::FWD);
-        // cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
         cycloWorker.init();
+        robot.init();
         
         // odometry.updateMazeCoords(START_ROBOT_DIRECTION);
         // TIM2::INIT();
