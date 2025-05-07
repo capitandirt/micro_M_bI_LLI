@@ -32,7 +32,7 @@ namespace DEVICES{
         
 
         maze.PrimaryFill();
-        maze.SetCell(START_CELL, START_ROBOT_COORDS);
+        maze.SetCell(_CELL, START_ROBOT_COORDS);
         // maze.PassCell(START_ROBOT_COORDS);
 
         maze.Print();
