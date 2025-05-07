@@ -20,6 +20,7 @@ class Robot : public RobotConnectionParams{
 public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
+    void init();
     void stepFloodFill();
     bool checkFloodFill();
 private:

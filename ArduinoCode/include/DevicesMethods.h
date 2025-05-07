@@ -41,6 +41,7 @@ namespace DEVICES{
         // cycloStore.addSmart(SmartCycloAction_t::FWD);
         cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
         cycloWorker.init();
+        robot.init();
         
         // odometry.updateMazeCoords(START_ROBOT_DIRECTION);
         // TIM2::INIT();

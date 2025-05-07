@@ -71,6 +71,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     }
 }
 
+/*useless code*/
 void ActionsHandler::primitivesToExplorers(Direction robot_dir)
 {
     dirs_to_primitives();
@@ -97,6 +98,10 @@ void ActionsHandler::primitivesToFasts()
         else if (TO_STOP());
         else if (TO_IDLE());
     }
+}
+
+void ActionsHandler::needCellAligning(){
+    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
 }
 
 void ActionsHandler::needStop(){
