@@ -56,6 +56,7 @@ CYCLOGRAM(FWD)
     {
         ms->isComplete = true;
     }
+    else ms->isComplete = false;
 }
 
 CYCLOGRAM(FWD_HALF)
@@ -63,10 +64,11 @@ CYCLOGRAM(FWD_HALF)
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
     
-    if(s->robotState->getDist() > CELL_SIZE / 2)
+    if(s->robotState->getDist() >= CELL_SIZE / 2)
     {
         ms->isComplete = true;
     }
+    else ms->isComplete = false;
 }
 
 CYCLOGRAM(SS90SL){}; //ДОПИСАТЬ

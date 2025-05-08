@@ -32,18 +32,9 @@ namespace DEVICES{
         
         optocoupler.init();
 
-        maze.PrimaryFill();
-        maze.SetCell(START_CELL, START_ROBOT_COORDS);
-        // maze.PassCell(START_ROBOT_COORDS);
-
-        // maze.Print();
-
-        // cycloStore.addSmart(SmartCycloAction_t::FWD);
-        cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
-        cycloWorker.init();
         robot.init();
-        
-        // odometry.updateMazeCoords(START_ROBOT_DIRECTION);
+        cycloWorker.init();
+
         // TIM2::INIT();
     }
 
@@ -63,12 +54,23 @@ namespace DEVICES{
         cycloWorker.doCyclogram();
 
         if(cycloWorker.isComplete() && !robot.checkFloodFill()){
-            // maze.PassCell(odometry.getMazeCoords());
-            robot.stepFloodFill();
+            Serial.println("STEP:");
+            Serial.print(odometry.getMazeCoords().x);
+            Serial.print(" ");
+            Serial.println(odometry.getMazeCoords().y);
+            odometry.printDir();
 
-            // maze.Print();
-            // cycloStore.printPrimitives();
-            // cycloStore.printSmarts();
+            cycloStore.reloadPrimitives();
+            robot.stepFloodFill();
+            
+            maze.Print();
+            odometry.printDir();
+            maze.PrintDirPath();
+            cycloStore.printPrimitives();
+            cycloStore.printSmarts();
+            Serial.print(odometry.getMazeCoords().x);
+            Serial.print(" ");
+            Serial.println(odometry.getMazeCoords().y);
         }
 
         cycloWorker.checkIsComplete();
@@ -142,8 +144,7 @@ namespace DEVICES{
             maze.Print();
 
             {   
-                Direction __sd = Direction::S; Vec2 __sv = {0, 0};
-                Vec2 __v;
+                Direction __sd = Direction::S;
                 actionsHandler.primitivesToExplorers(__sd);
             }
 

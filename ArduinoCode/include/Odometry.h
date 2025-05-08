@@ -10,10 +10,12 @@ public:
     float getOut() const noexcept {
         return _out;
     }  
+
     void tick(float in)
     {
         _out += in * Ts_s;
     }
+
     void reset()
     {
         _out = 0;
@@ -58,14 +60,18 @@ public:
     float getRelativeDist() const noexcept;
 
     void reset() noexcept;
-    void resetRelative() noexcept;
+    void updateRelative() noexcept;
 
     Vec2 getMazeCoords() const noexcept;
     Direction getDir() const noexcept;
 
+    void printDir() const noexcept;
+
     void update(float omegaL, float omegaR) noexcept;
     void updateDir(Direction dir_) noexcept;
+    void dirToOppositeSide();
     void updateMazeCoords(Direction dir);
+    void updateMazeCoords(Vec2 new_v);
 };
 
 #endif // !_ODOMETRY_H_

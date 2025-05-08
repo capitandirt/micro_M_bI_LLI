@@ -40,6 +40,24 @@ Direction Odometry::getDir() const{
     return dir;
 }
 
+void Odometry::printDir() const{
+    switch (dir)
+    {
+    case Direction::N:
+        Serial.println("N");
+        break;
+    case Direction::S:
+        Serial.println("S");
+        break;
+    case Direction::E:
+        Serial.println("E");
+        break;
+    case Direction::W:
+        Serial.println("W");
+        break;
+    }
+}
+
 void Odometry::update(float omegaL, float omegaR)
 {
     vL = omegaL * WHEEL_RADIUS;
@@ -62,8 +80,16 @@ void Odometry::updateDir(Direction dir_)
     dir = dir_;
 }
 
+void Odometry::dirToOppositeSide(){
+    dir = static_cast<Direction>((toInt(dir) + DIRECTION_SIZE / 2) % DIRECTION_SIZE); 
+}
+
 void Odometry::updateMazeCoords(Direction dir){
     mazeCoord.plusOrtVector(dir);
+}
+
+void Odometry::updateMazeCoords(Vec2 new_v){
+    mazeCoord = new_v;
 }
 
 void Odometry::reset()
@@ -81,10 +107,13 @@ void Odometry::reset()
     Distance.reset();
 }
 
-void Odometry::resetRelative()
+void Odometry::updateRelative()
 {
-    X_r = X;
-    Y_r = Y;
-    Theta_r = Theta;
-    Distance_r = Distance;
+    // X_r = X;
+    // Y_r = Y;
+    // Theta_r = Theta;
+    // Distance_r = Distance;
+
+    Distance.reset();
+    Theta.reset();
 }

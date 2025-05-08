@@ -191,8 +191,8 @@ Direction Maze::GetPathDir(uint8_t ind) const{
     if(ind >= MAZE_PATH_SIZE) return {};
     
     _buf_path_direction_store = static_cast<Direction>(
-        (static_cast<uint8_t>(_cell_blocks[ind*2].path_dir) << 1) | 
-        static_cast<uint8_t>(_cell_blocks[ind*2 + 1].path_dir));
+        (static_cast<uint8_t>(_cell_blocks[ind * 2].path_dir) << 1) | 
+         static_cast<uint8_t>(_cell_blocks[ind * 2 + 1].path_dir));
     return _buf_path_direction_store;
 }
 

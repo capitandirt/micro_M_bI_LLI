@@ -66,6 +66,15 @@ Cell OptocouplerSensors::getCell(Direction robot_dir){
     return cell_from_sense;
 }
 
+bool OptocouplerSensors::cellIsImpasse(){
+    calc_sense_mask();
+    calc_relative_cell();
+
+    return toBool(_relative_cell.north_wall) &&
+           toBool(_relative_cell.east_wall)  &&
+           toBool(_relative_cell.west_wall);
+}
+
 void OptocouplerSensors::printAbsCell(){
     calc_sense_mask();
     calc_relative_cell();

@@ -39,6 +39,7 @@ public:
 
     bool isComplete() const noexcept;
     void checkIsComplete();
+
 private:
     Cyclogram _cur_cyclogram = IDLE;
 
@@ -47,7 +48,6 @@ private:
     
     Sensors _sensors;
     MotionStates _motion_states;   
-    
 };
 
 #endif // !_CYCLOGRAM_H_

@@ -18,7 +18,9 @@ public:
     void primitivesToExplorers(Direction robot_dir);
     void primitivesToFasts();
     
-    void needCellAligning();
+    void reload();
+    void needStartCellAligning();
+    void needGetOutImpasse();
     void needStop();
 private:
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);

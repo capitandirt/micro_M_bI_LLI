@@ -4,10 +4,10 @@
 
 void setup()
 {
-    // DEVICES::INIT();
+	DEVICES::TEST::SET_SERIAL();
+    DEVICES::INIT();
     // DEVICES::TEST::EXPLORER_FWD_3_SMARTS();
     // DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
-	DEVICES::TEST::SET_SERIAL();
     // DEVICES::TEST::EXPLORER_CYC();
     // DEVICES::TEST::CYCLOGRAMS();
     // DEVICES::TEST::BFS();
@@ -33,7 +33,5 @@ void loop(){
     // DEVICES::TEST::OPTOCOUPLERS_MASK();
     // DEVICES::TEST::OPTOCOUPLERS_CELL();
     
-    // Serial.println((int)sizeof(Maze));
-
-    // DEVICES::TICK();
+    DEVICES::TICK();
 }

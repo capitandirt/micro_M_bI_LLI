@@ -73,7 +73,7 @@
 /*==W MOTOT PIREG END==*/
 
 /*==CYCLOGRAM BEGIN==*/
-#define FORWARD_SPEED 0.2
+#define FORWARD_SPEED 0.1
 #define CELL_SIZE 0.18
 /*==CYCLOGRAM END==*/
 
@@ -93,7 +93,7 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 11
+#define MAZE_SIDE_LENGTH 5
 
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)
