@@ -15,5 +15,4 @@ void Motor::drive(float u){
         digitalWrite(DIR, !M_POLARITY);
         analogWrite(PWM, -pwm);
     }
-
 }

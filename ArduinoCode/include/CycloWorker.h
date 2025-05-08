@@ -39,7 +39,6 @@ public:
 
     bool isComplete() const noexcept;
     void checkIsComplete();
-    // void printCycloProgram() const;
 private:
     Cyclogram _cur_cyclogram = IDLE;
 

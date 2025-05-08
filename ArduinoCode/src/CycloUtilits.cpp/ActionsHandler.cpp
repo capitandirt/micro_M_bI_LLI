@@ -235,13 +235,3 @@ bool ActionsHandler::TO_SD135S_DS45S()
     _cycloStore->virtualGoBack();
     return false;
 }
-
-void ActionsHandler::convertToSmart()
-{
-    PrimitiveCycloAction_t prim = PrimitiveCycloAction_t::START;
-    while(prim != PrimitiveCycloAction_t::STOP)
-    {
-        prim = _cycloStore->virtualPopFrontPrimitive();
-
-    }
-}

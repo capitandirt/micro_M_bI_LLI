@@ -74,7 +74,7 @@ struct RawCellStore{
 
     /** it may be both LO_PATH_DIR and HI_PATH_DIR. it depend by current element
       * so, take maze 2x2 
-      * in string view (here it is cell_store): 0 1 2 3 4 5 6 7 8 
+      * in string view (here it is cell_store): 0 1 2 3 4 5 6 7
       * in my view:       0 1  
       *                 2 3 4
       *                 5 6 7,
@@ -84,9 +84,9 @@ struct RawCellStore{
       * 
       * in this way, 0th-element is HI_PATH_DIR, 1th-element is LO_PATH_DIR.
       * but, 0th and 1th elements together are the full direction of the path
-      * for example, HI_PATH_DIR are: 0, 2, 4, 6;
-      *              LO_PATH_DIR are: 1, 3, 5, 7;
-      *       but full direction are: {0, 1}, {2, 3}, {4, 5}, {6, 7};
+      * for example, HI_PATH_DIR is: 0, 2, 4, 6;
+      *              LO_PATH_DIR is: 1, 3, 5, 7;
+      *       but full direction is: {0, 1}, {2, 3}, {4, 5}, {6, 7};
       * 
       * that are, (full struct) Direction dir = static_cast<Direction>((cell_store[0] << 1) | cell_store[1])
     */

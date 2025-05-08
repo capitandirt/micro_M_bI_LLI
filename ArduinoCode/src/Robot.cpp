@@ -10,7 +10,8 @@ void Robot::init(){
 void Robot::stepFloodFill()
 {
     if(_odometry->getMazeCoords().x == FINISH_ROBOT_COORDS_X &&
-       _odometry->getMazeCoords().y == FINISH_ROBOT_COORDS_Y ){
+       _odometry->getMazeCoords().y == FINISH_ROBOT_COORDS_Y 
+    ){
         _actionsHandler->needStop();
         FLOOD_FILL_IS_FINISH = true;
         return;
@@ -21,9 +22,6 @@ void Robot::stepFloodFill()
 
     _solver->SolveBfsMaze(_odometry->getMazeCoords(), FINISH_ROBOT_COORDS);
     
-    _maze->Print();
-
-
     _actionsHandler->loadExplorer(_odometry->getDir());
     
     _buf_robot_dir = _maze->GetPathDir(1);

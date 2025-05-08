@@ -43,23 +43,19 @@ CYCLOGRAM(FWD)
     const int32_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
     const int32_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
 
-    float regulatorArray[4] = {
+    const float regulatorArray[4] = {
         0,//ни один не видит стену
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD),//стену видит только правый
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD - left_sense),//стену видит только левый
         ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика  
     };
+
     ms->theta_i0 = regulatorArray[regulatorState];
-    Serial.print(String(regulatorState) + " ");
-    Serial.print(String(MAX_ANALOG_VALUE - left_sense) + " ");
-    Serial.print(String(MAX_ANALOG_VALUE - right_sense) + " ");
-    Serial.print(String(right_sense - left_sense) + " ");
-    Serial.print(String(regulatorArray[regulatorState]) + "\n");
+
     if(s->robotState->getDist() > CELL_SIZE)
     {
         ms->isComplete = true;
     }
-    else ms->isComplete = false;
 }
 
 CYCLOGRAM(FWD_HALF)
@@ -71,7 +67,6 @@ CYCLOGRAM(FWD_HALF)
     {
         ms->isComplete = true;
     }
-    else ms->isComplete = false;
 }
 
 CYCLOGRAM(SS90SL){}; //ДОПИСАТЬ

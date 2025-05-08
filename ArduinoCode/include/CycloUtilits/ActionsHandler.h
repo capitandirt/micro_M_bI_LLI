@@ -32,8 +32,6 @@ private:
     bool TO_SS90S();
     bool TO_SD45S_DS45S();
     bool TO_SD135S_DS45S();
-    void convertToSmart(); //экспериментальное 
-    
 };
 
 #endif
