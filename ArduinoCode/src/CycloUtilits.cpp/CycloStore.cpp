@@ -56,16 +56,18 @@ void CycloStore::reloadPrimitives(){
     _primitive_cyc_act_counter = 0;
 }
  
-Cyclogram CycloStore::cyclogramFrom(){
-    return _cyclograms[toInt(popFrontSmart())];
+Cyclogram CycloStore::cyclogramFrom(SmartCycloAction_t smart){
+    return _cyclograms[toInt(smart)];
 }
 
 void CycloStore::printSmarts() const{
+    Serial.println("Smarts:");
     for(uint8_t i = 0; i < _smart_cyc_act_end; i++){
         Serial.print(Str_SmartCyclogramAction[toInt(_cyclo_program[i].smart)]);
         // Serial.print(toInt(_cyclo_program[i].smart));
         Serial.print(' ');
     }
+    Serial.println();
     Serial.println();
 }
 
@@ -79,14 +81,14 @@ void CycloStore::printPrimitives() const{
         case PrimitiveCycloAction_t::LEFT:
             Serial.print("LEFT");
             break;
+        case PrimitiveCycloAction_t::BACK:
+            Serial.print("BACK");
+            break;
         case PrimitiveCycloAction_t::RIGHT:
             Serial.print("RIGHT");
             break;
         case PrimitiveCycloAction_t::STOP:
             Serial.print("STOP");
-            break;
-        case PrimitiveCycloAction_t::BACK:
-            Serial.print("BACK");
             break;
         case PrimitiveCycloAction_t::BLANK:
             Serial.print("BLANK");
@@ -95,6 +97,7 @@ void CycloStore::printPrimitives() const{
         // Serial.print(toInt(_cyclo_program[i]));
         Serial.print(' ');
     }
+    Serial.println();
     Serial.println();
 }
 

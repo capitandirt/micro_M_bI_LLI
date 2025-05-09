@@ -18,7 +18,9 @@ public:
     void primitivesToExplorers(Direction robot_dir);
     void primitivesToFasts();
     
-    void needCellAligning();
+    void reload();
+    void needStartCellAligning();
+    void needGetOutImpasse();
     void needStop();
 private:
     enum class SmartState
@@ -44,8 +46,6 @@ private:
     bool TO_SS90S();
     bool TO_SD45S_DS45S();
     bool TO_SD135S_DS45S();
-    void convertToSmart(); //экспериментальное 
-    
 };
 
 #endif

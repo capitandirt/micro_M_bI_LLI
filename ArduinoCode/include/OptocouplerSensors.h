@@ -64,6 +64,8 @@ public:
     Cell getRelativeCell();
     Cell getCell(Direction robotDir);
 
+    bool cellIsImpasse();
+
     void printAbsCell();
     void printMask();
     void printSense();

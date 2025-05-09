@@ -10,8 +10,6 @@ const PrimitiveCycloAction_t ActionsHandler::calc_primitive_cyclo_action(const u
 }
 
 void ActionsHandler::dirs_to_primitives(){
-    _cycloStore->reloadPrimitives();
-
     for(uint8_t i = 0; i < _maze->GetPathSize(); i++){
         _cycloStore->addPrimitive(calc_primitive_cyclo_action(i));
     }
@@ -43,16 +41,16 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
 }
 
 void ActionsHandler::loadExplorer(Direction robot_dir){
-    const auto from_robot_dir = static_cast<int8_t>(robot_dir);
-    const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
+    // const auto from_robot_dir = static_cast<int8_t>(robot_dir);
+    // const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
     
-    const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
-        (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
 
-    if(first_primitive == PrimitiveCycloAction_t::BACK){
-        _cycloStore->addSmart(SmartCycloAction_t::IP180);
-    }
+    // const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
+    //     (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
 
+    // if(first_primitive == PrimitiveCycloAction_t::BACK){
+    //     _cycloStore->addSmart(SmartCycloAction_t::IP180);
+    // }
     dirs_to_primitives();
 
     switch (_cycloStore->popFrontPrimitive())
@@ -69,6 +67,8 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     default:
         break;
     }
+
+    _cycloStore->addSmart(SmartCycloAction_t::STOP);
 }
 
 /*useless code*/
@@ -100,11 +100,21 @@ void ActionsHandler::primitivesToFasts()
     }
 }
 
-void ActionsHandler::needCellAligning(){
+void ActionsHandler::reload(){
+    _cycloStore->reloadPrimitives();
+    _cycloStore->reloadSmarts();
+}
+
+void ActionsHandler::needStartCellAligning(){
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
 }
 
+void ActionsHandler::needGetOutImpasse(){
+    _cycloStore->addSmart(SmartCycloAction_t::IP180);
+}
+
 void ActionsHandler::needStop(){
+    _cycloStore->reloadSmarts();
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
     _cycloStore->addSmart(SmartCycloAction_t::STOP);
 }

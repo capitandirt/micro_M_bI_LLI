@@ -136,6 +136,7 @@ ActionsHandler actionsHandler(&ahcp);
 
 
 RobotConnectionParams rcp{
+    ._cycloWorker = &cycloWorker,
     ._actionsHandler = &actionsHandler,
     ._maze = &maze,
     ._solver = &solver,

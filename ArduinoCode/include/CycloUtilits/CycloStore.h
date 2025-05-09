@@ -27,7 +27,7 @@ public:
     void reloadSmarts();
     void reloadPrimitives();
 
-    Cyclogram cyclogramFrom();
+    Cyclogram cyclogramFrom(SmartCycloAction_t smart);
 
     void printSmarts() const;
     void printPrimitives() const;

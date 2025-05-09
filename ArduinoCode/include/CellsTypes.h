@@ -48,8 +48,12 @@ enum class DirectionState : uint8_t{
 };
 
 enum class WallState : uint8_t{
-    LO = 0, HI
+    LO = 0, HI = 1, UNDEF = 2
 };
+
+inline uint8_t toInt(WallState ws){
+    return static_cast<uint8_t>(ws);
+}
 
 inline WallState toWallState(bool exp){
     return exp? WallState::HI : WallState::LO;
@@ -65,16 +69,15 @@ struct RawCellStore{
         first = 0, second
     };
 
-    WallState s_wall : 1;
-    WallState e_wall : 1;
+    WallState s_wall : 2;
+    WallState e_wall : 2;
     Direction cell_dir : 2;
     DirectionState is_def_cell_dir : 1;
     PathDirStore path_dir : 1;
-    bool is_cell_passed : 1; 
 
     /** it may be both LO_PATH_DIR and HI_PATH_DIR. it depend by current element
       * so, take maze 2x2 
-      * in string view (here it is cell_store): 0 1 2 3 4 5 6 7 8 
+      * in string view (here it is cell_store): 0 1 2 3 4 5 6 7
       * in my view:       0 1  
       *                 2 3 4
       *                 5 6 7,
@@ -84,9 +87,9 @@ struct RawCellStore{
       * 
       * in this way, 0th-element is HI_PATH_DIR, 1th-element is LO_PATH_DIR.
       * but, 0th and 1th elements together are the full direction of the path
-      * for example, HI_PATH_DIR are: 0, 2, 4, 6;
-      *              LO_PATH_DIR are: 1, 3, 5, 7;
-      *       but full direction are: {0, 1}, {2, 3}, {4, 5}, {6, 7};
+      * for example, HI_PATH_DIR is: 0, 2, 4, 6;
+      *              LO_PATH_DIR is: 1, 3, 5, 7;
+      *       but full direction is: {0, 1}, {2, 3}, {4, 5}, {6, 7};
       * 
       * that are, (full struct) Direction dir = static_cast<Direction>((cell_store[0] << 1) | cell_store[1])
     */
@@ -104,5 +107,11 @@ struct Cell{
     WallState south_wall;
     WallState west_wall;
 };
+
+// N | E | S | W
+inline uint8_t toInt(Cell c){
+    return toInt(c.north_wall) << 6 | toInt(c.east_wall) << 4 | 
+           toInt(c.south_wall) << 2 | toInt(c.west_wall);
+}
 
 #endif

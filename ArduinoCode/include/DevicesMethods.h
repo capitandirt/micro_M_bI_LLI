@@ -32,18 +32,8 @@ namespace DEVICES{
         
         optocoupler.init();
 
-        maze.PrimaryFill();
-        maze.SetCell(START_CELL, START_ROBOT_COORDS);
-        // maze.PassCell(START_ROBOT_COORDS);
-
-        // maze.Print();
-
-        // cycloStore.addSmart(SmartCycloAction_t::FWD);
-        cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
-        cycloWorker.init();
         robot.init();
-        
-        // odometry.updateMazeCoords(START_ROBOT_DIRECTION);
+
         // TIM2::INIT();
     }
 
@@ -62,14 +52,22 @@ namespace DEVICES{
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
 
-        if(cycloWorker.isComplete() && !robot.checkFloodFill()){
-            // maze.PassCell(odometry.getMazeCoords());
-            robot.stepFloodFill();
+        Serial.println("STEP:");
+        Serial.print(odometry.getMazeCoords().x);
+        Serial.print(" ");
+        Serial.println(odometry.getMazeCoords().y);
+        odometry.printDir();
 
-            // maze.Print();
-            // cycloStore.printPrimitives();
-            // cycloStore.printSmarts();
-        }
+        robot.stepFloodFill();
+        
+        maze.Print();
+        odometry.printDir();
+        maze.PrintDirPath();
+        cycloStore.printPrimitives();
+        cycloStore.printSmarts();
+        Serial.print(odometry.getMazeCoords().x);
+        Serial.print(" ");
+        Serial.println(odometry.getMazeCoords().y);
 
         cycloWorker.checkIsComplete();
     }
@@ -90,6 +88,25 @@ namespace DEVICES{
             maze.Clear();
         }
     
+        void UNDEF_CELL_WALLS(){
+            maze.PrimaryFill();
+
+            maze.SetCell({WallState::HI, WallState::HI, WallState::UNDEF, WallState::UNDEF}, {1, 1});
+            maze.SetCell({WallState::UNDEF, WallState::UNDEF, WallState::HI, WallState::UNDEF}, {2, 1});
+            maze.SetCell({WallState::LO, WallState::LO, WallState::LO, WallState::LO}, {0, 0});
+
+            solver.SolveBfsMaze({0, 0}, {2, 2});
+
+            Vec2 v = solver.FirstCellWithUndefWallsInPath();
+
+            // need {0, 1}
+            maze.Print();
+
+            Serial.print(v.x);
+            Serial.print(' ');
+            Serial.println(v.y);
+        }
+
         void CYCLOGRAMS(){
             cycloStore.addSmart(SmartCycloAction_t::IDLE);
             cycloStore.addSmart(SmartCycloAction_t::FWD1);
@@ -142,8 +159,7 @@ namespace DEVICES{
             maze.Print();
 
             {   
-                Direction __sd = Direction::S; Vec2 __sv = {0, 0};
-                Vec2 __v;
+                Direction __sd = Direction::S;
                 actionsHandler.primitivesToExplorers(__sd);
             }
 

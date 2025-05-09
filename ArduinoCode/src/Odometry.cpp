@@ -16,12 +16,46 @@ float Odometry::getDist() const{
     return Distance.getOut();
 }
 
+float Odometry::getRelativeX() const{
+    return X - X_r;
+}
+
+float Odometry::getRelativeY() const{
+    return Y - Y_r;
+}
+
+float Odometry::getRelativeTheta() const{
+    return Theta - Theta_r;
+}
+
+float Odometry::getRelativeDist() const{
+    return Distance - Distance_r;
+}
+
 Vec2 Odometry::getMazeCoords() const{
     return mazeCoord;
 }
 
 Direction Odometry::getDir() const{
     return dir;
+}
+
+void Odometry::printDir() const{
+    switch (dir)
+    {
+    case Direction::N:
+        Serial.println("N");
+        break;
+    case Direction::S:
+        Serial.println("S");
+        break;
+    case Direction::E:
+        Serial.println("E");
+        break;
+    case Direction::W:
+        Serial.println("W");
+        break;
+    }
 }
 
 void Odometry::update(float omegaL, float omegaR)
@@ -46,8 +80,16 @@ void Odometry::updateDir(Direction dir_)
     dir = dir_;
 }
 
+void Odometry::dirToOppositeSide(){
+    dir = static_cast<Direction>((toInt(dir) + DIRECTION_SIZE / 2) % DIRECTION_SIZE); 
+}
+
 void Odometry::updateMazeCoords(Direction dir){
     mazeCoord.plusOrtVector(dir);
+}
+
+void Odometry::updateMazeCoords(Vec2 new_v){
+    mazeCoord = new_v;
 }
 
 void Odometry::reset()
@@ -65,8 +107,13 @@ void Odometry::reset()
     Distance.reset();
 }
 
-void Odometry::resetCyclogramNeeds()
+void Odometry::updateRelative()
 {
+    // X_r = X;
+    // Y_r = Y;
+    // Theta_r = Theta;
+    // Distance_r = Distance;
+
     Distance.reset();
     Theta.reset();
 }

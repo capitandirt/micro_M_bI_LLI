@@ -73,7 +73,7 @@
 /*==W MOTOT PIREG END==*/
 
 /*==CYCLOGRAM BEGIN==*/
-#define FORWARD_SPEED 0.2
+#define FORWARD_SPEED 0.1
 #define CELL_SIZE 0.18
 /*==CYCLOGRAM END==*/
 

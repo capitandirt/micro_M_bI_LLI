@@ -8,6 +8,7 @@
 #include "Odometry.h"
 
 struct RobotConnectionParams{
+    CycloWorker* _cycloWorker;
     ActionsHandler* _actionsHandler;
     Maze* _maze;
     Solver* _solver;
@@ -26,8 +27,6 @@ public:
 private:
     bool FLOOD_FILL_IS_FINISH = 0;
 
-    Vec2 _buf_robot_coords;
-    Direction _buf_robot_dir;
 };
 
 #endif // !_ROBOT_H_

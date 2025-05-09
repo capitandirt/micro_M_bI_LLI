@@ -34,6 +34,7 @@ public:
     void UndefCell(const Vec2 vec2) noexcept;
     
     void GetCell(Cell& get_cell, const Vec2 v) const noexcept;
+    Cell GetCell(const Vec2 v) const noexcept;
     
     void SetCellDir(const Direction direction, const Vec2 v) noexcept;
     void GetCellDir(DirectionStore& direction_store, const Vec2 v) const noexcept;    
@@ -44,8 +45,7 @@ public:
     void GetPathDir(Direction& dir, uint8_t ind) const noexcept;
     Direction GetPathDir(uint8_t ind) const noexcept;
 
-    bool CellIsPassed(const Vec2 v) const noexcept;
-    void PassCell(const Vec2 v) noexcept;
+    bool UndefWallInCell(const Vec2 v);
 
     void ClearPath() noexcept;
     uint8_t GetPathSize() const noexcept;
