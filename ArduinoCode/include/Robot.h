@@ -8,6 +8,7 @@
 #include "Odometry.h"
 
 struct RobotConnectionParams{
+    CycloWorker* _cycloWorker;
     ActionsHandler* _actionsHandler;
     Maze* _maze;
     Solver* _solver;

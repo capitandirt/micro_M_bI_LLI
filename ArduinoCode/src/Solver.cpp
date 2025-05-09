@@ -4,10 +4,17 @@ void Solver::calc_path(const uint8_t ind_s, const uint8_t ind_f){
     uint8_t cur_cell_ind = ind_s;
     uint8_t cur_x, cur_y;
 
+    WAS_UNDEF_CELL = 0;
+
     _Maze->ClearPath();
     while(cur_cell_ind != ind_f){
         cur_x = cur_cell_ind % MAZE_SIDE_LENGTH;
         cur_y = cur_cell_ind / MAZE_SIDE_LENGTH;
+
+        if(!WAS_UNDEF_CELL && _Maze->UndefWallInCell({cur_x, cur_y})){
+            WAS_UNDEF_CELL = 1;
+            _first_cell_with_undef_walls_in_path = {cur_x, cur_y};
+        }
 
         _Maze->GetCellDir(_buf_cell_dir, {cur_x, cur_y});  
         _Maze->PushBackPathDir(_buf_cell_dir.cell_dir);
@@ -30,6 +37,10 @@ void Solver::calc_path(const uint8_t ind_s, const uint8_t ind_f){
             cur_cell_ind--;
             break;
         }
+    }
+
+    if(!WAS_UNDEF_CELL){
+        _first_cell_with_undef_walls_in_path = Maze::IndToVec2(ind_f);
     }
 }
 
@@ -164,4 +175,8 @@ void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
     _Maze->UndefCell(finish);
 
     calc_path(ind_s, ind_f);
+}
+
+Vec2 Solver::FirstCellWithUndefWallsInPath(){
+    return _first_cell_with_undef_walls_in_path;
 }

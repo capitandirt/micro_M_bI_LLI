@@ -69,19 +69,23 @@ void Maze::print_cell_path(const Vec2 v) const{
 void Maze::SetCell(const Cell set_cell, const Vec2 v){
     if(cell_request_is_out_of_range_cell_blocks(v)) return;
 
-    if(set_cell.north_wall == WallState::HI){
+    if(_cell_blocks[v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].s_wall != WallState::HI
+    ){
         _cell_blocks[v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].s_wall = set_cell.north_wall;
     }
 
-    if(set_cell.west_wall == WallState::HI){
+    if(_cell_blocks[MAZE_SIDE_LENGTH + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].e_wall != WallState::HI
+    ){
         _cell_blocks[MAZE_SIDE_LENGTH + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].e_wall = set_cell.west_wall;
     }
 
-    if(set_cell.east_wall == WallState::HI){
+    if(_cell_blocks[MAZE_SIDE_LENGTH_ADD_ONE + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].e_wall != WallState::HI
+    ){
         _cell_blocks[MAZE_SIDE_LENGTH_ADD_ONE + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].e_wall = set_cell.east_wall;
     }
         
-    if(set_cell.south_wall == WallState::HI){
+    if(_cell_blocks[MAZE_SIDE_LENGTH_ADD_ONE + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].s_wall != WallState::HI
+    ){
         _cell_blocks[MAZE_SIDE_LENGTH_ADD_ONE + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].s_wall = set_cell.south_wall;
     }
 }
@@ -99,7 +103,7 @@ void Maze::GetCell(Cell& get_cell, const Vec2 v) const{
 }
 
 Cell Maze::GetCell(const Vec2 v) const{
-    if(cell_request_is_out_of_range_cell_blocks(v)) return;
+    if(cell_request_is_out_of_range_cell_blocks(v)) return {};
 
     Cell q_cell;
     q_cell.north_wall = _cell_blocks[v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].s_wall;
@@ -116,6 +120,8 @@ Cell Maze::GetCell(const Vec2 v) const{
 void Maze::PrimaryFill(){
     for(uint16_t i = 0; i < MAZE_TOTAL_SIZE; i++){
         _cell_blocks[i].is_def_cell_dir = DirectionState::UNDEF;
+        _cell_blocks[i].e_wall = WallState::UNDEF;
+        _cell_blocks[i].s_wall = WallState::UNDEF;
     }
 
     /*fill north wall fronts*/
@@ -208,15 +214,18 @@ Direction Maze::GetPathDir(uint8_t ind) const{
 }
 
 bool Maze::UndefWallInCell(const Vec2 v){
-    if(cell_request_is_out_of_range_cell_blocks(v)) return;
+    if(cell_request_is_out_of_range_cell_blocks(v)) return 0;
     Cell cell = GetCell(v);
     
-    // UND = 0B10
-    // 10 | 10 | 10 | 10 = 
-    const uint8_t und_cell_mask = toInt(WallState::UND) << 6 | toInt(WallState::UND) << 4 | 
-                                  toInt(WallState::UND) << 2 | toInt(WallState::UND);
+    // UNDEF = 0B10
+    // but we need 0Bx1x1x1x1, then we can determine undef walls,
+    // because all that more 0B01010101 storage undef wall
 
-    return toInt(cell) ^ und_cell_mask;
+    const uint8_t not_undef = (~toInt(WallState::UNDEF)) & 0B1;
+    const uint8_t und_cell_mask = not_undef << 6 | not_undef << 4 | 
+                                  not_undef << 2 | not_undef;
+    
+    return (toInt(cell) | und_cell_mask) > und_cell_mask;
 }
 
 void Maze::ClearPath(){
@@ -318,8 +327,8 @@ void Maze::Print() const{
     Serial.println();
 
     for(uint8_t y = 0; y < MAZE_SIDE_LENGTH; y++){
-        PRINT_N_SPACES(3 - String(y * MAZE_SIDE_LENGTH).length());
-        Serial.print(y * MAZE_SIDE_LENGTH);
+        PRINT_N_SPACES(3 - String(y).length());
+        Serial.print(y);
 
         for(uint8_t x = 0; x < MAZE_SIDE_LENGTH; x++){
             print_cell_middle_walls({x, y});

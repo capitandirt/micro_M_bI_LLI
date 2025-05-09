@@ -48,7 +48,7 @@ enum class DirectionState : uint8_t{
 };
 
 enum class WallState : uint8_t{
-    LO = 0, HI = 1, UND = 2
+    LO = 0, HI = 1, UNDEF = 2
 };
 
 inline uint8_t toInt(WallState ws){
