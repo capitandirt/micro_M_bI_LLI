@@ -1,8 +1,9 @@
 #include "CycloUtilits/CycloStore.h"
 
-void CycloStore::addSmart(SmartCycloAction_t action){
+void CycloStore::addSmart(SmartCycloAction_t action, int8_t fwd_dist_optional = -1){ 
     if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
         _cyclo_program[_smart_cyc_act_end++].smart = action;
+        if(fwd_dist_optional != -1) _fwd_dist_optional = fwd_dist_optional;
     }
 }
 
@@ -104,7 +105,7 @@ void CycloStore::printPrimitives() const{
 void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::STOP    )] = STOP    ;
     _cyclograms[toInt(SmartCycloAction_t::IDLE    )] = IDLE    ;
-    _cyclograms[toInt(SmartCycloAction_t::FWD1    )] = FWD1    ;
+    _cyclograms[toInt(SmartCycloAction_t::FWD_X   )] = FWD_X   ;
     _cyclograms[toInt(SmartCycloAction_t::FWD_HALF)] = FWD_HALF;
     _cyclograms[toInt(SmartCycloAction_t::SS90EL  )] = SS90EL  ;
     _cyclograms[toInt(SmartCycloAction_t::SS90ER  )] = SS90ER  ;

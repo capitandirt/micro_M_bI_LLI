@@ -11,7 +11,7 @@ public:
 
     CycloStore(){load_cyclograms();}
 
-    void addSmart(SmartCycloAction_t action);
+    void addSmart(SmartCycloAction_t action, int8_t fwd_dist_optional = -1);
     void addPrimitive(PrimitiveCycloAction_t action);
 
     SmartCycloAction_t popFrontSmart();
@@ -31,6 +31,7 @@ public:
 
     void printSmarts() const;
     void printPrimitives() const;
+    int8_t getFwdDistOptional() const {return _fwd_dist_optional;}
 private:
     void load_cyclograms();
 
@@ -45,6 +46,7 @@ private:
 
     RawCycloActionStore _cyclo_program[CYCLO_PROG_SIZE];  
     Cyclogram _cyclograms[CYCLO_ACTION_SIZE];
+    int8_t _fwd_dist_optional = -1;
 };
 
 #endif // !_CYCLO_STORE_H_

@@ -26,7 +26,7 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {
         case PrimitiveCycloAction_t::FORWARD:
-            _cycloStore->addSmart(SmartCycloAction_t::FWD1);
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_X, 1);
             break;
 
         case PrimitiveCycloAction_t::BACK:
@@ -56,7 +56,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     switch (_cycloStore->popFrontPrimitive())
     {
     case PrimitiveCycloAction_t::FORWARD:
-        _cycloStore->addSmart(SmartCycloAction_t::FWD1);
+        _cycloStore->addSmart(SmartCycloAction_t::FWD_X, 1);
         break;
     case PrimitiveCycloAction_t::LEFT:
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
@@ -140,8 +140,9 @@ bool ActionsHandler::TO_STOP(){
 bool ActionsHandler::TO_FWD_X(){
     int X = 0;
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
-        for(;_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++) 
-        _cycloStore->addSmart(SmartCycloAction_t(toInt(SmartCycloAction_t::FWD1) + X));
+        for(;_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
+
+        _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }

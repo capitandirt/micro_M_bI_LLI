@@ -28,7 +28,7 @@ CYCLOGRAM(IDLE)
     ms->isComplete = true;
 }
 
-void FWD_X(MotionStates* ms, Sensors* s, float X)
+CYCLOGRAM(FWD_HALF)
 {
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
@@ -52,29 +52,43 @@ void FWD_X(MotionStates* ms, Sensors* s, float X)
 
     ms->theta_i0 = regulatorArray[regulatorState];
 
-    if(s->robotState->getDist() > CELL_SIZE)
+    if(s->robotState->getDist() > HALF(CELL_SIZE))
     {
         ms->isComplete = true;
     }
     else ms->isComplete = false;
 }
 
+CYCLOGRAM(FWD_X)
+{
+    ms->v_f0 = FORWARD_SPEED;
+    ms->theta_i0 = 0;
+    
+    int32_t left_sense = s->optocoupler->getSense().left;
+    int32_t right_sense = s->optocoupler->getSense().right;
+    Cell cell_from_sensors = s->optocoupler->getRelativeCell();
 
-CYCLOGRAM(FWD_HALF) {FWD_X(ms, s, 0.5);}
-CYCLOGRAM(FWD1)  {FWD_X(ms, s, 1); }
-CYCLOGRAM(FWD2)  {FWD_X(ms, s, 2); }
-CYCLOGRAM(FWD3)  {FWD_X(ms, s, 3); }
-CYCLOGRAM(FWD4)  {FWD_X(ms, s, 4); }
-CYCLOGRAM(FWD5)  {FWD_X(ms, s, 5); }
-CYCLOGRAM(FWD6)  {FWD_X(ms, s, 6); }
-CYCLOGRAM(FWD7)  {FWD_X(ms, s, 7); }
-CYCLOGRAM(FWD8)  {FWD_X(ms, s, 8); }
-CYCLOGRAM(FWD9)  {FWD_X(ms, s, 9); }
-CYCLOGRAM(FWD10) {FWD_X(ms, s, 10);}
-CYCLOGRAM(FWD11) {FWD_X(ms, s, 11);}
-CYCLOGRAM(FWD12) {FWD_X(ms, s, 12);}
-CYCLOGRAM(FWD13) {FWD_X(ms, s, 13);}
-CYCLOGRAM(FWD14) {FWD_X(ms, s, 14);}
+    // регулятор на положение по горизонтали при движении вперёд
+    uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
+
+    const int32_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
+    const int32_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+
+    const float regulatorArray[4] = {
+        0,//ни один не видит стену
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD),//стену видит только правый
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD - left_sense),//стену видит только левый
+        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика  
+    };
+
+    ms->theta_i0 = regulatorArray[regulatorState];
+
+    if(s->robotState->getDist() > CELL_SIZE * s->fwd_dist_optional)
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
+}
 
 CYCLOGRAM(SS90SL){}; //ДОПИСАТЬ
 CYCLOGRAM(SS90SR){};

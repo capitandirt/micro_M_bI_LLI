@@ -24,13 +24,14 @@ public:
                         {       
                             .time = 0,
                             .robotState = cwcp->odometry,
-                            .optocoupler = cwcp->optocoupler
+                            .optocoupler = cwcp->optocoupler,
+                            .fwd_dist_optional = 1
                         }),
                     _motion_states(
                         {   
                             .v_f0 = 0,
                             .theta_i0 = 0,
-                            .isComplete = 0
+                            .isComplete = false
                         }){}
 
 
