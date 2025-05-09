@@ -37,11 +37,13 @@ public:
     void init();
     void doCyclogram();
 
-    bool isComplete() const noexcept;
+    bool nowIsStop() const noexcept;
+    bool isCompleteCyclo() const noexcept;
+
     void checkIsComplete();
 
 private:
-    Cyclogram _cur_cyclogram = IDLE;
+    SmartCycloAction_t _cur_smart = SmartCycloAction_t::IDLE;
 
     uint32_t _cur_time = 0;
     uint32_t _last_time = 0;

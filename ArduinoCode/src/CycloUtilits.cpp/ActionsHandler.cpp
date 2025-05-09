@@ -67,6 +67,8 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     default:
         break;
     }
+
+    _cycloStore->addSmart(SmartCycloAction_t::STOP);
 }
 
 /*useless code*/

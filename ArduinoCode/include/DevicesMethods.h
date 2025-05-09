@@ -53,14 +53,13 @@ namespace DEVICES{
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
 
-        if(cycloWorker.isComplete() && !robot.checkFloodFill()){
+        if(cycloWorker.isCompleteCyclo() && cycloWorker.nowIsStop() && !robot.checkFloodFill()){
             Serial.println("STEP:");
             Serial.print(odometry.getMazeCoords().x);
             Serial.print(" ");
             Serial.println(odometry.getMazeCoords().y);
             odometry.printDir();
 
-            cycloStore.reloadPrimitives();
             robot.stepFloodFill();
             
             maze.Print();

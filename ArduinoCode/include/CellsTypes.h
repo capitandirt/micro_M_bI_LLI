@@ -48,8 +48,12 @@ enum class DirectionState : uint8_t{
 };
 
 enum class WallState : uint8_t{
-    LO = 0, HI
+    LO = 0, HI = 1, UND = 2
 };
+
+inline uint8_t toInt(WallState ws){
+    return static_cast<uint8_t>(ws);
+}
 
 inline WallState toWallState(bool exp){
     return exp? WallState::HI : WallState::LO;
@@ -65,12 +69,11 @@ struct RawCellStore{
         first = 0, second
     };
 
-    WallState s_wall : 1;
-    WallState e_wall : 1;
+    WallState s_wall : 2;
+    WallState e_wall : 2;
     Direction cell_dir : 2;
     DirectionState is_def_cell_dir : 1;
     PathDirStore path_dir : 1;
-    bool is_cell_passed : 1; 
 
     /** it may be both LO_PATH_DIR and HI_PATH_DIR. it depend by current element
       * so, take maze 2x2 
@@ -104,5 +107,11 @@ struct Cell{
     WallState south_wall;
     WallState west_wall;
 };
+
+// N | E | S | W
+inline uint8_t toInt(Cell c){
+    return toInt(c.north_wall) << 6 | toInt(c.east_wall) << 4 | 
+           toInt(c.south_wall) << 2 | toInt(c.west_wall);
+}
 
 #endif

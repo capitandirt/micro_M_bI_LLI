@@ -56,8 +56,8 @@ void CycloStore::reloadPrimitives(){
     _primitive_cyc_act_counter = 0;
 }
  
-Cyclogram CycloStore::cyclogramFrom(){
-    return _cyclograms[toInt(popFrontSmart())];
+Cyclogram CycloStore::cyclogramFrom(SmartCycloAction_t smart){
+    return _cyclograms[toInt(smart)];
 }
 
 void CycloStore::printSmarts() const{
