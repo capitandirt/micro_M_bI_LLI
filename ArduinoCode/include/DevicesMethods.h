@@ -92,7 +92,7 @@ namespace DEVICES{
     
         void CYCLOGRAMS(){
             cycloStore.addSmart(SmartCycloAction_t::IDLE);
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::FWD1);
             cycloStore.addSmart(SmartCycloAction_t::SS90SL);
             cycloStore.addSmart(SmartCycloAction_t::SS90SR);
             cycloStore.addSmart(SmartCycloAction_t::STOP);
@@ -116,9 +116,9 @@ namespace DEVICES{
         }
         void EXPLORER_FWD_3_SMARTS()
         {
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::FWD1);
+            cycloStore.addSmart(SmartCycloAction_t::FWD1);
+            cycloStore.addSmart(SmartCycloAction_t::FWD1);
         }
         
         void EXPLORER_CYC()

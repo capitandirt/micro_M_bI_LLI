@@ -101,7 +101,7 @@ void CycloStore::printPrimitives() const{
 void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::STOP    )] = STOP    ;
     _cyclograms[toInt(SmartCycloAction_t::IDLE    )] = IDLE    ;
-    _cyclograms[toInt(SmartCycloAction_t::FWD     )] = FWD     ;
+    _cyclograms[toInt(SmartCycloAction_t::FWD1    )] = FWD1    ;
     _cyclograms[toInt(SmartCycloAction_t::FWD_HALF)] = FWD_HALF;
     _cyclograms[toInt(SmartCycloAction_t::SS90EL  )] = SS90EL  ;
     _cyclograms[toInt(SmartCycloAction_t::SS90ER  )] = SS90ER  ;
