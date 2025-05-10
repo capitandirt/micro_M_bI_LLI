@@ -251,69 +251,140 @@ bool ActionsHandler::TO_SD135S_DS45S()
     return false;
 }
 
-void ActionsHandler::toDD90X(PrimitiveCycloAction_t* TURN)
+void ActionsHandler::TO_DD90X(PrimitiveCycloAction_t* TURN_TO_CHANGE)
 {
-    const auto OP_TURN = static_cast<PrimitiveCycloAction_t>((toInt((*TURN)) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
-
+    const auto TURN = *TURN_TO_CHANGE;
+    const auto OP_TURN = static_cast<PrimitiveCycloAction_t>((toInt((TURN)) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
+    int X = 0;
+    PrimitiveCycloAction_t next2Prim[2];
+    next2Prim[0] = TURN;
+    next2Prim[1] = _cycloStore->virtualPopFrontPrimitive();
+    for(;next2Prim[0] == next2Prim[1] && ((X%2 && next2Prim[0] == OP_TURN) || (!X%2 && next2Prim[0] == TURN)); X++)
+    {
+        _cycloStore->virtualPrimitiveRelease();
+        next2Prim[0] = _cycloStore->virtualPopFrontPrimitive();
+        next2Prim[1] = _cycloStore->virtualPopFrontPrimitive();
+    }
+    _cycloStore->virtualGoBack();
+    for(int i = 0; i < X; i++)
+    {
+        if(TURN == PrimitiveCycloAction_t::LEFT)
+        {
+            if(!(i % 2)) _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
+            else _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
+        }
+        else
+        {
+            if(!(i % 2)) _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
+            else _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
+        }
+    } 
+    if(!(X % 2)) *TURN_TO_CHANGE = OP_TURN;
 }
 
-void ActionsHandler::convertToSmart()
+void TO_DIA_X(PrimitiveCycloAction_t* TURN_TO_CHANGE)
+{
+    // НАПИСАТЬ!!!
+}
+
+/*
+Функция ужасно некрасива. Её нужно привести в вид
+{
+    entryHandler
+    repeatActionHandler
+    exitHandler
+}
+внутри этих хендлеров будут обработки на все N-ные действия
+переход в повторяющееся действие может произойти в любом из entry хендлеров
+*/
+
+int ActionsHandler::convertToSmart() // не закончена, остановился на обработке 4 действия в случае TURN (на DIA)
 {
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие [всегда FORWARD]
-    while(curPrim != PrimitiveCycloAction_t::STOP)
+    while(curPrim != PrimitiveCycloAction_t::STOP) // пока не стоит остановка
     {
         int X = 1;
         curPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действие
-        if(curPrim == PrimitiveCycloAction_t::FORWARD)
+        if(curPrim == PrimitiveCycloAction_t::FORWARD) // обработка 2 действия
         {
-            while(curPrim == PrimitiveCycloAction_t::FORWARD) {X++;}
+            while(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD) {X++;}
             _cycloStore->addSmart(SmartCycloAction_t::FWD, X);
             _cycloStore->virtualPrimitiveRelease();
         }
-        else
+        else // обработка 2 действия
         {
             PrimitiveCycloAction_t TURN = curPrim; // получение действия и приравнивание его к основному повороту
             PrimitiveCycloAction_t OP_TURN = static_cast<PrimitiveCycloAction_t>((static_cast<int8_t>(TURN) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
             
             curPrim = _cycloStore->virtualPopFrontPrimitive(); // 3 действия
             
-            if(curPrim == PrimitiveCycloAction_t::FORWARD)
+            if(curPrim == PrimitiveCycloAction_t::FORWARD) // обработка 3 действия
             {
                 if(TURN == PrimitiveCycloAction_t::LEFT) {_cycloStore->addSmart(SmartCycloAction_t::SS90SL);}
                 else {_cycloStore->addSmart(SmartCycloAction_t::SS90SR);}
                 _cycloStore->virtualPrimitiveRelease();
             }
-            else if(curPrim == TURN)
+            else if(curPrim == TURN) // обработка 3 действия
             {
                 curPrim = _cycloStore->virtualPopFrontPrimitive(); // 4 действия
-                if(curPrim == PrimitiveCycloAction_t::FORWARD) 
+                if(curPrim == PrimitiveCycloAction_t::FORWARD) // обработка 4 действия
                 {
                     if(TURN == PrimitiveCycloAction_t::LEFT) {_cycloStore->addSmart(SmartCycloAction_t::SS180SL);}
                     else {_cycloStore->addSmart(SmartCycloAction_t::SS180SR);}
                     _cycloStore->virtualPrimitiveRelease();
                 }
-                else if(curPrim == OP_TURN)
+                else if(curPrim == TURN) // обработка 4 действия
                 {
+                    TO_DIA_X(&curPrim);
+                }
+                else if(curPrim == OP_TURN) // обработка 4 действия
+                {
+                    if(TURN == PrimitiveCycloAction_t::LEFT) {_cycloStore->addSmart(SmartCycloAction_t::SD135SL);}
+                    else {_cycloStore->addSmart(SmartCycloAction_t::SD135SR);}
+
+                    TO_DD90X(&curPrim); // если выполнилось нечётное количество DD90S, то TURN и OP_TURN меняются местами
+                    if(curPrim == TURN) 
+                    {
+                        TURN = OP_TURN;
+                        OP_TURN = curPrim;
+                    }
+
+
                     curPrim = _cycloStore->virtualPopFrontPrimitive(); // 5 действия
                     if(curPrim == PrimitiveCycloAction_t::FORWARD)
                     {
                         if(TURN == PrimitiveCycloAction_t::LEFT) 
                         {
-                            _cycloStore->addSmart(SmartCycloAction_t::SD135SL);
                             _cycloStore->addSmart(SmartCycloAction_t::DS45SR);
                         }
                         else 
                         {
-                            _cycloStore->addSmart(SmartCycloAction_t::SD135SR);
                             _cycloStore->addSmart(SmartCycloAction_t::DS45SL);
                         }
                         _cycloStore->virtualPrimitiveRelease();
                     }
                     else if(curPrim == OP_TURN)
                     {
-
+                        curPrim = _cycloStore->virtualPopFrontPrimitive(); // 6 действия
+                        if(curPrim == PrimitiveCycloAction_t::FORWARD)
+                        {
+                            if(TURN == PrimitiveCycloAction_t::LEFT) 
+                            {
+                                _cycloStore->addSmart(SmartCycloAction_t::DS135SR);
+                            }
+                            else 
+                            {
+                                _cycloStore->addSmart(SmartCycloAction_t::DS135SL);
+                            }
+                            _cycloStore->virtualPrimitiveRelease();
+                        }
+                        else
+                        {
+                            return -1; //ОШИБКА, тут либо не работает TO_DD90X, либо вообще ужас.
+                        }
                     }
                 }
+                else return -1; //он решил повернуть в стену, это плохо
             }
         }
     }

@@ -47,8 +47,9 @@ private:
     bool TO_SD45S_DS45S();
     bool TO_SD135S_DS45S();
 
-    void toDD90X(PrimitiveCycloAction_t* TURN); // функция для обработки X функций DD90S, она меняет TURN в зависимости от количества DD90S
-    void convertToSmart(); //экспериментальное
+    void TO_DD90X(PrimitiveCycloAction_t* TURN_TO_CHANGE); // функция для обработки X функций DD90S, она меняет TURN в зависимости от количества DD90S
+    void TO_DIA_X(PrimitiveCycloAction_t* TURN_TO_CHANGE); // функция для обработки X функций DIA, она меняет TURN в зависимости от количества DIA
+    int convertToSmart(); //экспериментальное
 };
 
 #endif

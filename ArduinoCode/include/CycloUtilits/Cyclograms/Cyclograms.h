@@ -152,12 +152,12 @@ CYCLOGRAM(SS90SL)
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R; 
-    constexpr float circleDis = (2 * PI * R) / 4; // 90 = четверть окружности
+    constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = -theta_i;
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = theta_i;
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDis) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
     {
         ms->isComplete = true;
     }
@@ -171,12 +171,46 @@ CYCLOGRAM(SS90SR)
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R; 
-    constexpr float circleDis = (2 * PI * R) / 4; // 90 = четверть окружности
+    constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = -theta_i;
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = -theta_i;
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDis) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
+}
+CYCLOGRAM(DD90SL)
+{
+    ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
+    constexpr float forwDist = CELL_SIZE / M_SQRT2;
+    constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
+    float theta_i = FORWARD_SPEED / R;
+
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    else ms->theta_i0 = 0;
+
+    if(s->robotState->getDist() > forwDist + circleDist + forwDist)
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
+}
+CYCLOGRAM(DD90SR)
+{
+    ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
+    constexpr float forwDist = CELL_SIZE / M_SQRT2;
+    constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
+    float theta_i = FORWARD_SPEED / R;
+
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    else ms->theta_i0 = 0;
+
+    if(s->robotState->getDist() > forwDist + circleDist + forwDist)
     {
         ms->isComplete = true;
     }
@@ -189,12 +223,12 @@ CYCLOGRAM(SS180SL)
     ms->v_f0 = FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FORWARD_SPEED / R;
-    constexpr float circleDis = PI * R; // 180 = половина окружности 
+    constexpr float circleDist = PI * R; // 180 = половина окружности 
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = theta_i; 
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i; 
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDis) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
     {
         ms->isComplete = true;
     }
@@ -205,12 +239,12 @@ CYCLOGRAM(SS180SR)
     ms->v_f0 = FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FORWARD_SPEED / R;
-    constexpr float circleDis = PI * R; // 180 = половина окружности 
+    constexpr float circleDist = PI * R; // 180 = половина окружности 
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = -theta_i; 
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i; 
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDis) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
     {
         ms->isComplete = true;
     }
