@@ -22,6 +22,11 @@ extern Odometry odometry;
 extern OptocouplerSensors optocoupler;
 extern Robot robot;
 
+
+ISR(TIMER2_COMPA_vect){
+    optocoupler.tick();
+}
+
 namespace DEVICES{  
     void INIT(){
         leftEncoder.init();
@@ -129,7 +134,7 @@ namespace DEVICES{
             cycloStore.addSmart(SmartCycloAction_t::SS90EL);
             cycloStore.addSmart(SmartCycloAction_t::SS90ER);
         }
-        void EXPLORER_FWD_3_SMARTS()
+        void FWD_3X()
         {
             cycloStore.addSmart(SmartCycloAction_t::FWD);
             cycloStore.addSmart(SmartCycloAction_t::FWD);
@@ -169,12 +174,10 @@ namespace DEVICES{
         }
 
         void OPTOCOUPLERS_SENSE(){
-            optocoupler.tick();
             optocoupler.printSense();
         }
         
         void OPTOCOUPLERS_MASK(){
-            // optocoupler.tick();
             optocoupler.printMask();
         }
 
@@ -183,8 +186,4 @@ namespace DEVICES{
             optocoupler.printAbsCell();
         }
     }
-}
-
-ISR(TIMER2_COMPA_vect){
-    optocoupler.tick();
 }

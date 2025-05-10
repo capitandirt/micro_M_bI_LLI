@@ -12,7 +12,12 @@ void Robot::init(){
 
 void Robot::stepFloodFill()
 {
-    if(_cycloWorker->isCompleteCyclo() && _cycloWorker->nowIsStop() && !FLOOD_FILL_IS_FINISH){
+    if(!_cycloWorker->isCompleteCyclo() || !_cycloWorker->nowIsStop() || FLOOD_FILL_IS_FINISH){
+        Serial.print(_cycloWorker->nowIsStop());
+        Serial.print(" ");
+        Serial.print(_cycloWorker->isCompleteCyclo());
+        Serial.print(" ");
+        Serial.println(FLOOD_FILL_IS_FINISH);
         return;
     }
     
@@ -23,6 +28,8 @@ void Robot::stepFloodFill()
         FLOOD_FILL_IS_FINISH = true;
         return;
     }
+
+    // _maze->Print();
 
     const Direction cur_robot_dir = _odometry->getDir();
 
@@ -36,14 +43,14 @@ void Robot::stepFloodFill()
 
     _actionsHandler->reload();
     
-    if(_optocoupler->cellIsImpasse()){
-        _actionsHandler->needGetOutImpasse();
-        _odometry->dirToOppositeSide();
-    }
-    else{
+    // if(_optocoupler->cellIsImpasse()){
+    //     _actionsHandler->needGetOutImpasse();
+    //     _odometry->dirToOppositeSide();
+    // }
+    // else{
         const Direction next_robot_dir = _maze->GetPathDir(1);
         _odometry->updateDir(next_robot_dir);
-    } 
+    // } 
 
     _actionsHandler->loadExplorer(cur_robot_dir);    
     _odometry->updateMazeCoords(cur_robot_dir);

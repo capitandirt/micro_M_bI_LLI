@@ -19,7 +19,7 @@
 
 //*==ANGLE SPEED REGULATOR BEGIN==*/
 #define ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K 0.005 // [analogValue -> рад/с]
-#define ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K (0.005 + (FORWARD_SPEED * 0.05)) // [analogValue -> рад/с]  
+#define ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K (0.00125 + (FORWARD_SPEED * 0.00125)) // [analogValue -> рад/с]  
 //*==ANGLE SPEED REGULATOR END==*/
 
 

@@ -26,7 +26,7 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {
         case PrimitiveCycloAction_t::FORWARD:
-            _cycloStore->addSmart(SmartCycloAction_t::FWD, 1);
+            _cycloStore->addSmart(SmartCycloAction_t::FWD);
             break;
 
         case PrimitiveCycloAction_t::BACK:
@@ -56,7 +56,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     switch (_cycloStore->popFrontPrimitive())
     {
     case PrimitiveCycloAction_t::FORWARD:
-        _cycloStore->addSmart(SmartCycloAction_t::FWD, 1);
+        _cycloStore->addSmart(SmartCycloAction_t::FWD);
         break;
     case PrimitiveCycloAction_t::LEFT:
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
@@ -107,6 +107,7 @@ void ActionsHandler::reload(){
 
 void ActionsHandler::needStartCellAligning(){
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+    _cycloStore->addSmart(SmartCycloAction_t::STOP);
 }
 
 void ActionsHandler::needGetOutImpasse(){

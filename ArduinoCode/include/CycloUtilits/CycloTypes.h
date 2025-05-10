@@ -7,6 +7,7 @@
 
 enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,
+    CLUSTER_DOT,
     FWD_HALF,
     FWD,
     SS90SL,
@@ -54,6 +55,7 @@ inline constexpr uint8_t toInt(PrimitiveCycloAction_t pca){
 
 inline const char* Str_SmartCyclogramAction[]{
     "IDLE",
+    "CLUSTER_DOT",
     "FWD_HALF",
     "FWD",
     "SS90SL",
@@ -88,7 +90,7 @@ struct MotionStates
     bool isComplete;
 };
 
-using Cyclogram = void (*)(MotionStates*, Sensors*, int8_t);
-#define CYCLOGRAM(name) inline void name(MotionStates* ms, Sensors* s, int8_t x = -1)
+using Cyclogram = void (*)(MotionStates*, Sensors*);
+#define CYCLOGRAM(name) inline void name(MotionStates* ms, Sensors* s)
 
 #endif // !_CYCLO_STRUCTS_H_

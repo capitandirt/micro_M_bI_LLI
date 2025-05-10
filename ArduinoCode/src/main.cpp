@@ -8,7 +8,7 @@ void setup()
 
 	DEVICES::TEST::SET_SERIAL();
     // DEVICES::TEST::UNDEF_CELL_WALLS();
-    // DEVICES::TEST::EXPLORER_FWD_3_SMARTS();
+    // DEVICES::TEST::FWD_3X();
     // DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
     // DEVICES::TEST::EXPLORER_CYC();
     // DEVICES::TEST::CYCLOGRAMS();
@@ -23,6 +23,7 @@ void loop(){
         ;
     last_time = micros();
 
+    // cycloStore.printSmarts();
     // Serial.print(odometry.getMazeCoords().x);
     // Serial.print(" ");
     // Serial.print(odometry.getMazeCoords().y);
@@ -30,8 +31,7 @@ void loop(){
     // Serial.println((int)maze.GetPathDir(0));
     // maze.PrintDirPath();
     // cycloStore.printSmarts();
-
-    DEVICES::TEST::OPTOCOUPLERS_SENSE();
-
-    // DEVICES::TICK();
+    // DEVICES::TEST::OPTOCOUPLERS_SENSE();
+    // DEVICES::TEST::OPTOCOUPLERS_MASK();
+    DEVICES::TICK();
 }
