@@ -80,7 +80,6 @@ void Odometry:: updateDir(Direction dir_)
     dir = dir_;
 }
 
-
 void Odometry::updateMazeCoords(Direction dir){
     mazeCoord.plusOrtVector(dir);
 }

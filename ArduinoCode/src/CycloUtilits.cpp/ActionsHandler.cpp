@@ -47,14 +47,7 @@ Direction ActionsHandler::loadExplorer(Direction robot_dir){
     const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
         (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
 
-    if(first_primitive == PrimitiveCycloAction_t::BACK){
-        
-        _cycloStore->addSmart(SmartCycloAction_t::IP180);
-    }
-
-    dirs_to_primitives();
-
-    switch (_cycloStore->popFrontPrimitive())
+    switch (first_primitive)
     {
     case PrimitiveCycloAction_t::FORWARD:
         _cycloStore->addSmart(SmartCycloAction_t::FWD);
@@ -65,11 +58,20 @@ Direction ActionsHandler::loadExplorer(Direction robot_dir){
     case PrimitiveCycloAction_t::RIGHT:
         _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         break;
+    case PrimitiveCycloAction_t::BACK:
+        _cycloStore->addSmart(SmartCycloAction_t::IP180);
     default:
         break;
     }
 
-    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT                             );
+    // dirs_to_primitives();
+    
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
+    
+    _cycloStore->printSmarts();
+
+    robot_dir = static_cast<Direction>(from_path_dir);
+    return robot_dir;
 }
 
 /*useless code*/

@@ -13,6 +13,10 @@ enum class Direction : uint8_t{
     N = 0, E, S, W
 };
 
+inline Direction toOpposite(Direction dir){
+    return static_cast<Direction>((static_cast<uint8_t>(dir) + DIRECTION_SIZE / 2) % DIRECTION_SIZE);
+}
+
 struct Vec2
 {
     Vec2(){};
