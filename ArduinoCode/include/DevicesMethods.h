@@ -55,23 +55,8 @@ namespace DEVICES{
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
 
-        // Serial.println("STEP:");
-        // Serial.print(odometry.getMazeCoords().x);
-        // Serial.print(" ");
-        // Serial.println(odometry.getMazeCoords().y);
-        // odometry.printDir();
-
         robot.stepFloodFill();
         
-        // maze.Print();
-        // odometry.printDir();
-        // maze.PrintDirPath();
-        // cycloStore.printPrimitives();
-        // cycloStore.printSmarts();
-        // Serial.print(odometry.getMazeCoords().x);
-        // Serial.print(" ");
-        // Serial.println(odometry.getMazeCoords().y);
-
         cycloWorker.checkIsComplete();
     }
 

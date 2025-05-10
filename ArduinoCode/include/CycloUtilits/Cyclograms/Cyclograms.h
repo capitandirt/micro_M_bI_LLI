@@ -53,10 +53,10 @@ CYCLOGRAM(FWD_HALF)
     const int32_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
     const int32_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
 
-    const float regulatorArray[4] = {
+     const float regulatorArray[4] = {
         0,//ни один не видит стену
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD),//стену видит только правый
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD - left_sense),//стену видит только левый
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
         ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика  
     };
 

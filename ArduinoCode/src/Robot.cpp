@@ -24,9 +24,8 @@ void Robot::stepFloodFill()
         return;
     }
 
-    _maze->Print();
-
-    const Direction cur_robot_dir = _odometry->getDir();
+    const Direction cur_robot_dir  = _odometry->getDir();
+    const Direction next_robot_dir = _maze->GetPathDir(1);
 
     const Vec2 cur_robot_vec = _odometry->getMazeCoords();
     const Vec2 forward_robot_vec = _odometry->getMazeCoords().plusOrtVector(cur_robot_dir);
@@ -38,17 +37,26 @@ void Robot::stepFloodFill()
 
     _actionsHandler->reload();
     
-    if(_optocoupler->cellIsImpasse()){
-        _actionsHandler->needGetOutImpasse();
-        _odometry->dirToOppositeSide();
-    }
-    else{
-        const Direction next_robot_dir = _maze->GetPathDir(1);
-        _odometry->updateDir(next_robot_dir);
-    } 
-
     _actionsHandler->loadExplorer(cur_robot_dir);    
+
+    _maze->Print();
+    _maze->PrintDirPath();
+
+    Serial.println("NOW:");
+    Serial.print(_odometry->getMazeCoords().x);
+    Serial.print(' ');
+    Serial.println(_odometry->getMazeCoords().y);
+    _odometry->printDir();
+
+    _odometry->updateDir(next_robot_dir);
     _odometry->updateMazeCoords(cur_robot_dir);
+
+    Serial.println("BEFORE:");
+    Serial.print(_odometry->getMazeCoords().x);
+    Serial.print(' ');
+    Serial.println(_odometry->getMazeCoords().y);
+    _odometry->printDir();
+
 
 }
 
