@@ -25,7 +25,6 @@ void Robot::stepFloodFill()
     }
 
     const Direction cur_robot_dir  = _odometry->getDir();
-    const Direction next_robot_dir = _maze->GetPathDir(1);
 
     const Vec2 cur_robot_vec = _odometry->getMazeCoords();
     const Vec2 forward_robot_vec = _odometry->getMazeCoords().plusOrtVector(cur_robot_dir);
@@ -47,6 +46,8 @@ void Robot::stepFloodFill()
     Serial.print(' ');
     Serial.println(_odometry->getMazeCoords().y);
     _odometry->printDir();
+
+    const Direction next_robot_dir = _maze->GetPathDir(1);
 
     _odometry->updateDir(next_robot_dir);
     _odometry->updateMazeCoords(cur_robot_dir);

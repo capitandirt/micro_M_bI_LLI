@@ -14,7 +14,7 @@ class ActionsHandler : ActionsHandlerConnectionParams{
 public:
     ActionsHandler(ActionsHandlerConnectionParams* ahcp) : ActionsHandlerConnectionParams(*ahcp){}
     
-    void loadExplorer(Direction robot_dir);
+    Direction loadExplorer(Direction robot_dir);
     void primitivesToExplorers(Direction robot_dir);
     void primitivesToFasts();
     

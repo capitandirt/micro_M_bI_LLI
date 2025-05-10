@@ -75,14 +75,11 @@ void Odometry::update(float omegaL, float omegaR)
     Y.tick(vY);
 }
 
-void Odometry::updateDir(Direction dir_)
+void Odometry:: updateDir(Direction dir_)
 {
     dir = dir_;
 }
 
-void Odometry::dirToOppositeSide(){
-    dir = static_cast<Direction>((toInt(dir) + DIRECTION_SIZE / 2) % DIRECTION_SIZE); 
-}
 
 void Odometry::updateMazeCoords(Direction dir){
     mazeCoord.plusOrtVector(dir);
