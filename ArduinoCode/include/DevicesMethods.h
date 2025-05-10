@@ -34,7 +34,7 @@ namespace DEVICES{
 
         robot.init();
 
-        // TIM2::INIT();
+        TIM2::INIT();
     }
 
     void TICK(){
@@ -46,28 +46,26 @@ namespace DEVICES{
         
         leftServo.tick();
         rightServo.tick();
-
-        optocoupler.tick();
         
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
         cycloWorker.doCyclogram();
 
-        Serial.println("STEP:");
-        Serial.print(odometry.getMazeCoords().x);
-        Serial.print(" ");
-        Serial.println(odometry.getMazeCoords().y);
-        odometry.printDir();
+        // Serial.println("STEP:");
+        // Serial.print(odometry.getMazeCoords().x);
+        // Serial.print(" ");
+        // Serial.println(odometry.getMazeCoords().y);
+        // odometry.printDir();
 
         robot.stepFloodFill();
         
-        maze.Print();
-        odometry.printDir();
-        maze.PrintDirPath();
-        cycloStore.printPrimitives();
-        cycloStore.printSmarts();
-        Serial.print(odometry.getMazeCoords().x);
-        Serial.print(" ");
-        Serial.println(odometry.getMazeCoords().y);
+        // maze.Print();
+        // odometry.printDir();
+        // maze.PrintDirPath();
+        // cycloStore.printPrimitives();
+        // cycloStore.printSmarts();
+        // Serial.print(odometry.getMazeCoords().x);
+        // Serial.print(" ");
+        // Serial.println(odometry.getMazeCoords().y);
 
         cycloWorker.checkIsComplete();
     }
@@ -109,7 +107,7 @@ namespace DEVICES{
 
         void CYCLOGRAMS(){
             cycloStore.addSmart(SmartCycloAction_t::IDLE);
-            cycloStore.addSmart(SmartCycloAction_t::FWD1);
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
             cycloStore.addSmart(SmartCycloAction_t::SS90SL);
             cycloStore.addSmart(SmartCycloAction_t::SS90SR);
             cycloStore.addSmart(SmartCycloAction_t::STOP);
@@ -133,9 +131,9 @@ namespace DEVICES{
         }
         void EXPLORER_FWD_3_SMARTS()
         {
-            cycloStore.addSmart(SmartCycloAction_t::FWD1);
-            cycloStore.addSmart(SmartCycloAction_t::FWD1);
-            cycloStore.addSmart(SmartCycloAction_t::FWD1);
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::FWD);
         }
         
         void EXPLORER_CYC()
@@ -176,17 +174,17 @@ namespace DEVICES{
         }
         
         void OPTOCOUPLERS_MASK(){
-            optocoupler.tick();
+            // optocoupler.tick();
             optocoupler.printMask();
         }
 
         void OPTOCOUPLERS_CELL(){
-            optocoupler.tick();
+            // optocoupler.tick();
             optocoupler.printAbsCell();
         }
     }
 }
 
-// ISR(TIMER2_COMPA_vect){
-//     DEVICES::TICK();   
-// }
+ISR(TIMER2_COMPA_vect){
+    optocoupler.tick();
+}

@@ -25,7 +25,6 @@ public:
                             .time = 0,
                             .robotState = cwcp->odometry,
                             .optocoupler = cwcp->optocoupler,
-                            .fwd_dist_optional = 1
                         }),
                     _motion_states(
                         {   

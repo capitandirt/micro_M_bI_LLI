@@ -7,18 +7,18 @@
 namespace TIM2{
     void INIT(){
         noInterrupts();           
-        TCCR2A = 0;               
-        TCCR2B = 0;
-
-        const int MAX_COUNTER = 256;
-        const int PRESCALER = 1024;
-        const int COUNTER = Ts_us / (F_CPU / PRESCALER / MAX_COUNTER ) - 1;
-
-        OCR2A = COUNTER;            
-        TCCR2A |= (1 << WGM21);
-        TCCR2B |= (1 << CS22) | (1 << CS21) | (1 << CS20);
-        
-        TIMSK2 |= (1 << OCIE2A);
+        // set the mode for timer 2
+        bitClear(TCCR2A, WGM20);
+        bitSet(TCCR2A, WGM21);
+        bitClear(TCCR2B, WGM22);
+        // set divisor to 128 => timer clock = 125kHz
+        bitSet(TCCR2B, CS22);
+        bitClear(TCCR2B, CS21);
+        bitSet(TCCR2B, CS20);
+        // set the timer frequency
+        OCR2A = 249;  // (16000000/128/500)-1 = 249
+        // enable the timer interrupt
+        bitSet(TIMSK2, OCIE2A);
 
         interrupts(); 
     }

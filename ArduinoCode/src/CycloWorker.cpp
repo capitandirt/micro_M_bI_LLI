@@ -2,7 +2,6 @@
 
 void CycloWorker::init(){
     _cur_smart = cycloStore->popFrontSmart();
-    if(_cur_smart == SmartCycloAction_t::FWD_X) _sensors.fwd_dist_optional = cycloStore->getFwdDistOptional();
 }
 
 void CycloWorker::doCyclogram(){

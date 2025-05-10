@@ -8,7 +8,7 @@
 enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,
     FWD_HALF,
-    FWD_X,
+    FWD,
     SS90SL,
     SS90EL,
     SS90SR,
@@ -55,21 +55,7 @@ inline constexpr uint8_t toInt(PrimitiveCycloAction_t pca){
 inline const char* Str_SmartCyclogramAction[]{
     "IDLE",
     "FWD_HALF",
-    "FWD1",
-    "FWD2",
-    "FWD3",
-    "FWD4",
-    "FWD5",
-    "FWD6",
-    "FWD7",
-    "FWD8",
-    "FWD9",
-    "FWD10",
-    "FWD11",
-    "FWD12",
-    "FWD13",
-    "FWD14",
-    "FWD_LAST",
+    "FWD",
     "SS90SL",
     "SS90EL",
     "SS90SR",
@@ -93,7 +79,6 @@ struct Sensors
     float time;
     Odometry* robotState;
     OptocouplerSensors* optocoupler;
-    int8_t fwd_dist_optional;
 };
 
 struct MotionStates
@@ -103,7 +88,7 @@ struct MotionStates
     bool isComplete;
 };
 
-using Cyclogram = void (*)(MotionStates*, Sensors*);
-#define CYCLOGRAM(name) inline void name(MotionStates* ms, Sensors* s)
+using Cyclogram = void (*)(MotionStates*, Sensors*, int8_t);
+#define CYCLOGRAM(name) inline void name(MotionStates* ms, Sensors* s, int8_t x = -1)
 
 #endif // !_CYCLO_STRUCTS_H_

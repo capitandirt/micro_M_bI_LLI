@@ -1,6 +1,11 @@
 #include "OptocouplerSensors.h"
 
 void OptocouplerSensors::init(){
+    bitClear(ADCSRA, ADPS0);
+    bitClear(ADCSRA, ADPS1);
+    bitSet(ADCSRA, ADPS2);
+
+
     pinMode(EMITERS_FWD, OUTPUT);
     pinMode(EMITERS_SIDE, OUTPUT);
     pinMode(REC_RIGHT, INPUT);
@@ -10,14 +15,26 @@ void OptocouplerSensors::init(){
 }
 
 void OptocouplerSensors::tick(){
-    digitalWrite(EMITERS_FWD, 1);
-    digitalWrite(EMITERS_SIDE, 1);
-
-    _sense[OptocouplerSense::From::RIGHT] = analogRead(REC_RIGHT);
-    _sense[OptocouplerSense::From::LEFT] = analogRead(REC_LEFT);
+    // dark read
+    _sense[OptocouplerSense::From::RIGHT]     = analogRead(REC_RIGHT);
+    _sense[OptocouplerSense::From::LEFT]      = analogRead(REC_LEFT);
 
     _sense[OptocouplerSense::From::FORWARD_L] = analogRead(REC_FWD_LEFT);
     _sense[OptocouplerSense::From::FORWARD_R] = analogRead(REC_FWD_RIGHT);
+
+    digitalWrite(EMITERS_FWD, 1);
+    digitalWrite(EMITERS_SIDE, 1);
+    delayMicroseconds(50);
+
+    // light read
+    _sense[OptocouplerSense::From::RIGHT]     = analogRead(REC_RIGHT) - _sense[OptocouplerSense::From::RIGHT];
+    _sense[OptocouplerSense::From::LEFT]      = analogRead(REC_LEFT) - _sense[OptocouplerSense::From::LEFT];
+
+    _sense[OptocouplerSense::From::FORWARD_L] = analogRead(REC_FWD_LEFT) - _sense[OptocouplerSense::From::FORWARD_L];
+    _sense[OptocouplerSense::From::FORWARD_R] = analogRead(REC_FWD_RIGHT) - _sense[OptocouplerSense::From::FORWARD_R];
+
+    digitalWrite(EMITERS_FWD, 0);
+    digitalWrite(EMITERS_SIDE, 0);
 }
 
 Sense_t OptocouplerSensors::getSense(){

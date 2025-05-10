@@ -4,10 +4,10 @@
 
 void setup()
 {
-	DEVICES::TEST::SET_SERIAL();
+    DEVICES::INIT();
 
-    DEVICES::TEST::UNDEF_CELL_WALLS();
-    // DEVICES::INIT();
+	DEVICES::TEST::SET_SERIAL();
+    // DEVICES::TEST::UNDEF_CELL_WALLS();
     // DEVICES::TEST::EXPLORER_FWD_3_SMARTS();
     // DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
     // DEVICES::TEST::EXPLORER_CYC();
@@ -31,9 +31,7 @@ void loop(){
     // maze.PrintDirPath();
     // cycloStore.printSmarts();
 
-    // DEVICES::TEST::OPTOCOUPLERS_SENSE();
-    // DEVICES::TEST::OPTOCOUPLERS_MASK();
-    // DEVICES::TEST::OPTOCOUPLERS_CELL();
-    
+    DEVICES::TEST::OPTOCOUPLERS_SENSE();
+
     // DEVICES::TICK();
 }

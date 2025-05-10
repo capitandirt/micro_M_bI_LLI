@@ -3,10 +3,10 @@
 const PrimitiveCycloAction_t ActionsHandler::calc_primitive_cyclo_action(const uint8_t ind){
     if(ind >= _maze->GetPathSize() - 1) return PrimitiveCycloAction_t::STOP;
 
-    int8_t dirNow  = static_cast<int8_t>(_maze->GetPathDir(ind));
-    int8_t dirNext = static_cast<int8_t>(_maze->GetPathDir(ind + 1));
+    int8_t dir_now  = static_cast<int8_t>(_maze->GetPathDir(ind));
+    int8_t dir_next = static_cast<int8_t>(_maze->GetPathDir(ind + 1));
 
-    return static_cast<PrimitiveCycloAction_t>((dirNow - dirNext + DIRECTION_SIZE) % DIRECTION_SIZE);
+    return static_cast<PrimitiveCycloAction_t>((dir_now - dir_next + DIRECTION_SIZE) % DIRECTION_SIZE);
 }
 
 void ActionsHandler::dirs_to_primitives(){
@@ -26,7 +26,7 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {
         case PrimitiveCycloAction_t::FORWARD:
-            _cycloStore->addSmart(SmartCycloAction_t::FWD_X, 1);
+            _cycloStore->addSmart(SmartCycloAction_t::FWD, 1);
             break;
 
         case PrimitiveCycloAction_t::BACK:
@@ -56,7 +56,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     switch (_cycloStore->popFrontPrimitive())
     {
     case PrimitiveCycloAction_t::FORWARD:
-        _cycloStore->addSmart(SmartCycloAction_t::FWD_X, 1);
+        _cycloStore->addSmart(SmartCycloAction_t::FWD, 1);
         break;
     case PrimitiveCycloAction_t::LEFT:
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
@@ -142,7 +142,7 @@ bool ActionsHandler::TO_FWD_X(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
         for(;_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
 
-        _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
+        _cycloStore->addSmart(SmartCycloAction_t::FWD);
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }

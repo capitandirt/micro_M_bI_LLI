@@ -59,7 +59,7 @@ CYCLOGRAM(FWD_HALF)
     else ms->isComplete = false;
 }
 
-CYCLOGRAM(FWD_X)
+CYCLOGRAM(FWD)
 {
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
@@ -83,7 +83,7 @@ CYCLOGRAM(FWD_X)
 
     ms->theta_i0 = regulatorArray[regulatorState];
 
-    if(s->robotState->getDist() > CELL_SIZE * s->fwd_dist_optional)
+    if(s->robotState->getDist() > CELL_SIZE)
     {
         ms->isComplete = true;
     }
