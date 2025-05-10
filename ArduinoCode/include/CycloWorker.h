@@ -37,7 +37,7 @@ public:
     void init();
     void doCyclogram();
 
-    bool nowIsStop() const noexcept;
+    bool nowIsClusterDot() const noexcept;
     bool isCompleteCyclo() const noexcept;
 
     void checkIsComplete();

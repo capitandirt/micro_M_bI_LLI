@@ -68,7 +68,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
         break;
     }
 
-    _cycloStore->addSmart(SmartCycloAction_t::STOP);
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT                             );
 }
 
 /*useless code*/
@@ -107,11 +107,12 @@ void ActionsHandler::reload(){
 
 void ActionsHandler::needStartCellAligning(){
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
-    _cycloStore->addSmart(SmartCycloAction_t::STOP);
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
 void ActionsHandler::needGetOutImpasse(){
     _cycloStore->addSmart(SmartCycloAction_t::IP180);
+    _cycloStore->addSmart(SmartCycloAction_t::FWD);
 }
 
 void ActionsHandler::needStop(){

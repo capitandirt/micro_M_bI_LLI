@@ -13,8 +13,8 @@ void CycloWorker::doCyclogram(){
     mixer->impactVelocity(_motion_states.theta_i0, _motion_states.v_f0);
 }
 
-bool CycloWorker::nowIsStop() const{
-    return _cur_smart == SmartCycloAction_t::STOP;
+bool CycloWorker::nowIsClusterDot() const{
+    return _cur_smart == SmartCycloAction_t::CLUSTER_DOT;
 }
 
 bool CycloWorker::isCompleteCyclo() const{

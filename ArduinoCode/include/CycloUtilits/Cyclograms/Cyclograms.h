@@ -25,6 +25,12 @@ CYCLOGRAM(STOP)
     ms->isComplete = false;
 }
 
+CYCLOGRAM(CLUSTER_DOT){
+    ms->v_f0 = 0;
+    ms->theta_i0 = 0;
+    ms->isComplete = true;
+}
+
 CYCLOGRAM(IDLE)
 {
     ms->v_f0 = 0;
