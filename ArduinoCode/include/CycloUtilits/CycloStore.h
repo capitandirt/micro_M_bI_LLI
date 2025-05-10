@@ -11,7 +11,7 @@ public:
 
     CycloStore(){load_cyclograms();}
 
-    void addSmart(SmartCycloAction_t action, int8_t fwd_dist_optional = -1);
+    void addSmart(SmartCycloAction_t action);
     void addPrimitive(PrimitiveCycloAction_t action);
 
     SmartCycloAction_t popFrontSmart();

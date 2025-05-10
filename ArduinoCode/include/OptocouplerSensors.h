@@ -76,6 +76,7 @@ private:
 private:
     Cell _relative_cell;
 
+    volatile bool CAN_READ = 0;
     Sense_mask_t _sense_mask;
     OptocouplerSense _sense;
 };

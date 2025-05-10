@@ -1,6 +1,6 @@
 #include "CycloUtilits/CycloStore.h"
 
-void CycloStore::addSmart(SmartCycloAction_t action, int8_t x = -1){ 
+void CycloStore::addSmart(SmartCycloAction_t action){ 
     if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
         _cyclo_program[_smart_cyc_act_end++].smart = action;
     }
@@ -62,7 +62,7 @@ Cyclogram CycloStore::cyclogramFrom(SmartCycloAction_t smart){
 
 void CycloStore::printSmarts() const{
     Serial.println("Smarts:");
-    for(uint8_t i = 0; i < _smart_cyc_act_end; i++){
+    for(uint8_t i = _smart_cyc_act_counter; i < _smart_cyc_act_end; i++){
         Serial.print(Str_SmartCyclogramAction[toInt(_cyclo_program[i].smart)]);
         // Serial.print(toInt(_cyclo_program[i].smart));
         Serial.print(' ');
@@ -73,7 +73,7 @@ void CycloStore::printSmarts() const{
 
 void CycloStore::printPrimitives() const{
     Serial.println("Primitives:");
-    for(uint8_t i = 0; i < _primitive_cyc_act_end; i++){
+    for(uint8_t i = _primitive_cyc_act_counter; i < _primitive_cyc_act_end; i++){
     switch(_cyclo_program[i].primitive){
         case PrimitiveCycloAction_t::FORWARD:
             Serial.print("FORWARD");
