@@ -251,5 +251,58 @@ bool ActionsHandler::TO_SD135S_DS45S()
 
 void ActionsHandler::convertToSmart()
 {
-    
+    PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие [всегда FORWARD]
+    while(curPrim != PrimitiveCycloAction_t::STOP)
+    {
+        int X = 1;
+        curPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действие
+        if(curPrim == PrimitiveCycloAction_t::FORWARD)
+        {
+            while(curPrim == PrimitiveCycloAction_t::FORWARD) {X++;}
+            _cycloStore->addSmart(SmartCycloAction_t::FWD, X);
+            _cycloStore->virtualPrimitiveRelease();
+        }
+        else
+        {
+            PrimitiveCycloAction_t TURN = curPrim; // получение действия и приравнивание его к основному повороту
+            PrimitiveCycloAction_t OP_TURN = static_cast<PrimitiveCycloAction_t>((static_cast<int8_t>(TURN) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
+            
+            curPrim = _cycloStore->virtualPopFrontPrimitive(); // 3 действия
+            
+            if(curPrim == PrimitiveCycloAction_t::FORWARD)
+            {
+                if(TURN == PrimitiveCycloAction_t::LEFT) {_cycloStore->addSmart(SmartCycloAction_t::SS90SL);}
+                else {_cycloStore->addSmart(SmartCycloAction_t::SS90SR);}
+                _cycloStore->virtualPrimitiveRelease();
+            }
+            else if(curPrim == TURN)
+            {
+                curPrim = _cycloStore->virtualPopFrontPrimitive(); // 4 действия
+                if(curPrim == PrimitiveCycloAction_t::FORWARD) 
+                {
+                    if(TURN == PrimitiveCycloAction_t::LEFT) {_cycloStore->addSmart(SmartCycloAction_t::SS180SL);}
+                    else {_cycloStore->addSmart(SmartCycloAction_t::SS180SR);}
+                    _cycloStore->virtualPrimitiveRelease();
+                }
+                else if(curPrim == OP_TURN)
+                {
+                    curPrim = _cycloStore->virtualPopFrontPrimitive(); // 5 действия
+                    if(curPrim == PrimitiveCycloAction_t::FORWARD)
+                    {
+                        if(TURN == PrimitiveCycloAction_t::LEFT) 
+                        {
+                            _cycloStore->addSmart(SmartCycloAction_t::SD135SL);
+                            _cycloStore->addSmart(SmartCycloAction_t::DS45SR);
+                        }
+                        else 
+                        {
+                            _cycloStore->addSmart(SmartCycloAction_t::SD135SR);
+                            _cycloStore->addSmart(SmartCycloAction_t::DS45SL);
+                        }
+                        _cycloStore->virtualPrimitiveRelease();
+                    }
+                }
+            }
+        }
+    }
 }

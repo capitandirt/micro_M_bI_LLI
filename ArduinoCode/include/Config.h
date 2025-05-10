@@ -72,11 +72,6 @@
 #define W_KI (W_KP / 0.23f) // Ki = K / T
 /*==W MOTOT PIREG END==*/
 
-/*==CYCLOGRAM BEGIN==*/
-#define FORWARD_SPEED 0.1
-#define CELL_SIZE 0.18
-/*==CYCLOGRAM END==*/
-
 /*==MAZE BEGIN==*/
 // MY MAZE STRUCT
 // for exapmle, let's take maze 3x3:
@@ -155,10 +150,5 @@
 #define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (7)
 /*==OPTOCOUPLER END==*/
 
-
-//*==ANGLE SPEED REGULATOR BEGIN==*/
-#define ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K 0.005 // [analogValue -> рад/с]
-#define ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K (0.005 + (FORWARD_SPEED * 0.05)) // [analogValue -> рад/с]  
-//*==ANGLE SPEED REGULATOR END==*/
 
 #endif // !_CONFIG_H_

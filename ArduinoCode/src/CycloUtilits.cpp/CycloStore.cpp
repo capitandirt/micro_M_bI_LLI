@@ -3,6 +3,10 @@
 void CycloStore::addSmart(SmartCycloAction_t action, int8_t x = -1){ 
     if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
         _cyclo_program[_smart_cyc_act_end++].smart = action;
+        for(int i = 1; i < x && x != -1 ; i++)
+        {
+            _cyclo_program[_smart_cyc_act_end++].smart = action;
+        }
     }
 }
 

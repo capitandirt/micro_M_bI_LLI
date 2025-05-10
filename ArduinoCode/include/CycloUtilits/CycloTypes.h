@@ -19,8 +19,8 @@ enum class SmartCycloAction_t : uint8_t{
     DS45SR,
     SD135SL,
     SD135SR,
-    SS180L,
-    SS180R,
+    SS180SL,
+    SS180SR,
     IP180,
     IP90L,
     IP90R,
@@ -28,11 +28,11 @@ enum class SmartCycloAction_t : uint8_t{
     STOP,
 };
 
-enum class PrimitiveCycloAction_t : uint8_t{
+enum class PrimitiveCycloAction_t : uint8_t{ // LEFT, RIGHT, FORWARD, BACK, STOP
     FORWARD = 0,
     
     LEFT = 1,
-    BACK = 2,
+    BACK = 2, // не встречается в итоговом пути, не обрабатывается в convertToSmart
     RIGHT = 3,
     
     STOP = 4,

@@ -1,7 +1,7 @@
 #ifndef _CYCLO_STORE_H_
 #define _CYCLO_STORE_H_
 
-#include "Cyclograms.h"
+#include "Cyclograms/Cyclograms.h"
 #include "CycloTypes.h"
 
 class CycloStore{
@@ -31,7 +31,6 @@ public:
 
     void printSmarts() const;
     void printPrimitives() const;
-    int8_t getFwdDistOptional() const {return _fwd_dist_optional;}
 private:
     void load_cyclograms();
 
@@ -46,7 +45,6 @@ private:
 
     RawCycloActionStore _cyclo_program[CYCLO_PROG_SIZE];  
     Cyclogram _cyclograms[CYCLO_ACTION_SIZE];
-    int8_t _fwd_dist_optional = -1;
 };
 
 #endif // !_CYCLO_STORE_H_
