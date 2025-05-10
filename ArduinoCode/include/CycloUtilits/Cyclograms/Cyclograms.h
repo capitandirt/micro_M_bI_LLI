@@ -1,10 +1,13 @@
 #ifndef _CYCLOGRAMS_H_
 #define _CYCLOGRAMS_H_
 
-#include "../../Config.h"
 #include "../CycloTypes.h"
 #include "../../OptocouplerSensors.h"
-#include "Cyclogram_config.h"
+#include "Cyclogram.config.h"
+
+#include "smart45.h"
+#include "smart135.h"
+#include "alignment.h"
 /* РАСШИФРОВКА НАЗВАНИЙ ПОВОРОТОВ
 SS90EL
 S - from straight (0 / 90... градусов поворот) или D - from diagonal
@@ -100,9 +103,8 @@ CYCLOGRAM(DIA)
 //search turns 90
 CYCLOGRAM(SS90EL)
 {
-    
-    constexpr float R = SEARCH_TURN_RADIUS; //радиус поворота
     ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = SEARCH_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE / 2 - R;
@@ -115,12 +117,13 @@ CYCLOGRAM(SS90EL)
     {
         ms->isComplete = true;
     } 
+    else ms->isComplete = false;
 }
 
 CYCLOGRAM(SS90ER)
 {
-    constexpr float R = SEARCH_TURN_RADIUS; //радиус поворота
     ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = SEARCH_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE / 2 - R;
@@ -133,12 +136,13 @@ CYCLOGRAM(SS90ER)
     {
         ms->isComplete = true;
     } 
+    else ms->isComplete = false;
 }
 
 CYCLOGRAM(SS90SL)
 {
-    constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R; 
@@ -151,12 +155,13 @@ CYCLOGRAM(SS90SL)
     {
         ms->isComplete = true;
     }
+    else ms->isComplete = false;
 }
 
-CYCLOGRAM(SS90SL)
+CYCLOGRAM(SS90SR)
 {
-    constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R; 
@@ -169,142 +174,53 @@ CYCLOGRAM(SS90SL)
     {
         ms->isComplete = true;
     }
+    else ms->isComplete = false;
 }
 
 
-CYCLOGRAM(SD45SL)
+CYCLOGRAM(SS180SL)
 {
-    constexpr float forwDist = SD45S_FORW_DIST; // путь до начала поворота, максимум - CELL_SIZE / 2
-    constexpr float forwDist2 = M_SQRT2 * CELL_SIZE / 2 - (CELL_SIZE / 2 - forwDist); //путь после конца поворота
-    constexpr float R = (CELL_SIZE / 2 - forwDist) * (1 + M_SQRT2); //радиус поворота, максимум - 0.21 - (CELL_SIZE / 2 * (1 + sqrt(2)))
-
-    const float circleDis = (2 * PI * R) / 8; // 45 = 1/8 окружности
     ms->v_f0 = FORWARD_SPEED;
-    float theta_i = FORWARD_SPEED / R;
-
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = theta_i;
-    else ms->theta_i0 = 0;
-
-    if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
-}
-
-CYCLOGRAM(SD45SR)
-{
-    constexpr float forwDist = SD45S_FORW_DIST; // путь до начала поворота, максимум - CELL_SIZE / 2
-    constexpr float forwDist2 = M_SQRT2 * CELL_SIZE / 2 - (CELL_SIZE / 2 - forwDist); //путь после конца поворота
-    constexpr float R = (CELL_SIZE / 2 - forwDist) * (1 + M_SQRT2); //радиус поворота, максимум - 0.21 - (CELL_SIZE / 2 * (1 + sqrt(2)))
-
-    const float circleDis = (2 * PI * R) / 8; // 45 = 1/8 окружности
-    ms->v_f0 = FORWARD_SPEED;
-    float theta_i = FORWARD_SPEED / R;
-
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = -theta_i;
-    else ms->theta_i0 = 0;
-
-    if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
-}
-
-CYCLOGRAM(DS45SL)
-{
-    constexpr float forwDist = SD45S_FORW_DIST; // путь до начала поворота, максимум - CELL_SIZE / 2
-    constexpr float forwDist2 = M_SQRT2 * CELL_SIZE / 2 - (CELL_SIZE / 2 - forwDist); //путь после конца поворота
-    constexpr float R = (CELL_SIZE / 2 - forwDist) * (1 + M_SQRT2); //радиус поворота, максимум - 0.21 - (CELL_SIZE / 2 * (1 + sqrt(2)))
-
-    const float circleDis = (2 * PI * R) / 8; // 45 = 1/8 окружности
-    ms->v_f0 = FORWARD_SPEED;
-    float theta_i = FORWARD_SPEED / R;
-
-    if(s->robotState->getDist() > forwDist2 && s->robotState->getDist() < forwDist2 + circleDis) ms->theta_i0 = theta_i;
-    else ms->theta_i0 = 0;
-
-    if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
-}
-
-CYCLOGRAM(DS45SR)
-{
-    constexpr float forwDist = SD45S_FORW_DIST; // путь до начала поворота, максимум - CELL_SIZE / 2
-    constexpr float forwDist2 = M_SQRT2 * CELL_SIZE / 2 - (CELL_SIZE / 2 - forwDist); //путь после конца поворота
-    constexpr float R = (CELL_SIZE / 2 - forwDist) * (1 + M_SQRT2); //радиус поворота, максимум - 0.21 - (CELL_SIZE / 2 * (1 + sqrt(2)))
-
-    const float circleDis = (2 * PI * R) / 8; // 45 = 1/8 окружности
-    ms->v_f0 = FORWARD_SPEED;
-    float theta_i = FORWARD_SPEED / R;
-
-    if(s->robotState->getDist() > forwDist2 && s->robotState->getDist() < forwDist2 + circleDis) ms->theta_i0 = -theta_i;
-    else ms->theta_i0 = 0;
-
-    if(s->robotState->getDist() > forwDist + circleDis + forwDist2) ms->isComplete = true;
-}
-
-CYCLOGRAM(SD135SL)
-{
-    constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
-    ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float circleDis = PI * R; // 180 = половина окружности 
+    constexpr float forwDist = SS180S_FORW_DIST;
 
-    constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
-    constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
-    constexpr float circleDis = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
-
-    if(s->robotState->getDist() > forwDist1 && s->robotState->getDist() < forwDist1 + circleDis) ms->theta_i0 = theta_i;
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = theta_i; 
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > forwDist1 + circleDis + forwDist2) ms->isComplete = true;
+    if(s->robotState->getDist() > 2 * forwDist + circleDis) 
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
 }
-
-CYCLOGRAM(SD135SR)
+CYCLOGRAM(SS180SR)
 {
-    constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
     ms->v_f0 = FORWARD_SPEED;
+    constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float circleDis = PI * R; // 180 = половина окружности 
+    constexpr float forwDist = SS180S_FORW_DIST;
 
-    constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
-    constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
-    constexpr float circleDis = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
-
-    if(s->robotState->getDist() > forwDist1 && s->robotState->getDist() < forwDist1 + circleDis) ms->theta_i0 = -theta_i;
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDis) ms->theta_i0 = -theta_i; 
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > forwDist1 + circleDis + forwDist2) ms->isComplete = true;
+    if(s->robotState->getDist() > 2 * forwDist + circleDis) 
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
 }
-
-CYCLOGRAM(DS135SL)
-{
-    constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
-    ms->v_f0 = FORWARD_SPEED;
-    constexpr float theta_i = FORWARD_SPEED / R;
-
-    constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
-    constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
-    constexpr float circleDis = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
-
-    if(s->robotState->getDist() > forwDist2 && s->robotState->getDist() < forwDist2 + circleDis) ms->theta_i0 = theta_i;
-    else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > forwDist1 + circleDis + forwDist2) ms->isComplete = true;
-}
-
-CYCLOGRAM(DS135SR)
-{
-    constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
-    ms->v_f0 = FORWARD_SPEED;
-    constexpr float theta_i = FORWARD_SPEED / R;
-
-    constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
-    constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
-    constexpr float circleDis = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
-
-    if(s->robotState->getDist() > forwDist2 && s->robotState->getDist() < forwDist2 + circleDis) ms->theta_i0 = -theta_i;
-    else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > forwDist1 + circleDis + forwDist2) ms->isComplete = true;
-}
-
-CYCLOGRAM(SS180L){}
-CYCLOGRAM(SS180R){}
 
 CYCLOGRAM(IP180)
 {
     ms->v_f0 = 0;
     constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH / 2;
     ms->theta_i0 = theta_i;
-    if(s->robotState->getTheta() > PI) ms->isComplete = true;
+    if(s->robotState->getTheta() > PI) 
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
 }
 
 CYCLOGRAM(IP90L)
@@ -312,7 +228,11 @@ CYCLOGRAM(IP90L)
     ms->v_f0 = 0;
     constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH / 2;
     ms->theta_i0 = theta_i;
-    if(s->robotState->getTheta() > HALF_PI) ms->isComplete = true;
+    if(s->robotState->getTheta() > HALF_PI)
+    {
+         ms->isComplete = true;
+    }
+    else ms->isComplete = false;
 }
 
 CYCLOGRAM(IP90R)
@@ -320,7 +240,11 @@ CYCLOGRAM(IP90R)
     ms->v_f0 = 0;
     constexpr float theta_i = -FORWARD_SPEED / ROBOT_WIDTH / 2;
     ms->theta_i0 = theta_i;
-    if(s->robotState->getTheta() < -HALF_PI) ms->isComplete = true;
+    if(s->robotState->getTheta() < -HALF_PI)
+    { 
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
 }
 
 #endif // !_CYCLOGRAMS_H_

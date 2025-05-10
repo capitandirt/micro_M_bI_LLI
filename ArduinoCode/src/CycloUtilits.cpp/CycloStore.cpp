@@ -1,6 +1,6 @@
 #include "CycloUtilits/CycloStore.h"
 
-void CycloStore::addSmart(SmartCycloAction_t action){ 
+void CycloStore::addSmart(SmartCycloAction_t action, int8_t x = -1){ 
     if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
         _cyclo_program[_smart_cyc_act_end++].smart = action;
         for(int i = 1; i < x && x != -1 ; i++)
@@ -117,9 +117,13 @@ void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::DS45SR  )] = DS45SR  ;
     _cyclograms[toInt(SmartCycloAction_t::SD135SL )] = SD135SL ;
     _cyclograms[toInt(SmartCycloAction_t::SD135SR )] = SD135SR ;
-    _cyclograms[toInt(SmartCycloAction_t::SS180L  )] = SS180L  ;
-    _cyclograms[toInt(SmartCycloAction_t::SS180R  )] = SS180R  ;
+    _cyclograms[toInt(SmartCycloAction_t::DS135SL )] = DS135SL  ;
+    _cyclograms[toInt(SmartCycloAction_t::DS135SR )] = DS135SR  ;
+    _cyclograms[toInt(SmartCycloAction_t::SS180SL )] = SS180SL ;
+    _cyclograms[toInt(SmartCycloAction_t::SS180SR )] = SS180SR ;
     _cyclograms[toInt(SmartCycloAction_t::IP180   )] = IP180   ;
     _cyclograms[toInt(SmartCycloAction_t::IP90L   )] = IP90L   ;
     _cyclograms[toInt(SmartCycloAction_t::IP90R   )] = IP90R   ;
+    _cyclograms[toInt(SmartCycloAction_t::TO_ALIGN)] = TO_ALIGN;
+    _cyclograms[toInt(SmartCycloAction_t::FROM_ALIGN_TO_CENTER)] = FROM_ALIGN_TO_CENTER;
 }

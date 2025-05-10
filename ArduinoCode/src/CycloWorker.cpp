@@ -8,7 +8,7 @@ void CycloWorker::doCyclogram(){
     _cur_time = millis();
     _sensors.time = _cur_time - _last_time;
 
-    cycloStore->cyclogramFrom(_cur_smart)(&_motion_states, &_sensors, -1);
+    cycloStore->cyclogramFrom(_cur_smart)(&_motion_states, &_sensors);
     
     mixer->impactVelocity(_motion_states.theta_i0, _motion_states.v_f0);
 }

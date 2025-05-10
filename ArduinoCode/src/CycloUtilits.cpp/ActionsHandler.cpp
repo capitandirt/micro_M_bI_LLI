@@ -223,7 +223,7 @@ bool ActionsHandler::TO_SD135S_DS45S()
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD) // проверка на то, является ли первое действие проездом вперёд
     {
         const PrimitiveCycloAction_t TURN = _cycloStore->virtualPopFrontPrimitive(); // получение второго действия и приравнивание его к основному повороту
-        const auto OP_TURN = static_cast<PrimitiveCycloAction_t>((static_cast<int8_t>(TURN) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
+        const auto OP_TURN = static_cast<PrimitiveCycloAction_t>((toInt(TURN) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
         if(TURN == PrimitiveCycloAction_t::LEFT || TURN == PrimitiveCycloAction_t::RIGHT) // проверка на то, является ли второе дествие поворотом вообще
         {
             if(_cycloStore->virtualPopFrontPrimitive() == TURN)
@@ -248,6 +248,12 @@ bool ActionsHandler::TO_SD135S_DS45S()
     }
     _cycloStore->virtualGoBack();
     return false;
+}
+
+void ActionsHandler::toDD90X(PrimitiveCycloAction_t* TURN)
+{
+    const auto OP_TURN = static_cast<PrimitiveCycloAction_t>((toInt((*TURN)) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
+
 }
 
 void ActionsHandler::convertToSmart()
@@ -301,6 +307,10 @@ void ActionsHandler::convertToSmart()
                             _cycloStore->addSmart(SmartCycloAction_t::DS45SL);
                         }
                         _cycloStore->virtualPrimitiveRelease();
+                    }
+                    else if(curPrim == OP_TURN)
+                    {
+
                     }
                 }
             }
