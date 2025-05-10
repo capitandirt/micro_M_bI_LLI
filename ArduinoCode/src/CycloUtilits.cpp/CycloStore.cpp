@@ -1,6 +1,6 @@
 #include "CycloUtilits/CycloStore.h"
 
-void CycloStore::addSmart(SmartCycloAction_t action){ 
+void CycloStore::addSmart(SmartCycloAction_t action, int8_t x = -1){ 
     if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
         _cyclo_program[_smart_cyc_act_end++].smart = action;
         for(int i = 1; i < x && x != -1 ; i++)
@@ -105,21 +105,22 @@ void CycloStore::printPrimitives() const{
 }
 
 void CycloStore::load_cyclograms(){
-    _cyclograms[toInt(SmartCycloAction_t::STOP    )] = STOP    ;
-    _cyclograms[toInt(SmartCycloAction_t::IDLE    )] = IDLE    ;
-    _cyclograms[toInt(SmartCycloAction_t::FWD     )] = FWD     ;
-    _cyclograms[toInt(SmartCycloAction_t::FWD_HALF)] = FWD_HALF;
-    _cyclograms[toInt(SmartCycloAction_t::SS90EL  )] = SS90EL  ;
-    _cyclograms[toInt(SmartCycloAction_t::SS90ER  )] = SS90ER  ;
-    _cyclograms[toInt(SmartCycloAction_t::SD45SL  )] = SD45SL  ;
-    _cyclograms[toInt(SmartCycloAction_t::SD45SR  )] = SD45SR  ;
-    _cyclograms[toInt(SmartCycloAction_t::DS45SL  )] = DS45SL  ;
-    _cyclograms[toInt(SmartCycloAction_t::DS45SR  )] = DS45SR  ;
-    _cyclograms[toInt(SmartCycloAction_t::SD135SL )] = SD135SL ;
-    _cyclograms[toInt(SmartCycloAction_t::SD135SR )] = SD135SR ;
-    _cyclograms[toInt(SmartCycloAction_t::SS180L  )] = SS180L  ;
-    _cyclograms[toInt(SmartCycloAction_t::SS180R  )] = SS180R  ;
-    _cyclograms[toInt(SmartCycloAction_t::IP180   )] = IP180   ;
-    _cyclograms[toInt(SmartCycloAction_t::IP90L   )] = IP90L   ;
-    _cyclograms[toInt(SmartCycloAction_t::IP90R   )] = IP90R   ;
+    _cyclograms[toInt(SmartCycloAction_t::STOP       )] = STOP       ;
+    _cyclograms[toInt(SmartCycloAction_t::CLUSTER_DOT)] = CLUSTER_DOT;    ;
+    _cyclograms[toInt(SmartCycloAction_t::IDLE       )] = IDLE       ;
+    _cyclograms[toInt(SmartCycloAction_t::FWD        )] = FWD        ;
+    _cyclograms[toInt(SmartCycloAction_t::FWD_HALF   )] = FWD_HALF   ;
+    _cyclograms[toInt(SmartCycloAction_t::SS90EL     )] = SS90EL     ;
+    _cyclograms[toInt(SmartCycloAction_t::SS90ER     )] = SS90ER     ;
+    _cyclograms[toInt(SmartCycloAction_t::SD45SL     )] = SD45SL     ;
+    _cyclograms[toInt(SmartCycloAction_t::SD45SR     )] = SD45SR     ;
+    _cyclograms[toInt(SmartCycloAction_t::DS45SL     )] = DS45SL     ;
+    _cyclograms[toInt(SmartCycloAction_t::DS45SR     )] = DS45SR     ;
+    _cyclograms[toInt(SmartCycloAction_t::SD135SL    )] = SD135SL    ;
+    _cyclograms[toInt(SmartCycloAction_t::SD135SR    )] = SD135SR    ;
+    _cyclograms[toInt(SmartCycloAction_t::SS180SL    )] = SS180SL    ;
+    _cyclograms[toInt(SmartCycloAction_t::SS180SR    )] = SS180SR    ;
+    _cyclograms[toInt(SmartCycloAction_t::IP180      )] = IP180      ;
+    _cyclograms[toInt(SmartCycloAction_t::IP90L      )] = IP90L      ;
+    _cyclograms[toInt(SmartCycloAction_t::IP90R      )] = IP90R      ;
 }

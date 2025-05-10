@@ -26,7 +26,7 @@ enum class SmartCycloAction_t : uint8_t{
     IP90L,
     IP90R,
 
-    STOP,
+    STOP // <! END OF ENUM
 };
 
 enum class PrimitiveCycloAction_t : uint8_t{ // LEFT, RIGHT, FORWARD, BACK, STOP

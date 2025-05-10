@@ -22,6 +22,12 @@ CYCLOGRAM(STOP)
     ms->isComplete = false;
 }
 
+CYCLOGRAM(CLUSTER_DOT){
+    ms->v_f0 = 0;
+    ms->theta_i0 = 0;
+    ms->isComplete = true;
+}
+
 CYCLOGRAM(IDLE)
 {
     ms->v_f0 = 0;
@@ -153,7 +159,7 @@ CYCLOGRAM(SS90SL)
     }
 }
 
-CYCLOGRAM(SS90SL)
+CYCLOGRAM(SS90SR)
 {
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     ms->v_f0 = FORWARD_SPEED;
@@ -296,8 +302,8 @@ CYCLOGRAM(DS135SR)
     if(s->robotState->getDist() > forwDist1 + circleDis + forwDist2) ms->isComplete = true;
 }
 
-CYCLOGRAM(SS180L){}
-CYCLOGRAM(SS180R){}
+CYCLOGRAM(SS180SL){}
+CYCLOGRAM(SS180SR){}
 
 CYCLOGRAM(IP180)
 {

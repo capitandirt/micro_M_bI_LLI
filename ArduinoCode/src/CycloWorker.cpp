@@ -8,13 +8,13 @@ void CycloWorker::doCyclogram(){
     _cur_time = millis();
     _sensors.time = _cur_time - _last_time;
 
-    cycloStore->cyclogramFrom(_cur_smart)(&_motion_states, &_sensors, -1);
+    cycloStore->cyclogramFrom(_cur_smart)(&_motion_states, &_sensors);
     
     mixer->impactVelocity(_motion_states.theta_i0, _motion_states.v_f0);
 }
 
-bool CycloWorker::nowIsStop() const{
-    return _cur_smart == SmartCycloAction_t::STOP;
+bool CycloWorker::nowIsClusterDot() const{
+    return _cur_smart == SmartCycloAction_t::CLUSTER_DOT;
 }
 
 bool CycloWorker::isCompleteCyclo() const{

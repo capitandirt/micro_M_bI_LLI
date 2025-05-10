@@ -16,8 +16,8 @@ void setup()
     // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
 }
 
-uint32_t last_time = 0;
 
+uint32_t last_time = 0;
 void loop(){
     while(micros() - last_time < Ts_us)
         ;
