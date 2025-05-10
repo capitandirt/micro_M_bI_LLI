@@ -40,17 +40,18 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
     
 }
 
-void ActionsHandler::loadExplorer(Direction robot_dir){
-    // const auto from_robot_dir = static_cast<int8_t>(robot_dir);
-    // const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
-    
+Direction ActionsHandler::loadExplorer(Direction robot_dir){
+    const auto from_robot_dir = static_cast<int8_t>(robot_dir);
+    const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
 
-    // const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
-    //     (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
+    const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
+        (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
 
-    // if(first_primitive == PrimitiveCycloAction_t::BACK){
-    //     _cycloStore->addSmart(SmartCycloAction_t::IP180);
-    // }
+    if(first_primitive == PrimitiveCycloAction_t::BACK){
+        
+        _cycloStore->addSmart(SmartCycloAction_t::IP180);
+    }
+
     dirs_to_primitives();
 
     switch (_cycloStore->popFrontPrimitive())
@@ -106,6 +107,8 @@ void ActionsHandler::reload(){
 }
 
 void ActionsHandler::needStartCellAligning(){
+    _cycloStore->addSmart(SmartCycloAction_t::TO_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }

@@ -69,7 +69,6 @@ public:
 
     void update(float omegaL, float omegaR) noexcept;
     void updateDir(Direction dir_) noexcept;
-    void dirToOppositeSide();
     void updateMazeCoords(Direction dir);
     void updateMazeCoords(Vec2 new_v);
 };
