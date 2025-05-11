@@ -96,20 +96,32 @@ namespace DEVICES{
         }
 
         void CYCLOGRAMS(){
-            cycloStore.addSmart(SmartCycloAction_t::IDLE);
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
-            cycloStore.addSmart(SmartCycloAction_t::SS90SL);
-            cycloStore.addSmart(SmartCycloAction_t::SS90SR);
-            cycloStore.addSmart(SmartCycloAction_t::STOP);
-
             cycloStore.addPrimitive(PrimitiveCycloAction_t::BLANK);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
 
+            cycloStore.addSmart(SmartCycloAction_t::IP90L);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X, 8);
+            cycloStore.addSmart(SmartCycloAction_t::IP90R);
+            cycloStore.addSmart(SmartCycloAction_t::IP180);
+            cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 30);
+            cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
+            cycloStore.addSmart(SmartCycloAction_t::SD135SR);
+
             cycloStore.printPrimitives();
             cycloStore.printSmarts();
+
+            SmartSubmission ss = cycloStore.popFrontSmartSubmission();
+            Serial.print((int)ss.smart);
+            Serial.print(' ');
+            Serial.println((int)ss.x);
+
+            ss = cycloStore.popFrontSmartSubmission();
+            Serial.print((int)ss.smart);
+            Serial.print(' ');
+            Serial.println((int)ss.x);
 
             cycloStore.reloadPrimitives();
             cycloStore.reloadSmarts();
@@ -119,20 +131,25 @@ namespace DEVICES{
             cycloStore.addSmart(SmartCycloAction_t::SS90EL);
             cycloStore.addSmart(SmartCycloAction_t::SS90ER);
         }
+
         void FWD_3X()
         {
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
-            cycloStore.addSmart(SmartCycloAction_t::FWD);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
         }
         
         void EXPLORER_CYC()
         {
-            cycloStore.addSmart(SmartCycloAction_t::IP90L);
-            cycloStore.addSmart(SmartCycloAction_t::IP90R);
-            cycloStore.addSmart(SmartCycloAction_t::IP90R);
-            cycloStore.addSmart(SmartCycloAction_t::IP180);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
             cycloStore.addSmart(SmartCycloAction_t::SS90EL);
+            cycloStore.addSmart(SmartCycloAction_t::SS90ER);
+            cycloStore.addSmart(SmartCycloAction_t::IP180);
+
+            cycloStore.printSmarts();
+
+            cycloStore.reloadPrimitives();
+            cycloStore.reloadSmarts();
         }
 
         void CONVERT_PATH_TO_CYCLOGRAMS(){

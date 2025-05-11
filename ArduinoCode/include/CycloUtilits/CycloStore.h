@@ -11,10 +11,10 @@ public:
 
     CycloStore(){load_cyclograms();}
 
-    void addSmart(SmartCycloAction_t action, int8_t x = -1);
-    void addPrimitive(PrimitiveCycloAction_t action);
+    void addSmart(SmartCycloAction_t smart, uint8_t x = toInt(X_t::NONE));
+    void addPrimitive(PrimitiveCycloAction_t primitive);
 
-    SmartCycloAction_t popFrontSmart();
+    SmartSubmission popFrontSmartSubmission();
     PrimitiveCycloAction_t popFrontPrimitive();
     
     PrimitiveCycloAction_t virtualPopFrontPrimitive();
@@ -27,7 +27,7 @@ public:
     void reloadSmarts();
     void reloadPrimitives();
 
-    Cyclogram cyclogramFrom(SmartCycloAction_t smart);
+    void executeSmart(SmartSubmission smart_submis, CycloContext smart_context);
 
     void printSmarts() const;
     void printPrimitives() const;

@@ -19,19 +19,17 @@ struct CycloWorkerConnectionParams{
 
 class CycloWorker : public CycloWorkerConnectionParams{
 public:
-    CycloWorker(CycloWorkerConnectionParams* cwcp) : CycloWorkerConnectionParams(*cwcp), 
-                    _sensors(
-                        {       
-                            .time = 0,
-                            .robotState = cwcp->odometry,
-                            .optocoupler = cwcp->optocoupler,
-                        }),
-                    _motion_states(
-                        {   
-                            .v_f0 = 0,
-                            .theta_i0 = 0,
-                            .isComplete = false
-                        }){}
+    CycloWorker(CycloWorkerConnectionParams* cwcp) :
+        CycloWorkerConnectionParams(*cwcp), 
+        _cyclo_context {
+            .ms = { .v_f0 = 0,
+                    .theta_i0 = 0,
+                    .isComplete = false},
+
+            .s = {  .time = 0,
+                    .robotState = cwcp->odometry,
+                    .optocoupler = cwcp->optocoupler}}{}
+
 
 
     void init();
@@ -43,13 +41,12 @@ public:
     void checkIsComplete();
 
 private:
-    SmartCycloAction_t _cur_smart = SmartCycloAction_t::IDLE;
+    SmartSubmission _cur_smart_submis = {SmartCycloAction_t::IDLE, X_t::NONE};
 
     uint32_t _cur_time = 0;
     uint32_t _last_time = 0;
     
-    Sensors _sensors;
-    MotionStates _motion_states;   
+    CycloContext _cyclo_context;
 };
 
 #endif // !_CYCLOGRAM_H_

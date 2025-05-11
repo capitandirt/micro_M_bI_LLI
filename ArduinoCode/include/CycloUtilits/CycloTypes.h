@@ -9,7 +9,8 @@ enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,
     CLUSTER_DOT,
     FWD_HALF,
-    FWD,
+    FWD_X,
+    DIAG_X,
     SS90EL,
     SS90ER,
     SS90SL,
@@ -46,24 +47,56 @@ enum class PrimitiveCycloAction_t : uint8_t{ // LEFT, RIGHT, FORWARD, BACK, STOP
     BLANK = 5
 };
 
-struct RawCycloActionStore{
-    PrimitiveCycloAction_t primitive : 3;
-    SmartCycloAction_t smart : 5;
+constexpr uint8_t BYTE_SIZE = 8;
+constexpr uint8_t VALUE_SMART_BITS_IN_RAW_STORE = 5;
+constexpr uint8_t VALUE_PRIMITIVE_BITS_IN_RAW_STORE = BYTE_SIZE - VALUE_SMART_BITS_IN_RAW_STORE;
+
+enum class X_t : uint8_t{ NONE = 1, LAST = (1 << VALUE_SMART_BITS_IN_RAW_STORE) - 1};
+
+struct SmartSubmission{
+    SmartCycloAction_t smart;
+    X_t x;
 };
 
-inline constexpr uint8_t toInt(SmartCycloAction_t sca){
+struct RawCycloActionStore{    
+    PrimitiveCycloAction_t primitive : VALUE_PRIMITIVE_BITS_IN_RAW_STORE; // stupid warning
+    
+    // here can contain X_t too
+    SmartCycloAction_t smart : VALUE_SMART_BITS_IN_RAW_STORE;
+};
+
+inline constexpr uint8_t toInt(const SmartCycloAction_t sca){
     return static_cast<uint8_t>(sca);
 }
 
-inline constexpr uint8_t toInt(PrimitiveCycloAction_t pca){
+inline constexpr uint8_t toInt(const PrimitiveCycloAction_t pca){
     return static_cast<uint8_t>(pca);
+}
+
+inline constexpr uint8_t toInt(X_t x){
+    return static_cast<uint8_t>(x);
+}
+
+inline X_t toX_t(const uint8_t val){
+    if (val == 0) return X_t::NONE;
+    if (val > toInt(X_t::LAST)) return X_t::LAST;
+
+    return static_cast<X_t>(val);
+}
+
+inline X_t toX_t(SmartCycloAction_t val){
+    if(toInt(val) > toInt(X_t::LAST)) return X_t::LAST;
+    if(toInt(val) == toInt(X_t::NONE)) return X_t::NONE;
+
+    return static_cast<X_t>(toInt(val));
 }
 
 inline const char* Str_SmartCyclogramAction[]{
     "IDLE",
     "CLUSTER_DOT",
     "FWD_HALF",
-    "FWD",
+    "FWD_",
+    "DIAG_",
     "SS90EL",
     "SS90ER",
     "SS90SL",
@@ -103,7 +136,17 @@ struct MotionStates
     bool isComplete;
 };
 
-using Cyclogram = void (*)(MotionStates*, Sensors*);
-#define CYCLOGRAM(name) inline void name(MotionStates* ms, Sensors* s)
+struct CycloContext{
+    MotionStates ms;
+    Sensors s;
+
+    void reload(){
+        ms.isComplete = 0;
+        s.robotState->reset();
+    }
+};
+
+using Cyclogram = void (*)(MotionStates*, const Sensors*, uint8_t);
+#define CYCLOGRAM(name) inline void name(MotionStates* ms, const Sensors* s, uint8_t x = toInt(X_t::NONE))
 
 #endif // !_CYCLO_STRUCTS_H_

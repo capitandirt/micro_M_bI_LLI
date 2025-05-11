@@ -43,17 +43,17 @@ CYCLOGRAM(FWD_HALF)
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
     
-    int32_t left_sense = s->optocoupler->getSense().left;
-    int32_t right_sense = s->optocoupler->getSense().right;
-    Cell cell_from_sensors = s->optocoupler->getRelativeCell();
+    const uint16_t left_sense = s->optocoupler->getSense().left;
+    const uint16_t right_sense = s->optocoupler->getSense().right;
+    const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
 
     // регулятор на положение по горизонтали при движении вперёд
-    uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
+    const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int32_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int32_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const uint16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
+    const uint16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
 
-     const float regulatorArray[4] = {
+    const float regulatorArray[4] = {
         0,//ни один не видит стену
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
@@ -69,20 +69,20 @@ CYCLOGRAM(FWD_HALF)
     else ms->isComplete = false;
 }
 
-CYCLOGRAM(FWD)
+CYCLOGRAM(FWD_X)
 {
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
     
-    int32_t left_sense = s->optocoupler->getSense().left;
-    int32_t right_sense = s->optocoupler->getSense().right;
-    Cell cell_from_sensors = s->optocoupler->getRelativeCell();
+    const uint16_t left_sense = s->optocoupler->getSense().left;
+    const uint16_t right_sense = s->optocoupler->getSense().right;
+    const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
 
     // регулятор на положение по горизонтали при движении вперёд
-    uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
+    const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int32_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int32_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const uint16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
+    const uint16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
@@ -93,18 +93,17 @@ CYCLOGRAM(FWD)
 
     ms->theta_i0 = regulatorArray[regulatorState];
 
-    if(s->robotState->getDist() > CELL_SIZE)
+    if(s->robotState->getDist() > CELL_SIZE * x)
     {
         ms->isComplete = true;
     }
     else ms->isComplete = false;
 }
 
-CYCLOGRAM(DIA)
+CYCLOGRAM(DIAG_X)
 {
     
 }
-
 
 //search turns 90
 CYCLOGRAM(SS90EL)

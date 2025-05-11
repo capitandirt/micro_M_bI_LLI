@@ -26,7 +26,7 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
     switch(first_primitive) // установка соответствия направления робота и направлений пути
     {
         case PrimitiveCycloAction_t::FORWARD:
-            _cycloStore->addSmart(SmartCycloAction_t::FWD);
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
             break;
 
         case PrimitiveCycloAction_t::BACK:
@@ -37,7 +37,6 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
         default:
             break;
     }
-    
 }
 
 Direction ActionsHandler::loadExplorer(Direction robot_dir){
@@ -50,7 +49,7 @@ Direction ActionsHandler::loadExplorer(Direction robot_dir){
     switch (first_primitive)
     {
     case PrimitiveCycloAction_t::FORWARD:
-        _cycloStore->addSmart(SmartCycloAction_t::FWD);
+        _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
         break;
     case PrimitiveCycloAction_t::LEFT:
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
@@ -68,8 +67,6 @@ Direction ActionsHandler::loadExplorer(Direction robot_dir){
     
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
     
-    _cycloStore->printSmarts();
-
     robot_dir = static_cast<Direction>(from_path_dir);
     return robot_dir;
 }
@@ -117,7 +114,7 @@ void ActionsHandler::needStartCellAligning(){
 
 void ActionsHandler::needGetOutImpasse(){
     _cycloStore->addSmart(SmartCycloAction_t::IP180);
-    _cycloStore->addSmart(SmartCycloAction_t::FWD);
+    _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
 }
 
 void ActionsHandler::needStop(){
@@ -149,7 +146,7 @@ bool ActionsHandler::TO_FWD_X(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
         for(;_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
 
-        _cycloStore->addSmart(SmartCycloAction_t::FWD);
+        _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
@@ -313,7 +310,7 @@ int ActionsHandler::convertToSmart() // не закончена, останов�
         if(curPrim == PrimitiveCycloAction_t::FORWARD) // обработка 2 действия
         {
             while(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD) {X++;}
-            _cycloStore->addSmart(SmartCycloAction_t::FWD, X);
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
             _cycloStore->virtualPrimitiveRelease();
         }
         else // обработка 2 действия
