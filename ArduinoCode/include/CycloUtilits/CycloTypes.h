@@ -59,10 +59,9 @@ struct SmartSubmission{
 };
 
 struct RawCycloActionStore{    
-    PrimitiveCycloAction_t primitive : VALUE_PRIMITIVE_BITS_IN_RAW_STORE; // stupid warning
-    
-    // here can contain X_t too
+    // smart can contain X_t too
     SmartCycloAction_t smart : VALUE_SMART_BITS_IN_RAW_STORE;
+    PrimitiveCycloAction_t primitive : VALUE_PRIMITIVE_BITS_IN_RAW_STORE; // stupid warning
 };
 
 inline constexpr uint8_t toInt(const SmartCycloAction_t sca){
@@ -73,7 +72,7 @@ inline constexpr uint8_t toInt(const PrimitiveCycloAction_t pca){
     return static_cast<uint8_t>(pca);
 }
 
-inline constexpr uint8_t toInt(X_t x){
+inline constexpr uint8_t toInt(const X_t x){
     return static_cast<uint8_t>(x);
 }
 
@@ -84,7 +83,7 @@ inline X_t toX_t(const uint8_t val){
     return static_cast<X_t>(val);
 }
 
-inline X_t toX_t(SmartCycloAction_t val){
+inline X_t toX_t(const SmartCycloAction_t val){
     if(toInt(val) > toInt(X_t::LAST)) return X_t::LAST;
     if(toInt(val) == toInt(X_t::NONE)) return X_t::NONE;
 
@@ -142,7 +141,7 @@ struct CycloContext{
 
     void reload(){
         ms.isComplete = 0;
-        s.robotState->reset();
+        s.robotState->updateRelative();
     }
 };
 

@@ -26,9 +26,8 @@ void CycloWorker::checkIsComplete(){
         _last_time = _cur_time; 
 
         _cur_smart_submis = cycloStore->popFrontSmartSubmission();
-        _cyclo_context.s.robotState->updateRelative();
 
+        _cyclo_context.reload();
         _reset_reg();
-        _cyclo_context.ms.isComplete = 0;
     }
 };
