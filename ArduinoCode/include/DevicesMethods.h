@@ -102,7 +102,7 @@ namespace DEVICES{
             cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
 
-            cycloStore.addSmart(SmartCycloAction_t::IP90L);
+            cycloStore.addSmart(SmartCycloAction_t::IP90L, 2);
             cycloStore.addSmart(SmartCycloAction_t::FWD_X, 8);
             cycloStore.addSmart(SmartCycloAction_t::IP90R);
             cycloStore.addSmart(SmartCycloAction_t::IP180);

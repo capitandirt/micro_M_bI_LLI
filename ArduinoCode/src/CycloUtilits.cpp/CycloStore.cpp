@@ -2,18 +2,23 @@
 
 // !Андрей, X используется только и только для fwd_x & diag_x, 
 // в иных случая функция будет игнорить аргумент.
-// этому есть сугубо экономная для памяти причина  
 void CycloStore::addSmart(const SmartCycloAction_t smart, uint8_t x = toInt(X_t::NONE)){ 
     if(smart == SmartCycloAction_t::FWD_X || 
-       smart == SmartCycloAction_t::DIAG_X){
+       smart == SmartCycloAction_t::DIAG_X)
+    {
         if(_smart_cyc_act_end + 1 < CYCLO_PROG_SIZE){
             _cyclo_program[_smart_cyc_act_end++].smart = smart;
-
             _cyclo_program[_smart_cyc_act_end++].smart = static_cast<SmartCycloAction_t>(toX_t(x)); // if NONE, than FWD_1
         }
     }else{
         if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
             _cyclo_program[_smart_cyc_act_end++].smart = smart;
+        }
+
+        for(uint8_t i = 1; i < x; i++){
+            if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
+                _cyclo_program[_smart_cyc_act_end++].smart = smart;
+            }
         }
     }
 }
