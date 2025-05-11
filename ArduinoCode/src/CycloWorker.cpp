@@ -21,7 +21,7 @@ bool CycloWorker::isCompleteCyclo() const{
     return _cyclo_context.ms.isComplete;
 }
 
-void CycloWorker::checkIsComplete(){
+void CycloWorker::tryComplete(){
     if(_cyclo_context.ms.isComplete){
         _last_time = _cur_time; 
 

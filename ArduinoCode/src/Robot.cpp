@@ -16,30 +16,25 @@ void Robot::stepFloodFill()
         return;
     }
 
-    if(_odometry->getMazeCoords().x == FINISH_ROBOT_COORDS_X &&
-       _odometry->getMazeCoords().y == FINISH_ROBOT_COORDS_Y 
+    const Direction cur_robot_dir = _odometry->getDir();
+    const Vec2 forward_robot_vec  = _odometry->getMazeCoords().plusOrtVector(cur_robot_dir);
+    const Cell forward_cell       = _optocoupler->getCell(cur_robot_dir);
+
+    if(forward_robot_vec.x == FINISH_ROBOT_COORDS_X &&
+       forward_robot_vec.y == FINISH_ROBOT_COORDS_Y 
     ){
         _actionsHandler->needStop();
         FLOOD_FILL_IS_FINISH = true;
         return;
     }
 
-    Direction cur_robot_dir  = _odometry->getDir();
-
-    const Vec2 forward_robot_vec = _odometry->getMazeCoords().plusOrtVector(cur_robot_dir);
-    const Cell cell_from_sensors = _optocoupler->getCell(cur_robot_dir);
-
-    _maze->SetCell(cell_from_sensors, forward_robot_vec);
+    _maze->SetCell(forward_cell, forward_robot_vec);
     _solver->SolveBfsMaze(forward_robot_vec, FINISH_ROBOT_COORDS);
 
-    _actionsHandler->reload();
+    _actionsHandler->loadExplorer(cur_robot_dir);    
     
-    Direction next_robot_dir = _actionsHandler->loadExplorer(cur_robot_dir);    
+    const Direction next_robot_dir = _maze->GetPathDir(0);
 
     _odometry->updateDir(next_robot_dir);
-    _odometry->updateMazeCoords(cur_robot_dir);
-}
-
-bool Robot::checkFloodFill(){
-    return FLOOD_FILL_IS_FINISH;
+    _odometry->updateMazeCoords(forward_robot_vec);
 }

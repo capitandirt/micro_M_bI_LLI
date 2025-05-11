@@ -38,7 +38,7 @@ public:
     bool nowIsClusterDot() const noexcept;
     bool isCompleteCyclo() const noexcept;
 
-    void checkIsComplete();
+    void tryComplete();
 
 private:
     SmartSubmission _cur_smart_submis = {SmartCycloAction_t::IDLE, X_t::NONE};

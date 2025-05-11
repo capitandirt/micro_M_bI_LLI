@@ -57,7 +57,7 @@ namespace DEVICES{
 
         robot.stepFloodFill();
         
-        cycloWorker.checkIsComplete();
+        cycloWorker.tryComplete();
     }
 
     namespace TEST{

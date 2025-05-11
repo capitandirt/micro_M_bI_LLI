@@ -23,7 +23,7 @@ public:
 
     void init();
     void stepFloodFill();
-    bool checkFloodFill();
+
 private:
     bool FLOOD_FILL_IS_FINISH = 0;
 

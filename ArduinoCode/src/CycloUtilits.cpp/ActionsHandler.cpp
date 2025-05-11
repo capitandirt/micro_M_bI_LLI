@@ -39,7 +39,9 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
     }
 }
 
-Direction ActionsHandler::loadExplorer(Direction robot_dir){
+void ActionsHandler::loadExplorer(Direction robot_dir){
+    reload();
+
     const auto from_robot_dir = static_cast<int8_t>(robot_dir);
     const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
 
@@ -63,12 +65,7 @@ Direction ActionsHandler::loadExplorer(Direction robot_dir){
         break;
     }
 
-    // dirs_to_primitives();
-    
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
-    
-    robot_dir = static_cast<Direction>(from_path_dir);
-    return robot_dir;
 }
 
 /*useless code*/
