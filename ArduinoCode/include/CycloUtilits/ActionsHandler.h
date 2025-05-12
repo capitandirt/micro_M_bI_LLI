@@ -23,17 +23,6 @@ public:
     void needGetOutImpasse();
     void needStop();
 private:
-    enum class SmartState
-    {
-        FORWARD,
-        RIGHT,
-        LEFT,
-        BACK,
-        DIAG_NE,
-        DIAG_NW,
-        DIAG_SE,
-        DIAG_SW
-    };
 
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
     void dirs_to_primitives();
@@ -47,8 +36,40 @@ private:
     bool TO_SD45S_DS45S();
     bool TO_SD135S_DS45S();
 
-    void TO_DD90X(PrimitiveCycloAction_t* TURN_TO_CHANGE); // функция для обработки X функций DD90S, она меняет TURN в зависимости от количества DD90S
-    void TO_DIA_X(PrimitiveCycloAction_t* TURN_TO_CHANGE); // функция для обработки X функций DIA, она меняет TURN в зависимости от количества DIA
+    enum class RobotState_t : uint8_t
+    {
+        LEFT,
+        LEFT_FORWARD,
+        FORWARD,
+        RIGHT_FORWARD,
+        RIGHT,
+
+        STOP
+    };
+    inline RobotState_t toState(const PrimitiveCycloAction_t curPrim)
+    {
+        switch(curPrim)
+        {
+            case PrimitiveCycloAction_t::LEFT:
+                return RobotState_t::LEFT;
+            case PrimitiveCycloAction_t::RIGHT:
+                return RobotState_t::RIGHT;
+            case PrimitiveCycloAction_t::FORWARD:
+                return RobotState_t::FORWARD;
+                
+            default:
+                return RobotState_t(-1);// этого не может быть
+        }
+    }
+    inline uint8_t toIntFromState(const RobotState_t rs){
+        return static_cast<uint8_t>(rs);
+    }
+
+    PrimitiveCycloAction_t TO_DD90X();
+    PrimitiveCycloAction_t TO_DIA_X(); 
+    
+    RobotState_t entryHandler(); //возвращает состояние робота на конец входа. Stop если кластер обработан
+    PrimitiveCycloAction_t repeatActionHandler();
     int convertToSmart(); //экспериментальное
 };
 
