@@ -30,8 +30,6 @@ public:
                     .robotState = cwcp->odometry,
                     .optocoupler = cwcp->optocoupler}}{}
 
-
-
     void init();
     void doCyclogram();
 

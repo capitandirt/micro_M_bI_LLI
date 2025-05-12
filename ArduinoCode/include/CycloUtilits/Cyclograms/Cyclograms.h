@@ -42,53 +42,125 @@ CYCLOGRAM(FWD_HALF)
 {
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
-    
-    const uint16_t left_sense = s->optocoupler->getSense().left;
-    const uint16_t right_sense = s->optocoupler->getSense().right;
+
+    const int16_t left_sense = s->optocoupler->getSense().left;
+    const int16_t right_sense = s->optocoupler->getSense().right;
     const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
 
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const uint16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const uint16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика  
+        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 
     ms->theta_i0 = regulatorArray[regulatorState];
 
-    if(s->robotState->getDist() > HALF(CELL_SIZE))
+    if(s->robotState->getDist() > HALF(CELL_SIZE) )
     {
         ms->isComplete = true;
     }
     else ms->isComplete = false;
 }
 
-CYCLOGRAM(FWD_X)
+CYCLOGRAM(FWDE)
 {
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
-    
-    const uint16_t left_sense = s->optocoupler->getSense().left;
-    const uint16_t right_sense = s->optocoupler->getSense().right;
+
+    static bool FIRST_ENTRANCE = 1;
+    static bool start_left_wall_state = 0;
+    static bool start_right_wall_state = 0;
+    static bool prev_left_wall_state = 0;
+    static bool prev_right_wall_state = 0;
+    static float dist_buf = 0;
+    static bool CAN_TRY_ALIGN = 0;
+    static bool NEED_ALIGN = 0;
+
+    const int16_t left_sense = s->optocoupler->getSense().left;
+    const int16_t right_sense = s->optocoupler->getSense().right;
     const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
 
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const uint16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const uint16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
         ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика  
+        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
+    };
+
+    if(FIRST_ENTRANCE){
+        start_left_wall_state = toBool(cell_from_sensors.west_wall);
+        start_right_wall_state = toBool(cell_from_sensors.east_wall);
+
+        CAN_TRY_ALIGN = start_left_wall_state && start_right_wall_state;
+        FIRST_ENTRANCE = 0;
+    }
+
+    ms->theta_i0 = regulatorArray[regulatorState];
+
+    if(CAN_TRY_ALIGN && ((
+        prev_left_wall_state == 1 && toBool(cell_from_sensors.west_wall) == 0) || (
+       prev_right_wall_state == 1 && toBool(cell_from_sensors.east_wall) == 0))){
+            NEED_ALIGN = 1;
+            dist_buf = s->robotState->getDist();
+    }
+
+    prev_left_wall_state = toBool(cell_from_sensors.west_wall);
+    prev_right_wall_state = toBool(cell_from_sensors.east_wall);
+
+    if(NEED_ALIGN)
+    {
+        if(s->robotState->getDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
+            ms->isComplete = true;
+        }
+    }
+    else if(s->robotState->getDist() > CELL_SIZE)
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
+
+    if(ms->isComplete){
+        FIRST_ENTRANCE = 1;
+        prev_left_wall_state = 0;
+        prev_right_wall_state = 0;
+        CAN_TRY_ALIGN = 0;
+        NEED_ALIGN = 0;
+    }
+}
+
+CYCLOGRAM(FWD_X)
+{
+    ms->v_f0 = FORWARD_SPEED;
+    ms->theta_i0 = 0;
+
+    const int16_t left_sense = s->optocoupler->getSense().left;
+    const int16_t right_sense = s->optocoupler->getSense().right;
+    const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
+
+    // регулятор на положение по горизонтали при движении вперёд
+    const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
+
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+
+    const float regulatorArray[4] = {
+        0,//ни один не видит стену
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
+        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
+        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 
     ms->theta_i0 = regulatorArray[regulatorState];
@@ -102,7 +174,7 @@ CYCLOGRAM(FWD_X)
 
 CYCLOGRAM(DIAG_X)
 {
-    
+
 }
 
 //search turns 90
@@ -121,7 +193,7 @@ CYCLOGRAM(SS90EL)
     if(s->robotState->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
-    } 
+    }
     else ms->isComplete = false;
 }
 
@@ -140,7 +212,7 @@ CYCLOGRAM(SS90ER)
     if(s->robotState->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
-    } 
+    }
     else ms->isComplete = false;
 }
 
@@ -150,13 +222,13 @@ CYCLOGRAM(SS90SL)
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
-    constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R; 
+    constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
-    
+
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = -theta_i;
     if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -169,13 +241,13 @@ CYCLOGRAM(SS90SR)
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
-    constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R; 
+    constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
-    
+
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = -theta_i;
     if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -222,12 +294,12 @@ CYCLOGRAM(SS180SL)
     ms->v_f0 = FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FORWARD_SPEED / R;
-    constexpr float circleDist = PI * R; // 180 = половина окружности 
+    constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i; 
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -238,12 +310,12 @@ CYCLOGRAM(SS180SR)
     ms->v_f0 = FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FORWARD_SPEED / R;
-    constexpr float circleDist = PI * R; // 180 = половина окружности 
+    constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i; 
+    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist) 
+    if(s->robotState->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -253,9 +325,9 @@ CYCLOGRAM(SS180SR)
 CYCLOGRAM(IP180)
 {
     ms->v_f0 = 0;
-    constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH / 2;
+    constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH;
     ms->theta_i0 = theta_i;
-    if(s->robotState->getTheta() > PI) 
+    if(s->robotState->getTheta() > PI)
     {
         ms->isComplete = true;
     }
@@ -280,7 +352,7 @@ CYCLOGRAM(IP90R)
     constexpr float theta_i = -FORWARD_SPEED / ROBOT_WIDTH / 2;
     ms->theta_i0 = theta_i;
     if(s->robotState->getTheta() < -HALF_PI)
-    { 
+    {
         ms->isComplete = true;
     }
     else ms->isComplete = false;

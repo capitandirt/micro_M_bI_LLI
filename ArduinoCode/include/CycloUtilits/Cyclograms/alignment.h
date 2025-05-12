@@ -8,6 +8,7 @@
 CYCLOGRAM(TO_ALIGN)
 {
     ms->v_f0 = -FORWARD_SPEED;
+
     if(s->time > ALIGNMENT_TIME)
     {
         ms->v_f0 = 0;
