@@ -80,8 +80,8 @@ void CycloStore::reloadPrimitives(){
     _primitive_cyc_act_counter = 0;
 }
  
-void CycloStore::executeSmart(SmartSubmission smart_submis, CycloContext cyclo_context){
-    _cyclograms[toInt(smart_submis.smart)](&cyclo_context.ms, &cyclo_context.s, toInt(smart_submis.x));
+void CycloStore::executeSmart(SmartSubmission smart_submis, CycloContext* cyclo_context){
+    _cyclograms[toInt(smart_submis.smart)](&cyclo_context->ms, &cyclo_context->s, toInt(smart_submis.x));
 }
 
 void CycloStore::printSmarts() const{
@@ -136,6 +136,7 @@ void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::CLUSTER_DOT         )] = CLUSTER_DOT         ;
     _cyclograms[toInt(SmartCycloAction_t::IDLE                )] = IDLE                ;
     _cyclograms[toInt(SmartCycloAction_t::FWD_HALF            )] = FWD_HALF            ;
+    _cyclograms[toInt(SmartCycloAction_t::FWDE                )] = FWDE                ;
     _cyclograms[toInt(SmartCycloAction_t::FWD_X               )] = FWD_X               ;
     _cyclograms[toInt(SmartCycloAction_t::DIAG_X              )] = DIAG_X              ;
     _cyclograms[toInt(SmartCycloAction_t::SS90EL              )] = SS90EL              ;

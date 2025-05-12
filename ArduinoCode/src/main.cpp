@@ -4,13 +4,13 @@
 
 void setup()
 {
-    // DEVICES::INIT();
+	// DEVICES::TEST::SET_SERIAL();
+    DEVICES::INIT();    
 
-	DEVICES::TEST::SET_SERIAL();
     // DEVICES::TEST::UNDEF_CELL_WALLS();
-    // DEVICES::TEST::FWD_3X();
+    // DEVICES::TEST::FWDE();
     // DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
-    DEVICES::TEST::CYCLOGRAMS();
+    // DEVICES::TEST::CYCLOGRAMS();
     // DEVICES::TEST::BFS();
     // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
 }
@@ -22,8 +22,9 @@ void loop(){
         ;
     last_time = micros();
 
+    // DEVICES::TEST::
     // DEVICES::TEST::OPTOCOUPLERS_SENSE();
     // DEVICES::TEST::OPTOCOUPLERS_MASK();
 
-    // DEVICES::TICK();
+    DEVICES::TICK();
 }

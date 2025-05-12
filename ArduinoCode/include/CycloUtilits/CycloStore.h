@@ -27,7 +27,7 @@ public:
     void reloadSmarts();
     void reloadPrimitives();
 
-    void executeSmart(SmartSubmission smart_submis, CycloContext smart_context);
+    void executeSmart(SmartSubmission smart_submis, CycloContext* smart_context);
 
     void printSmarts() const;
     void printPrimitives() const;

@@ -51,7 +51,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     switch (first_primitive)
     {
     case PrimitiveCycloAction_t::FORWARD:
-        _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
+        _cycloStore->addSmart(SmartCycloAction_t::FWDE);
         break;
     case PrimitiveCycloAction_t::LEFT:
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);

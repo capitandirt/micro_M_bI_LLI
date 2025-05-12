@@ -53,6 +53,7 @@ namespace DEVICES{
         rightServo.tick();
         
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
+
         cycloWorker.doCyclogram();
 
         robot.stepFloodFill();
@@ -128,15 +129,17 @@ namespace DEVICES{
         }
 
         void EXPLORER_LEFT_RIGHT_SMARTS(){
-            cycloStore.addSmart(SmartCycloAction_t::SS90EL);
             cycloStore.addSmart(SmartCycloAction_t::SS90ER);
+            cycloStore.addSmart(SmartCycloAction_t::SS90EL);
         }
 
         void FWD_3X()
         {
-            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
-            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
-            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X, 3);
+        }
+
+        void FWDE(){
+            cycloStore.addSmart(SmartCycloAction_t::FWDE);
         }
         
         void EXPLORER_CYC()
@@ -186,6 +189,20 @@ namespace DEVICES{
         void OPTOCOUPLERS_CELL(){
             // optocoupler.tick();
             optocoupler.printAbsCell();
+        }
+
+        void ANDREW_MOMENT(){
+            cycloStore.addSmart(SmartCycloAction_t::TO_ALIGN);
+            cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
+            cycloStore.addSmart(SmartCycloAction_t::SD45SL);
+            cycloStore.addSmart(SmartCycloAction_t::DS45SR);
+            cycloStore.addSmart(SmartCycloAction_t::SS180SL);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+            cycloStore.addSmart(SmartCycloAction_t::SS90SR);
+            cycloStore.addSmart(SmartCycloAction_t::SD135SR);
+            cycloStore.addSmart(SmartCycloAction_t::DD90SL);
+            cycloStore.addSmart(SmartCycloAction_t::DD90SR);
+            cycloStore.addSmart(SmartCycloAction_t::DS135SL);
         }
     }
 }
