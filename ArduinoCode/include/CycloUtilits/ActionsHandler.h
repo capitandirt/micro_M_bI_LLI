@@ -44,7 +44,8 @@ private:
         RIGHT_FORWARD,
         RIGHT,
 
-        STOP
+        STOP,
+        NAS // not a state
     };
     inline RobotState_t toState(const PrimitiveCycloAction_t curPrim)
     {
@@ -58,7 +59,7 @@ private:
                 return RobotState_t::FORWARD;
                 
             default:
-                return RobotState_t(-1);// этого не может быть
+                return RobotState_t::NAS;// этого не может быть
         }
     }
     inline uint8_t toIntFromState(const RobotState_t rs){
