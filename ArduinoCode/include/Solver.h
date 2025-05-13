@@ -1,7 +1,7 @@
 #ifndef _SOLVER_H_
 #define _SOLVER_H_
 
-#include "CycloWorker.h"
+#include "CycloUtilits/CycloWorker.h"
 #include "Maze.h"
 #include "MyQueue.h"
 

@@ -10,7 +10,7 @@ struct ActionsHandlerConnectionParams{
     CycloStore* _cycloStore;
 };
 
-class ActionsHandler : ActionsHandlerConnectionParams{
+class ActionsHandler : private ActionsHandlerConnectionParams{
 public:
     ActionsHandler(ActionsHandlerConnectionParams* ahcp) : ActionsHandlerConnectionParams(*ahcp){}
     

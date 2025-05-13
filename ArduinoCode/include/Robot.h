@@ -4,7 +4,7 @@
 #include "CycloUtilits/ActionsHandler.h"
 #include "Maze.h"
 #include "Solver.h"
-#include "OptocouplerSensors.h"
+#include "Drivers/OptocouplerSensors.h"
 #include "Odometry.h"
 
 struct RobotConnectionParams{
@@ -17,7 +17,7 @@ struct RobotConnectionParams{
 };
 
 
-class Robot : public RobotConnectionParams{
+class Robot : private RobotConnectionParams{
 public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 

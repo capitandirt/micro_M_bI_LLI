@@ -16,15 +16,15 @@ float PiReg::getU() const{
 void PiReg::tick(){
     _err = _set - _cur;
 
-    _P = _err * Kp;
-    _I = _integrator * Ki;
+    _P = _err * _Kp;
+    _I = _integrator * _Ki;
 
     _u = _P + _I;
 
     _constrained_u = constrain(_u, NEG_MAX_U, MAX_U);
 
     if(_u == _constrained_u || _P < 0){
-        _integrator += _err * Ts_s;
+        _integrator += _err * _Ts_s;
     }
     else{
         _u = _constrained_u;

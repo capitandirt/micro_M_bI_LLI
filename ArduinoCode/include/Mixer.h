@@ -1,14 +1,14 @@
 #ifndef _MIXER_H_
 #define _MIXER_H_
 
-#include "Servo.h"
+#include "Drivers/Servo.h"
 
 struct MotionControlConnectionParams{
     Servo *leftServo;
     Servo *rightServo;
 };
 
-class Mixer : public MotionControlConnectionParams{
+class Mixer : private MotionControlConnectionParams{
 public:
     Mixer(MotionControlConnectionParams* mccp) : MotionControlConnectionParams(*mccp){} 
 

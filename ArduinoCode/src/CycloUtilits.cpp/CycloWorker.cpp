@@ -1,4 +1,4 @@
-#include "CycloWorker.h"
+#include "CycloUtilits/CycloWorker.h"
 
 void CycloWorker::init(){
     _cur_smart_submis = cycloStore->popFrontSmartSubmission();
@@ -29,7 +29,11 @@ void CycloWorker::tryComplete(){
 
         _cur_smart_submis = cycloStore->popFrontSmartSubmission();
 
+        if(_prev_smart_submis.smart != _cur_smart_submis.smart){
+            _reset_reg();
+        }
+        _prev_smart_submis.smart = _cur_smart_submis.smart;
+        
         _cyclo_context.reload();
-        _reset_reg();
     }
 };

@@ -11,7 +11,7 @@ struct ServoConnectionParams{
     VelocityEstimator* velocityEstimator;
 };
 
-class Servo : public ServoConnectionParams{
+class Servo : private ServoConnectionParams{
 private:
     float _w;
     float cur_w;

@@ -1,8 +1,8 @@
 #ifndef _ALIGNMTNT_H_
 #define _ALIGNMTNT_H_
 
-#include "../CycloTypes.h"
-#include "../../OptocouplerSensors.h"
+#include "CycloUtilits/CycloTypes.h"
+#include "Drivers/OptocouplerSensors.h"
 #include "Cyclogram.config.h"
 
 CYCLOGRAM(TO_ALIGN)
@@ -20,7 +20,7 @@ CYCLOGRAM(TO_ALIGN)
 CYCLOGRAM(FROM_ALIGN_TO_CENTER)
 {
     ms->v_f0 = FORWARD_SPEED;
-    if(s->robotState->getDist() > FROM_ALIGNMENT_TO_CENTER)
+    if(s->odometry->getDist() > FROM_ALIGNMENT_TO_CENTER)
     {
         ms->v_f0 = 0;
         ms->isComplete = true;

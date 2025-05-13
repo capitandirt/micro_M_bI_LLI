@@ -1,8 +1,8 @@
 #ifndef _CYCLOGRAMS_H_
 #define _CYCLOGRAMS_H_
 
-#include "../CycloTypes.h"
-#include "../../OptocouplerSensors.h"
+#include "CycloUtilits/CycloTypes.h"
+#include "Drivers/OptocouplerSensors.h"
 #include "Cyclogram.config.h"
 
 #include "smart45.h"
@@ -50,8 +50,8 @@ CYCLOGRAM(FWD_HALF)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->getSenseThresholdLeft();
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->getSenseThresholdRight();
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
@@ -62,7 +62,7 @@ CYCLOGRAM(FWD_HALF)
 
     ms->theta_i0 = regulatorArray[regulatorState];
 
-    if(s->robotState->getDist() > HALF(CELL_SIZE) )
+    if(s->odometry->getDist() > HALF(CELL_SIZE) )
     {
         ms->isComplete = true;
     }
@@ -90,8 +90,8 @@ CYCLOGRAM(FWDE)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->getSenseThresholdLeft();
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->getSenseThresholdRight();
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
@@ -114,7 +114,7 @@ CYCLOGRAM(FWDE)
         prev_left_wall_state == 1 && toBool(cell_from_sensors.west_wall) == 0) || (
        prev_right_wall_state == 1 && toBool(cell_from_sensors.east_wall) == 0))){
             NEED_ALIGN = 1;
-            dist_buf = s->robotState->getDist();
+            dist_buf = s->odometry->getDist();
     }
 
     prev_left_wall_state = toBool(cell_from_sensors.west_wall);
@@ -122,11 +122,11 @@ CYCLOGRAM(FWDE)
 
     if(NEED_ALIGN)
     {
-        if(s->robotState->getDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
+        if(s->odometry->getDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
             ms->isComplete = true;
         }
     }
-    else if(s->robotState->getDist() > CELL_SIZE)
+    else if(s->odometry->getDist() > CELL_SIZE)
     {
         ms->isComplete = true;
     }
@@ -153,8 +153,8 @@ CYCLOGRAM(FWD_X)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->getSenseThresholdLeft();
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->getSenseThresholdRight();
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
@@ -165,7 +165,7 @@ CYCLOGRAM(FWD_X)
 
     ms->theta_i0 = regulatorArray[regulatorState];
 
-    if(s->robotState->getDist() > CELL_SIZE * x)
+    if(s->odometry->getDist() > CELL_SIZE * x)
     {
         ms->isComplete = true;
     }
@@ -188,9 +188,9 @@ CYCLOGRAM(SS90EL)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 - четверть окружности #КОСТЫЛЬ
 
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = theta_i;
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist)
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -207,9 +207,9 @@ CYCLOGRAM(SS90ER)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 - четверть окружности #КОСТЫЛЬ
 
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = theta_i;
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist)
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -226,9 +226,9 @@ CYCLOGRAM(SS90SL)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
 
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = -theta_i;
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist)
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -245,9 +245,9 @@ CYCLOGRAM(SS90SR)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
 
     //if(s->robotState->getDist() > forwDist && s->robotState->getTheta() < HALF_PI) ms->theta_i0 = -theta_i;
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist)
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -261,10 +261,10 @@ CYCLOGRAM(DD90SL)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->robotState->getDist() > forwDist + circleDist + forwDist)
+    if(s->odometry->getDist() > forwDist + circleDist + forwDist)
     {
         ms->isComplete = true;
     }
@@ -278,10 +278,10 @@ CYCLOGRAM(DD90SR)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->robotState->getDist() > forwDist + circleDist + forwDist)
+    if(s->odometry->getDist() > forwDist + circleDist + forwDist)
     {
         ms->isComplete = true;
     }
@@ -297,9 +297,9 @@ CYCLOGRAM(SS180SL)
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist)
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -313,9 +313,9 @@ CYCLOGRAM(SS180SR)
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->robotState->getDist() > 2 * forwDist + circleDist)
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
     }
@@ -327,7 +327,7 @@ CYCLOGRAM(IP180)
     ms->v_f0 = 0;
     constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH;
     ms->theta_i0 = theta_i;
-    if(s->robotState->getTheta() > PI)
+    if(s->odometry->getTheta() > PI)
     {
         ms->isComplete = true;
     }
@@ -339,7 +339,7 @@ CYCLOGRAM(IP90L)
     ms->v_f0 = 0;
     constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH / 2;
     ms->theta_i0 = theta_i;
-    if(s->robotState->getTheta() > HALF_PI)
+    if(s->odometry->getTheta() > HALF_PI)
     {
          ms->isComplete = true;
     }
@@ -351,7 +351,7 @@ CYCLOGRAM(IP90R)
     ms->v_f0 = 0;
     constexpr float theta_i = -FORWARD_SPEED / ROBOT_WIDTH / 2;
     ms->theta_i0 = theta_i;
-    if(s->robotState->getTheta() < -HALF_PI)
+    if(s->odometry->getTheta() < -HALF_PI)
     {
         ms->isComplete = true;
     }

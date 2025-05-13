@@ -3,7 +3,7 @@
 
 #include "Arduino.h"
 #include "Odometry.h"
-#include "OptocouplerSensors.h"
+#include "Drivers/OptocouplerSensors.h"
 
 enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,
@@ -126,7 +126,7 @@ inline const char* Str_SmartCyclogramAction[]{
 struct Sensors
 {
     float time;
-    Odometry* robotState;
+    Odometry* odometry;
     OptocouplerSensors* optocoupler;
 };
 
@@ -143,7 +143,7 @@ struct CycloContext{
 
     void reload(){
         ms.isComplete = 0;
-        s.robotState->updateRelative();
+        s.odometry->updateRelative();
     }
 };
 

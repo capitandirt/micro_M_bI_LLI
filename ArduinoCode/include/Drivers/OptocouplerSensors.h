@@ -54,7 +54,7 @@ private:
     };
 };
 
-class OptocouplerSensors : public OprocouplerConnectionParams{ 
+class OptocouplerSensors : private OprocouplerConnectionParams{ 
 public:
     OptocouplerSensors(OprocouplerConnectionParams* ocp) : OprocouplerConnectionParams(*ocp){}
 
@@ -63,6 +63,9 @@ public:
     Sense_t getSense();
     Cell getRelativeCell();
     Cell getCell(Direction robotDir);
+
+    uint16_t getSenseThresholdLeft();
+    uint16_t getSenseThresholdRight();
 
     bool cellIsImpasse();
 

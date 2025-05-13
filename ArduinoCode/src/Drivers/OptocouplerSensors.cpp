@@ -1,4 +1,4 @@
-#include "OptocouplerSensors.h"
+#include "Drivers/OptocouplerSensors.h"
 
 void OptocouplerSensors::init(){
     bitClear(ADCSRA, ADPS0);
@@ -83,6 +83,14 @@ Cell OptocouplerSensors::getCell(Direction robot_dir){
     }
 
     return cell_from_sense;
+}
+
+uint16_t OptocouplerSensors::getSenseThresholdLeft(){
+    return SENSE_THRESHOLD_LEFT;
+}
+
+uint16_t OptocouplerSensors::getSenseThresholdRight(){
+    return SENSE_THRESHOLD_RIGHT;
 }
 
 bool OptocouplerSensors::cellIsImpasse(){

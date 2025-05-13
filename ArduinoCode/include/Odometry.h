@@ -1,7 +1,7 @@
 #ifndef _ODOMETRY_H_
 #define _ODOMETRY_H_
 
-#include "Encoder.h"
+#include "Drivers/Encoder.h"
 #include "CellsTypes.h"
 
 class Integrator

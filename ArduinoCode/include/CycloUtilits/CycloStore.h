@@ -11,7 +11,7 @@ public:
 
     CycloStore(){load_cyclograms();}
 
-    void addSmart(SmartCycloAction_t smart, uint8_t x = toInt(X_t::NONE));
+    void addSmart(const SmartCycloAction_t smart, const uint8_t x = toInt(X_t::NONE));
     void addPrimitive(PrimitiveCycloAction_t primitive);
 
     SmartSubmission popFrontSmartSubmission();
@@ -27,7 +27,7 @@ public:
     void reloadSmarts();
     void reloadPrimitives();
 
-    void executeSmart(SmartSubmission smart_submis, CycloContext* smart_context);
+    void executeSmart(const SmartSubmission smart_submis, CycloContext* smart_context);
 
     void printSmarts() const;
     void printPrimitives() const;

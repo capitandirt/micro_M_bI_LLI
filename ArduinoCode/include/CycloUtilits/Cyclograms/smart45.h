@@ -1,8 +1,8 @@
 #ifndef _SMART45_H_
 #define _SMART45_H_
 
-#include "../CycloTypes.h"
-#include "../../OptocouplerSensors.h"
+#include "CycloUtilits/CycloTypes.h"
+#include "Drivers/OptocouplerSensors.h"
 #include "Cyclogram.config.h"
 
 CYCLOGRAM(SD45SL)
@@ -15,10 +15,10 @@ CYCLOGRAM(SD45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->robotState->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -35,10 +35,10 @@ CYCLOGRAM(SD45SR)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->robotState->getDist() > forwDist && s->robotState->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->robotState->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -55,10 +55,10 @@ CYCLOGRAM(DS45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->robotState->getDist() > forwDist2 && s->robotState->getDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->robotState->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -75,10 +75,10 @@ CYCLOGRAM(DS45SR)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->robotState->getDist() > forwDist2 && s->robotState->getDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->robotState->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }

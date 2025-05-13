@@ -5,8 +5,8 @@
 
 #include "Mixer.h"
 #include "Config.h"
-#include "OptocouplerSensors.h"
 
+#include "Drivers/OptocouplerSensors.h"
 #include "CycloUtilits/CycloStore.h"
 
 struct CycloWorkerConnectionParams{
@@ -17,7 +17,7 @@ struct CycloWorkerConnectionParams{
     void (*_reset_reg)();
 };
 
-class CycloWorker : public CycloWorkerConnectionParams{
+class CycloWorker : private CycloWorkerConnectionParams{
 public:
     CycloWorker(CycloWorkerConnectionParams* cwcp) :
         CycloWorkerConnectionParams(*cwcp), 
@@ -27,7 +27,7 @@ public:
                     .isComplete = false},
 
             .s = {  .time = 0,
-                    .robotState = cwcp->odometry,
+                    .odometry = cwcp->odometry,
                     .optocoupler = cwcp->optocoupler}}{}
 
     void init();
@@ -40,6 +40,7 @@ public:
 
 private:
     SmartSubmission _cur_smart_submis = {SmartCycloAction_t::IDLE, X_t::NONE};
+    SmartSubmission _prev_smart_submis = {SmartCycloAction_t::IDLE, X_t::NONE};
 
     uint32_t _cur_time = 0;
     uint32_t _last_time = 0;
