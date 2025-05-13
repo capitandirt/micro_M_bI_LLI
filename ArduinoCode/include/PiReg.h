@@ -2,7 +2,7 @@
 #define _PI_REGULATOR_H_
 
 #include "Config.h"
-#include "VelocityEstimator.h"
+#include "Drivers/VelocityEstimator.h"
 #include "Arduino.h"
 
 struct PiRegConnectionParams{
