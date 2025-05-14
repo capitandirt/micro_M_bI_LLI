@@ -2,14 +2,14 @@
 #define _VELOCITY_ESTIMATOR_H_
 
 #include "Config.h"
-#include "Drivers/Encoder.h"
+#include "Encoder.h"
 
 struct VelocityEstimatorConnectionParams
 {
     Encoder *encoder;
 };
 
-class VelocityEstimator : private VelocityEstimatorConnectionParams{
+class VelocityEstimator : public VelocityEstimatorConnectionParams{
 public:
     VelocityEstimator(VelocityEstimatorConnectionParams *vecp) : VelocityEstimatorConnectionParams(*vecp){}
 

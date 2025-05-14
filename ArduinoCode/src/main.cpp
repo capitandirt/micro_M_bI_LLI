@@ -4,9 +4,10 @@
 
 void setup()
 {
-	// DEVICES::TEST::SET_SERIAL();
+	DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();    
 
+    // DEVICES::TEST::ANDREW_MOMENT();
     // DEVICES::TEST::UNDEF_CELL_WALLS();
     // DEVICES::TEST::FWDE();
     // DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
@@ -23,7 +24,7 @@ void loop(){
     last_time = micros();
 
     // DEVICES::TEST::
-    // DEVICES::TEST::OPTOCOUPLERS_SENSE();
+    DEVICES::TEST::OPTOCOUPLERS_SENSE();
     // DEVICES::TEST::OPTOCOUPLERS_MASK();
 
     DEVICES::TICK();

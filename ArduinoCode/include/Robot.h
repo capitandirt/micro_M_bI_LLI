@@ -17,7 +17,7 @@ struct RobotConnectionParams{
 };
 
 
-class Robot : private RobotConnectionParams{
+class Robot : public RobotConnectionParams{
 public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 

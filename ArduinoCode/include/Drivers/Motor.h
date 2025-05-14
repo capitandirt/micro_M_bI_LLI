@@ -11,7 +11,7 @@ struct MotorConnectionParams{
         M_POLARITY;
 };
 
-class Motor : private MotorConnectionParams{
+class Motor : public MotorConnectionParams{
 public:
     Motor(MotorConnectionParams* mcp) : MotorConnectionParams(*mcp){}
     void init();

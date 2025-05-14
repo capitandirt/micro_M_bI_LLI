@@ -63,12 +63,16 @@
 #define NEG_MAX_U -V_BATT
 /*==POWER END==*/
 
+/*==FUNCTIONAL SELECTOR BEGIN==*/
+#define FUNCTION_PIN A6
+/*==FUNCTIONAL SELECTOR END==*/
+
 /*==W MOTOT PIREG BEGIN==*/
 #define W_K_MOTOR (6 / 1.5) //он выдаёт примерно 6.5 рад/с на 1.5 Волта
 #define W_T_MOTOR 0.21 //210 мс - 70% времени от разгона от 0 до некой постоянной скорости при напряжении
 #define W_T_u (32 * Ts_s)
 
-#define W_KP (0.12f) // Kp = K
+#define W_KP (0.10f) // Kp = K
 #define W_KI (W_KP / 0.23f) // Ki = K / T
 /*==W MOTOT PIREG END==*/
 
@@ -146,8 +150,8 @@
 
 #define OPTOCOUPLER_SENSE_ERROR (55)
 #define OPTOCOUPLER_SENSE_THRESHOLD_LEFT (50)
-#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_L (45)
-#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (45)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_L (40)
+#define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (40)
 #define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (50)
 /*==OPTOCOUPLER END==*/
 

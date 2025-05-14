@@ -35,9 +35,10 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
+        functionalSelector.init();
         optocoupler.init();
 
-        robot.init();
+        // robot.init();
 
         TIM2::INIT();
     }
@@ -52,11 +53,13 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
+        // functionalSelector.tick();
+
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
         cycloWorker.doCyclogram();
 
-        robot.stepFloodFill();
+        // robot.stepFloodFill();
         
         cycloWorker.tryComplete();
     }
@@ -175,7 +178,6 @@ namespace DEVICES{
             cycloStore.printPrimitives();
             cycloStore.printSmarts();
             cycloStore.reloadSmarts();
-            // cycloStore.printSmarts();
         }
 
         void OPTOCOUPLERS_SENSE(){
@@ -187,11 +189,10 @@ namespace DEVICES{
         }
 
         void OPTOCOUPLERS_CELL(){
-            // optocoupler.tick();
             optocoupler.printAbsCell();
         }
 
-        void ANDREW_MOMENT(){
+        void ANDREW_MOMENT(){            
             cycloStore.addSmart(SmartCycloAction_t::TO_ALIGN);
             cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
             cycloStore.addSmart(SmartCycloAction_t::SD45SL);

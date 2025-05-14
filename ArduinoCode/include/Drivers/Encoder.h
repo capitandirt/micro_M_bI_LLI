@@ -12,7 +12,7 @@ struct EncoderConnectionParams
     void (*ISR)();
 };
 
-class Encoder : private EncoderConnectionParams{
+class Encoder : public EncoderConnectionParams{
 public:
     Encoder(EncoderConnectionParams *ecp) : EncoderConnectionParams(*ecp){}
 
