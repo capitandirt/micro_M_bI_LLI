@@ -66,11 +66,11 @@ private:
         return static_cast<uint8_t>(rs);
     }
 
-    PrimitiveCycloAction_t TO_DD90X();
+    RobotState_t TO_DD90X(const RobotState_t startState); 
     PrimitiveCycloAction_t TO_DIA_X(); 
     
     RobotState_t entryHandler(); //возвращает состояние робота на конец входа. Stop если кластер обработан
-    PrimitiveCycloAction_t repeatActionHandler();
+    RobotState_t repeatActionHandler(const RobotState_t startState); 
     int convertToSmart(); //экспериментальное
 };
 

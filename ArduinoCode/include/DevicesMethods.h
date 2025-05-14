@@ -37,7 +37,7 @@ namespace DEVICES{
         
         optocoupler.init();
 
-        robot.init();
+        // robot.init();
 
         TIM2::INIT();
     }
@@ -56,7 +56,7 @@ namespace DEVICES{
 
         cycloWorker.doCyclogram();
 
-        robot.stepFloodFill();
+        // robot.stepFloodFill();
         
         cycloWorker.tryComplete();
     }
@@ -191,7 +191,7 @@ namespace DEVICES{
             optocoupler.printAbsCell();
         }
 
-        void ANDREW_MOMENT(){
+        void ANDREI_MOMENT(){
             cycloStore.addSmart(SmartCycloAction_t::TO_ALIGN);
             cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
             cycloStore.addSmart(SmartCycloAction_t::SD45SL);

@@ -138,12 +138,15 @@ bool ActionsHandler::TO_STOP(){
     return false;
 }
 
-bool ActionsHandler::TO_FWD_X(){
-    int X = 0;
+bool ActionsHandler::TO_FWD_X()
+{
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
-        for(;_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
+        for(uint8_t X = 0; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
+        {
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
+        }
 
-        _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
+        
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
@@ -256,9 +259,10 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
     if(curPrim == PrimitiveCycloAction_t::FORWARD) // обработка 1 действия
     {
-        return RobotState_t::FORWARD; // на этот момент X = 1
+        _cycloStore->virtualGoBack(); // это делается чтобы изначально X был равен 0
+        return RobotState_t::FORWARD;
     }
-    _cycloStore->virtualPrimitiveRelease();//этот примитив в любом случае релизится, чтобы позже от него если что начать отчёт 45
+    _cycloStore->virtualPrimitiveRelease();
     
     const PrimitiveCycloAction_t TURN = curPrim; // получение действия и приравнивание его к основному повороту
     const PrimitiveCycloAction_t OP_TURN = static_cast<PrimitiveCycloAction_t>((static_cast<int8_t>(TURN) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
@@ -326,20 +330,25 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
     }
     else 
     {
-        return RobotState_t(-1); //он решил повернуть в стену, это плохо
+        return RobotState_t::NAS; //он решил повернуть в стену, это плохо
     }
 }
 
 
 
-PrimitiveCycloAction_t ActionsHandler::TO_DD90X()
+ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startState)
 {
     int X = 0;
 
     const auto TURN = _cycloStore->virtualPopFrontPrimitive();
     const auto OP_TURN = static_cast<PrimitiveCycloAction_t>((toInt(TURN) + DIRECTION_SIZE/2) % DIRECTION_SIZE); // расчёт противоположного основному поворота
     PrimitiveCycloAction_t lastTurn = OP_TURN;
-    
+
+    if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT)
+    {
+        return startState;
+    };
+
     PrimitiveCycloAction_t next2Prim[2];
     next2Prim[0] = TURN;
     next2Prim[1] = _cycloStore->virtualPopFrontPrimitive();
@@ -363,7 +372,7 @@ PrimitiveCycloAction_t ActionsHandler::TO_DD90X()
             _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
             lastTurn = PrimitiveCycloAction_t::LEFT;
         }
-        return lastTurn;
+        return toState(lastTurn);
     } 
     
 }
@@ -375,8 +384,13 @@ PrimitiveCycloAction_t ActionsHandler::TO_DIA_X()
 
 
 
-PrimitiveCycloAction_t ActionsHandler::repeatActionHandler()
-{
+ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotState_t startState)
+{ 
+    if(startState == RobotState_t::FORWARD)
+    {
+        TO_FWD_X();
+        return RobotState_t::FORWARD;
+    }
     // НАПИСАТЬ!!!
 }
 
@@ -386,8 +400,9 @@ int ActionsHandler::convertToSmart()
     while(curPrim != PrimitiveCycloAction_t::STOP) // пока не стоит остановка
     {
         RobotState_t repeatStartState = entryHandler();
-        if(toIntFromState(repeatStartState) == -1)  return -1;// вход вылетел с ошибкой поворота в стену на 3 действии
+        if(repeatStartState == RobotState_t::NAS) return -1;// вход вылетел с ошибкой поворота в стену на 3 действии
         
+        RobotState_t repeatEndState = repeatActionHandler(repeatStartState);
         //ДОПИСАТЬ!!!
     }
 }
