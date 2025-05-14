@@ -25,7 +25,7 @@ void loop(){
     last_time = micros();
 
     // DEVICES::TEST::
-    // DEVICES::TEST::OPTOCOUPLERS_SENSE();
+    DEVICES::TEST::OPTOCOUPLERS_SENSE();
     // DEVICES::TEST::OPTOCOUPLERS_MASK();
     DEVICES::TICK();
 }

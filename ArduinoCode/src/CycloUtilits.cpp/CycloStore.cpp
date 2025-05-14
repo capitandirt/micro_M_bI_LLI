@@ -2,7 +2,7 @@
 
 // !Андрей, X используется только и только для fwd_x & diag_x, 
 // в иных случая функция будет игнорить аргумент.
-void CycloStore::addSmart(const SmartCycloAction_t smart, const uint8_t x = toInt(X_t::NONE)){ 
+void CycloStore::addSmart(const SmartCycloAction_t smart, uint8_t x = toInt(X_t::NONE)){ 
     if(smart == SmartCycloAction_t::FWD_X || 
        smart == SmartCycloAction_t::DIAG_X)
     {
@@ -82,7 +82,7 @@ void CycloStore::reloadPrimitives(){
     _primitive_cyc_act_counter = 0;
 }
  
-void CycloStore::executeSmart(const SmartSubmission smart_submis, CycloContext* cyclo_context){
+void CycloStore::executeSmart(SmartSubmission smart_submis, CycloContext* cyclo_context){
     _cyclograms[toInt(smart_submis.smart)](&cyclo_context->ms, &cyclo_context->s, toInt(smart_submis.x));
 }
 
@@ -143,6 +143,8 @@ void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::DIAG_X              )] = DIAG_X              ;
     _cyclograms[toInt(SmartCycloAction_t::SS90EL              )] = SS90EL              ;
     _cyclograms[toInt(SmartCycloAction_t::SS90ER              )] = SS90ER              ;
+    _cyclograms[toInt(SmartCycloAction_t::SS90SR              )] = SS90SR              ;
+    _cyclograms[toInt(SmartCycloAction_t::SS90SL              )] = SS90SL              ;
     _cyclograms[toInt(SmartCycloAction_t::SD45SL              )] = SD45SL              ;
     _cyclograms[toInt(SmartCycloAction_t::SD45SR              )] = SD45SR              ;
     _cyclograms[toInt(SmartCycloAction_t::DS45SL              )] = DS45SL              ;

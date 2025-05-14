@@ -2,7 +2,6 @@
 #define _SMART135_H_
 
 #include "CycloUtilits/CycloTypes.h"
-#include "Drivers/OptocouplerSensors.h"
 #include "Cyclogram.config.h"
 
 CYCLOGRAM(SD135SL)

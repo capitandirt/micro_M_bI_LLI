@@ -10,7 +10,7 @@ struct ActionsHandlerConnectionParams{
     CycloStore* _cycloStore;
 };
 
-class ActionsHandler : private ActionsHandlerConnectionParams{
+class ActionsHandler : ActionsHandlerConnectionParams{
 public:
     ActionsHandler(ActionsHandlerConnectionParams* ahcp) : ActionsHandlerConnectionParams(*ahcp){}
     
@@ -25,6 +25,17 @@ public:
     
     int convertToSmart(); //экспериментальное
 private:
+    enum class SmartState
+    {
+        FORWARD,
+        RIGHT,
+        LEFT,
+        BACK,
+        DIAG_NE,
+        DIAG_NW,
+        DIAG_SE,
+        DIAG_SW
+    };
 
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
     void dirs_to_primitives();

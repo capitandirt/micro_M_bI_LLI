@@ -20,7 +20,6 @@ void Robot::stepFloodFill()
     const Vec2 forward_robot_vec  = _odometry->getMazeCoords().plusOrtVector(cur_robot_dir);
     const Cell forward_cell       = _optocoupler->getCell(cur_robot_dir);
 
-    // IF FINISH THAN STOP FLOOD FILL
     if(forward_robot_vec.x == FINISH_ROBOT_COORDS_X &&
        forward_robot_vec.y == FINISH_ROBOT_COORDS_Y 
     ){

@@ -2,7 +2,8 @@
 #define _DEVICES_H_
 
 #include "Robot.h"
-#include "CycloUtilits/CycloWorker.h"
+#include "CycloWorker.h"
+#include "Drivers/FunctionalSelector.h"
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -63,14 +64,14 @@ MotorConnectionParams right_mcp {
 Motor rightMotor(&right_mcp);
 
 PiRegConnectionParams left_w_prcp{
-    ._Kp = W_KP,
-    ._Ki = W_KI
+    .Kp = W_KP,
+    .Ki = W_KI
 };
 PiReg left_w_PiReg(&left_w_prcp);
 
 PiRegConnectionParams right_w_prcp{
-    ._Kp = W_KP,
-    ._Ki = W_KI
+    .Kp = W_KP,
+    .Ki = W_KI
 };
 PiReg right_w_PiReg(&right_w_prcp);
 
@@ -144,5 +145,7 @@ RobotConnectionParams rcp{
     ._odometry = &odometry,
 };
 Robot robot(&rcp);
+
+FunctionalSelector functionalSelector(FUNCTION_PIN);
 
 #endif // !_DEVICES_H_

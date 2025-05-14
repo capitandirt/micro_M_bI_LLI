@@ -35,6 +35,7 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
+        functionalSelector.init();
         optocoupler.init();
 
         // robot.init();
@@ -52,6 +53,8 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
+        // functionalSelector.tick();
+
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
         cycloWorker.doCyclogram();
@@ -175,7 +178,6 @@ namespace DEVICES{
             cycloStore.printPrimitives();
             cycloStore.printSmarts();
             cycloStore.reloadSmarts();
-            // cycloStore.printSmarts();
         }
 
         void OPTOCOUPLERS_SENSE(){
@@ -187,7 +189,6 @@ namespace DEVICES{
         }
 
         void OPTOCOUPLERS_CELL(){
-            // optocoupler.tick();
             optocoupler.printAbsCell();
         }
 

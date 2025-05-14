@@ -8,7 +8,7 @@ struct MotionControlConnectionParams{
     Servo *rightServo;
 };
 
-class Mixer : private MotionControlConnectionParams{
+class Mixer : public MotionControlConnectionParams{
 public:
     Mixer(MotionControlConnectionParams* mccp) : MotionControlConnectionParams(*mccp){} 
 

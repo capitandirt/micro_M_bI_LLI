@@ -6,12 +6,11 @@
 #include "Arduino.h"
 
 struct PiRegConnectionParams{
-    float _Kp;
-    float _Ki;
-    float _Ts_s;
+    float Kp;
+    float Ki;
 };
 
-class PiReg : private PiRegConnectionParams{
+class PiReg : public PiRegConnectionParams{
 public:
     PiReg(PiRegConnectionParams *prcp) : PiRegConnectionParams(*prcp){}     
 

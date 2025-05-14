@@ -85,14 +85,6 @@ Cell OptocouplerSensors::getCell(Direction robot_dir){
     return cell_from_sense;
 }
 
-uint16_t OptocouplerSensors::getSenseThresholdLeft(){
-    return SENSE_THRESHOLD_LEFT;
-}
-
-uint16_t OptocouplerSensors::getSenseThresholdRight(){
-    return SENSE_THRESHOLD_RIGHT;
-}
-
 bool OptocouplerSensors::cellIsImpasse(){
     calc_sense_mask();
     calc_relative_cell();
