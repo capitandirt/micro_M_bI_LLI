@@ -64,13 +64,24 @@ struct RawCycloActionStore{
     SmartCycloAction_t smart : VALUE_SMART_BITS_IN_RAW_STORE;
     PrimitiveCycloAction_t primitive : VALUE_PRIMITIVE_BITS_IN_RAW_STORE; // stupid warning
 };
-
 inline constexpr uint8_t toInt(const SmartCycloAction_t sca){
     return static_cast<uint8_t>(sca);
 }
 
 inline constexpr uint8_t toInt(const PrimitiveCycloAction_t pca){
     return static_cast<uint8_t>(pca);
+}
+
+inline bool isOppositeTurns(const PrimitiveCycloAction_t TURN1, const PrimitiveCycloAction_t TURN2)
+{
+    return (toInt(TURN1) + DIRECTION_SIZE/2) % DIRECTION_SIZE == toInt(TURN2);
+}
+
+inline PrimitiveCycloAction_t toOpposite(const PrimitiveCycloAction_t TURN)
+{
+    if(TURN == PrimitiveCycloAction_t::LEFT) return PrimitiveCycloAction_t::RIGHT;
+    else if(TURN == PrimitiveCycloAction_t::RIGHT) return PrimitiveCycloAction_t::LEFT;
+    else return PrimitiveCycloAction_t::BLANK;
 }
 
 inline constexpr uint8_t toInt(const X_t x){

@@ -22,6 +22,8 @@ public:
     void needStartCellAligning();
     void needGetOutImpasse();
     void needStop();
+    
+    int convertToSmart(); //экспериментальное
 private:
 
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
@@ -67,11 +69,11 @@ private:
     }
 
     RobotState_t TO_DD90X(const RobotState_t startState); 
-    PrimitiveCycloAction_t TO_DIA_X(); 
+    RobotState_t TO_DIA_X(const RobotState_t startState); 
     
     RobotState_t entryHandler(); //возвращает состояние робота на конец входа. Stop если кластер обработан
     RobotState_t repeatActionHandler(const RobotState_t startState); 
-    int convertToSmart(); //экспериментальное
+    RobotState_t exitHandler(const RobotState_t startState);
 };
 
 #endif

@@ -11,7 +11,7 @@
 /*==SEARCH CONSTS END==*/
 
 /*==SMART CYCLOGRAM CONSTS BEGIN==*/
-#define SS90S_TURN_RADIUS 0.1
+#define SS90S_TURN_RADIUS 0.08
 #define DD90S_TURN_RADIUS 0.1 // максимум - CELL_SIZE / M_SQRT2
 #define SD45S_FORW_DIST (CELL_SIZE / 3) // путь до начала поворота, максимум - CELL_SIZE / 2
 #define SD135S_TURN_RADIUS 0.07

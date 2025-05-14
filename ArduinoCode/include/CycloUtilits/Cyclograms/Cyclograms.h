@@ -325,7 +325,7 @@ CYCLOGRAM(SS180SR)
 CYCLOGRAM(IP180)
 {
     ms->v_f0 = 0;
-    constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH;
+    constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
     ms->theta_i0 = theta_i;
     if(s->odometry->getTheta() > PI)
     {
@@ -337,7 +337,7 @@ CYCLOGRAM(IP180)
 CYCLOGRAM(IP90L)
 {
     ms->v_f0 = 0;
-    constexpr float theta_i = FORWARD_SPEED / ROBOT_WIDTH / 2;
+    constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
     ms->theta_i0 = theta_i;
     if(s->odometry->getTheta() > HALF_PI)
     {
@@ -349,7 +349,7 @@ CYCLOGRAM(IP90L)
 CYCLOGRAM(IP90R)
 {
     ms->v_f0 = 0;
-    constexpr float theta_i = -FORWARD_SPEED / ROBOT_WIDTH / 2;
+    constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
     ms->theta_i0 = theta_i;
     if(s->odometry->getTheta() < -HALF_PI)
     {

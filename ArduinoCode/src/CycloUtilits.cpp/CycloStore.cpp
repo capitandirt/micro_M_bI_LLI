@@ -10,7 +10,9 @@ void CycloStore::addSmart(const SmartCycloAction_t smart, const uint8_t x = toIn
             _cyclo_program[_smart_cyc_act_end++].smart = smart;
             _cyclo_program[_smart_cyc_act_end++].smart = static_cast<SmartCycloAction_t>(toX_t(x)); // if NONE, than FWD_1
         }
-    }else{
+    }
+    else
+    {
         if(_smart_cyc_act_end < CYCLO_PROG_SIZE){
             _cyclo_program[_smart_cyc_act_end++].smart = smart;
         }
