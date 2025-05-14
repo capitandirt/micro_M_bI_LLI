@@ -349,7 +349,7 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
     PrimitiveCycloAction_t next2Prim[2];
     next2Prim[0] = TURN;
     next2Prim[1] = _cycloStore->virtualPopFrontPrimitive();
-    for(;next2Prim[0] == next2Prim[1] && ((!X%2 && next2Prim[0] == OP_TURN) || (X%2 && next2Prim[0] == TURN)); X++)
+    for(;next2Prim[0] == next2Prim[1] && ((!(X%2) && next2Prim[0] == OP_TURN) || (X%2 && next2Prim[0] == TURN)); X++)
     {
         _cycloStore->virtualPrimitiveRelease();
         next2Prim[0] = _cycloStore->virtualPopFrontPrimitive();
