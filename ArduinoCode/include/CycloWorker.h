@@ -30,7 +30,7 @@ public:
                     .odometry = cwcp->odometry,
                     .optocoupler = cwcp->optocoupler}}{}
 
-    void init();
+    void reload();
     void doCyclogram();
 
     bool nowIsClusterDot() const noexcept;
@@ -39,8 +39,8 @@ public:
     void tryComplete();
 
 private:
-    SmartSubmission _cur_smart_submis = {SmartCycloAction_t::IDLE, X_t::NONE};
-    SmartSubmission _prev_smart_submis = {SmartCycloAction_t::IDLE, X_t::NONE};
+    SmartSubmission _cur_smart_submis = {SmartCycloAction_t::CLUSTER_DOT, X_t::NONE};
+    SmartSubmission _prev_smart_submis = {SmartCycloAction_t::CLUSTER_DOT, X_t::NONE};
 
     uint32_t _cur_time = 0;
     uint32_t _last_time = 0;

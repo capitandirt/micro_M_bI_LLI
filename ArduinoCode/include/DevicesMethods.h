@@ -24,6 +24,7 @@ extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
+    functionalSelector.tick();
     optocoupler.tick();
 }
 
@@ -38,7 +39,7 @@ namespace DEVICES{
         functionalSelector.init();
         optocoupler.init();
 
-        // robot.init();
+        robot.init();
 
         TIM2::INIT();
     }
@@ -53,13 +54,14 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
-        // functionalSelector.tick();
+        functionalSelector.passMillis(millis());
 
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
         cycloWorker.doCyclogram();
 
-        // robot.stepFloodFill();
+        robot.startExplorer();
+        robot.stepFloodFill();
         
         cycloWorker.tryComplete();
     }
