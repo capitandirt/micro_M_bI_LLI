@@ -23,7 +23,7 @@ public:
     void needGetOutImpasse();
     void needStop();
     
-    int convertToSmart(); //экспериментальное
+    void convertToSmart(); //экспериментальное
 private:
     enum class SmartState
     {
@@ -60,24 +60,8 @@ private:
         STOP,
         NAS // not a state
     };
-    inline RobotState_t toState(const PrimitiveCycloAction_t curPrim)
-    {
-        switch(curPrim)
-        {
-            case PrimitiveCycloAction_t::LEFT:
-                return RobotState_t::LEFT;
-            case PrimitiveCycloAction_t::RIGHT:
-                return RobotState_t::RIGHT;
-            case PrimitiveCycloAction_t::FORWARD:
-                return RobotState_t::FORWARD;
-                
-            default:
-                return RobotState_t::NAS;// этого не может быть
-        }
-    }
-    inline uint8_t toIntFromState(const RobotState_t rs){
-        return static_cast<uint8_t>(rs);
-    }
+    RobotState_t toState(const PrimitiveCycloAction_t curPrim);
+    uint8_t toIntFromState(const RobotState_t rs);
 
     RobotState_t TO_DD90X(const RobotState_t startState); 
     RobotState_t TO_DIA_X(const RobotState_t startState); 

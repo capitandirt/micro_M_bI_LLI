@@ -12,6 +12,8 @@ CYCLOGRAM(SD135SL)
 
     constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
     constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
+
+
     constexpr float circleDist = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
 
     if(s->odometry->getDist() > forwDist1 && s->odometry->getDist() < forwDist1 + circleDist) ms->theta_i0 = theta_i;
@@ -29,8 +31,8 @@ CYCLOGRAM(SD135SR)
     constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
-    constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
-    constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
+    constexpr float forwDist1 = CELL_SIZE / 2 + (CELL_SIZE - R * (1 + M_SQRT2));
+    constexpr float forwDist2 = CELL_SIZE * M_SQRT2 - R * (1 + M_SQRT2);
     constexpr float circleDist = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
 
     if(s->odometry->getDist() > forwDist1 && s->odometry->getDist() < forwDist1 + circleDist) ms->theta_i0 = -theta_i;

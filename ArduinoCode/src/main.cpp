@@ -7,7 +7,8 @@ void setup()
 	DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();    
 
-    DEVICES::TEST::CONVERT_TO_SMART();
+    DEVICES::TEST::ANDREI_MOMENT();
+    // DEVICES::TEST::CONVERT_TO_SMART();
     //DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
     // DEVICES::TEST::UNDEF_CELL_WALLS();
     // DEVICES::TEST::FWDE();
@@ -22,10 +23,10 @@ uint32_t last_time = 0;
 void loop(){
     while(micros() - last_time < Ts_us)
         ;
-    last_time = micros();
+        last_time = micros();
 
     // DEVICES::TEST::
-    DEVICES::TEST::OPTOCOUPLERS_SENSE();
+    // DEVICES::TEST::OPTOCOUPLERS_SENSE();
     // DEVICES::TEST::OPTOCOUPLERS_MASK();
     DEVICES::TICK();
 }

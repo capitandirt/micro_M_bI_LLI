@@ -149,6 +149,8 @@ void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::SD45SR              )] = SD45SR              ;
     _cyclograms[toInt(SmartCycloAction_t::DS45SL              )] = DS45SL              ;
     _cyclograms[toInt(SmartCycloAction_t::DS45SR              )] = DS45SR              ;
+    _cyclograms[toInt(SmartCycloAction_t::DD90SL              )] = DD90SL              ;
+    _cyclograms[toInt(SmartCycloAction_t::DD90SR              )] = DD90SR              ;
     _cyclograms[toInt(SmartCycloAction_t::SD135SL             )] = SD135SL             ;
     _cyclograms[toInt(SmartCycloAction_t::SD135SR             )] = SD135SR             ;
     _cyclograms[toInt(SmartCycloAction_t::DS135SL             )] = DS135SL             ;

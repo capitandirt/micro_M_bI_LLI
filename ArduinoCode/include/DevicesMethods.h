@@ -50,10 +50,19 @@ namespace DEVICES{
         leftVelocityEstimator.tick();
         rightVelocityEstimator.tick();
         
+        // leftServo.setW(1);
+        // rightServo.setW(1);
+
         leftServo.tick();
         rightServo.tick();
+
+        // Serial.print(leftServo.velocityEstimator->getW());
+        // Serial.print(' ');
+        // Serial.println(rightServo.velocityEstimator->getW());
         
         // functionalSelector.tick();
+
+
 
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
@@ -193,17 +202,21 @@ namespace DEVICES{
         }
 
         void ANDREI_MOMENT(){
-            cycloStore.addSmart(SmartCycloAction_t::TO_ALIGN);
-            cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
-            cycloStore.addSmart(SmartCycloAction_t::SD45SL);
-            cycloStore.addSmart(SmartCycloAction_t::DS45SR);
-            cycloStore.addSmart(SmartCycloAction_t::SS180SL);
-            cycloStore.addSmart(SmartCycloAction_t::FWD_X);
-            cycloStore.addSmart(SmartCycloAction_t::SS90SR);
-            cycloStore.addSmart(SmartCycloAction_t::SD135SR);
-            cycloStore.addSmart(SmartCycloAction_t::DD90SL);
+            // cycloStore.addSmart(SmartCycloAction_t::TO_ALIGN);
+            // cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
+
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X, 1);
+            cycloStore.addSmart(SmartCycloAction_t::SD135SL);
             cycloStore.addSmart(SmartCycloAction_t::DD90SR);
+            cycloStore.addSmart(SmartCycloAction_t::DD90SL);
+            cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 1);
             cycloStore.addSmart(SmartCycloAction_t::DS135SL);
+            cycloStore.addSmart(SmartCycloAction_t::FWD_X, 2);
+            
+            // cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 1);
+            // cycloStore.addSmart(SmartCycloAction_t::DD90SL);
+            // cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 3);
+            // cycloStore.addSmart(SmartCycloAction_t::DS45SL);
         }
 
         void CONVERT_TO_SMART()

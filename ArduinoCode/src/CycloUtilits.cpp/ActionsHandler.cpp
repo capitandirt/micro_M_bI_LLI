@@ -250,8 +250,40 @@ bool ActionsHandler::TO_SD135S_DS45S()
     return false;
 }
 
+uint8_t ActionsHandler::toIntFromState(const ActionsHandler::RobotState_t rs)
+{
+    return static_cast<uint8_t>(rs);
+}
+
+ActionsHandler::RobotState_t ActionsHandler::toState(const PrimitiveCycloAction_t curPrim)
+{
+    Serial.print("to_State: ");
+    switch(curPrim)
+    {
+    case PrimitiveCycloAction_t::LEFT:
+        Serial.println("LEFT");
+        return RobotState_t::LEFT;
+        
+    case PrimitiveCycloAction_t::RIGHT:
+        Serial.println("RIGHT");
+        return RobotState_t::RIGHT;
+
+    case PrimitiveCycloAction_t::FORWARD:
+        Serial.println("FORWARD");
+        return RobotState_t::FORWARD;
+        
+    default:
+        Serial.println("error in toState");
+        return RobotState_t::NAS;// этого не может быть
+    }
+
+    Serial.print("\n");
+}
+
 ActionsHandler::RobotState_t ActionsHandler::entryHandler()
 {
+    static int entryCounter = 0;
+    entryCounter++;
     //=====================================================================================================================
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
     if(curPrim == PrimitiveCycloAction_t::FORWARD) // обработка 1 действия
@@ -291,6 +323,7 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
                 break;
         }
         _cycloStore->virtualGoBack(); //второе действие доказало, что это 45, но далее в обработчике повторов нам оно будет нужно
+        Serial.println(String(toIntFromState(toState(TURN))) + " 318 entryCounter: " + String(entryCounter) + " primAction: " + toInt(TURN));   
         return toState(TURN); //вход в какой-то повтор под углом 45 градусов
     } 
     //если 2 действие TURN:
@@ -323,15 +356,15 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
                 break;
         }
         _cycloStore->virtualGoBack(); //третье действие доказало, что это 135, но далее в обработчике повторов нам оно будет нужно
+        Serial.println(String(toIntFromState(toState(TURN))) + " 351"); 
         return toState(TURN); //вход в какой-то повтор под углом 135 градусов
     }
     else 
     {
+        Serial.println("error in entryHandler, counter is: " + String(entryCounter)); 
         return RobotState_t::NAS; //он решил повернуть в стену, это плохо
     }
 }
-
-
 
 ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startState)
 {
@@ -431,11 +464,17 @@ ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotStat
 
 ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t startState)
 {
+    int entryCounter = 0;
+    entryCounter++;
     if(startState == RobotState_t::FORWARD) return RobotState_t::STOP;
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
     const auto TURN = curPrim;
     const auto OP_TURN = toOpposite(TURN);
-    if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT) return RobotState_t::NAS; //это ошибка, такого быть не должно
+    if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT)
+    {
+        Serial.println("TURN isn't turn in exitHandler, counter is: " + String(entryCounter));
+        return RobotState_t::NAS; //это ошибка, такого быть не должно
+    }
     curPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действие
     if(curPrim == PrimitiveCycloAction_t::FORWARD) // обработка 2 действия
     {
@@ -468,7 +507,11 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
             _cycloStore->virtualPrimitiveRelease();
             return RobotState_t::STOP;
         }
-        else if(curPrim == TURN) return RobotState_t::NAS; // он решил повернуть в стену, это плохо
+        else if(curPrim == TURN) 
+        {
+            Serial.println("error in exitHandler, counter is: " + String(entryCounter));
+            return RobotState_t::NAS; // он решил повернуть в стену, это плохо
+        }
         else
         {
             _cycloStore->virtualGoBack();
@@ -482,20 +525,28 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
     }
 }
 
-int ActionsHandler::convertToSmart()
+void ActionsHandler::convertToSmart()
 {
     PrimitiveCycloAction_t curPrim = _cycloStore->popFrontPrimitive(); // 0 действие [всегда FORWARD]
     while(curPrim != PrimitiveCycloAction_t::STOP) // пока не стоит остановка
     {
         RobotState_t repeatStartState = entryHandler();
-        if(repeatStartState == RobotState_t::NAS) return -1;// вход вылетел с ошибкой поворота в стену на 3 действии
+        if(repeatStartState == RobotState_t::NAS)
+        {
+            Serial.println("Error in entryHandler/previous exitHandler");
+            return;
+        };// вход вылетел с ошибкой поворота в стену на 3 действии
         if(repeatStartState == RobotState_t::STOP) continue; // кластер действий был завершён в entryHandler и повтор не нужен
         RobotState_t exitState;
         do
         {
             RobotState_t repeatEndState = repeatActionHandler(repeatStartState);
             exitState = exitHandler(repeatEndState);
-            if(exitState == RobotState_t::NAS) return -1;// вылетел на моменте, когда turn оказался не turn-ом
+            if(exitState == RobotState_t::NAS)
+            {
+                Serial.println("Error in repeatHandler");
+                return; 
+            };// вылетел на моменте, когда turn оказался не turn-ом
 
             repeatStartState = exitState;
         } while (exitState != RobotState_t::STOP);

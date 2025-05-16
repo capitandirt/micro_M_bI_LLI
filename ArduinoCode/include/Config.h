@@ -68,12 +68,14 @@
 /*==FUNCTIONAL SELECTOR END==*/
 
 /*==W MOTOT PIREG BEGIN==*/
-#define W_K_MOTOR (6 / 1.5) //он выдаёт примерно 6.5 рад/с на 1.5 Волта
-#define W_T_MOTOR 0.21 //210 мс - 70% времени от разгона от 0 до некой постоянной скорости при напряжении
-#define W_T_u (32 * Ts_s)
+#define W_K_MOTOR (6.0 / 1.5) //он выдаёт примерно 6.5 рад/с на 1.5 Волта
+#define W_T_MOTOR 0.15 //210 мс - 70% времени от разгона от 0 до некой постоянной скорости при напряжении
+#define W_T_u (2 * Ts_s)
 
-#define W_KP (0.10f) // Kp = K
-#define W_KI (W_KP / 0.23f) // Ki = K / T
+// #define W_KP (W_T_MOTOR / (2 * W_K_MOTOR * W_T_u)) // Kp = K 
+// #define W_KI (W_KP / W_T_MOTOR) // Ki = K / T
+#define W_KP (0.4)
+#define W_KI (W_KP / 0.05)
 /*==W MOTOT PIREG END==*/
 
 /*==MAZE BEGIN==*/
@@ -114,8 +116,8 @@
 
 
 /*==ROBOT FINISH PLACE BEGIN==*/
-#define FINISH_ROBOT_COORDS_X (4)
-#define FINISH_ROBOT_COORDS_Y (4)
+#define FINISH_ROBOT_COORDS_X (1)
+#define FINISH_ROBOT_COORDS_Y (0)
 
 #define FINISH_ROBOT_COORDS {FINISH_ROBOT_COORDS_X, FINISH_ROBOT_COORDS_Y}
 /*==ROBOT FINISH PLACE END==*/

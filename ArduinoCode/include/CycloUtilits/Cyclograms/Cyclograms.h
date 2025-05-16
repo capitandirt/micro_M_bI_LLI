@@ -173,7 +173,14 @@ CYCLOGRAM(FWD_X)
 
 CYCLOGRAM(DIAG_X)
 {
+    ms->v_f0 = FORWARD_SPEED;
+    ms->theta_i0 = 0;
 
+    if(s->odometry->getDist() > CELL_SIZE / M_SQRT2 * x)
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
 }
 
 //search turns 90
@@ -254,7 +261,7 @@ CYCLOGRAM(DD90SL)
 {
     ms->v_f0 = FORWARD_SPEED;
     constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
-    constexpr float forwDist = CELL_SIZE / M_SQRT2;
+    constexpr float forwDist = CELL_SIZE / M_SQRT2 - R + 0.005;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FORWARD_SPEED / R;
 
@@ -271,7 +278,7 @@ CYCLOGRAM(DD90SR)
 {
     ms->v_f0 = FORWARD_SPEED;
     constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
-    constexpr float forwDist = CELL_SIZE / M_SQRT2;
+    constexpr float forwDist = CELL_SIZE / M_SQRT2 - R;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FORWARD_SPEED / R;
 
