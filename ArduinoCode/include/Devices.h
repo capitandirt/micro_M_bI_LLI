@@ -4,6 +4,7 @@
 #include "Robot.h"
 #include "CycloWorker.h"
 #include "Drivers/FunctionalSelector.h"
+#include "Drivers/Led.h"
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -135,7 +136,9 @@ ActionsHandlerConnectionParams ahcp{
 };
 ActionsHandler actionsHandler(&ahcp);
 
-FunctionalSelector functionalSelector(FUNCTION_PIN);
+Led indicator(INDICATOR_LED_PIN);
+FunctionalSelector functionalSelector(FUNCTION_PIN, &indicator);
+
 
 RobotConnectionParams rcp{
     ._cycloWorker = &cycloWorker,

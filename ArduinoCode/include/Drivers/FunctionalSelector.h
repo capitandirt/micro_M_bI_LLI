@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "Config.h"
+#include "Led.h"
 
 enum class ProgramStatus : uint8_t{
     NONE, 
@@ -21,13 +22,15 @@ enum class ProgramStatus : uint8_t{
 class FunctionalSelector
 {
 public:
-    FunctionalSelector(const uint8_t PIN) : _PIN(PIN) {}
+    FunctionalSelector(const uint8_t PIN, Led* indicator):
+                        _INPUT_PIN(PIN),
+                        _indicator(indicator){}
 
     void           init()                       noexcept;
     void           tick()                       noexcept;
 
     ProgramStatus  getStatus()                  const noexcept;
-    void           incStatus()                  noexcept;
+    void           nextStatus()                  noexcept;
 
     void           passMillis(const uint32_t t) noexcept;
 
@@ -38,9 +41,10 @@ private:
 private:
     static constexpr uint32_t NEED_TIME_TO_DOWN = 1000; // ms
     static constexpr uint16_t ADC_THRESHOLD = 1000; // crocodiles
-    mutable ProgramStatus _status = ProgramStatus::NONE;
 
-    uint32_t _cur_millis;
+    Led* _indicator;
+
+    uint32_t _cur_millis = 0;
     uint32_t _timer = 0;
     uint32_t _time_in_press = 0;
 
@@ -56,7 +60,7 @@ private:
 
     uint8_t _counter = 0;
 
-    const uint8_t _PIN;
+    const uint8_t _INPUT_PIN;
 };
 
 #endif // !_FUNCTIONAL_SELECTOR_H_

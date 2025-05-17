@@ -44,7 +44,7 @@ namespace DEVICES{
         TIM2::INIT();
     }
 
-    void TICK(){
+    void TICK(uint32_t now_millis){
         leftEncoder.tick();
         rightEncoder.tick();
         
@@ -54,13 +54,13 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
-        functionalSelector.passMillis(millis());
+        functionalSelector.passMillis(now_millis);
 
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
         cycloWorker.doCyclogram();
 
-        robot.statusHandler();
+        // robot.statusHandler();
         
         cycloWorker.tryComplete();
     }

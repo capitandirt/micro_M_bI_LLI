@@ -10,7 +10,7 @@ void Robot::statusHandler(){
     {
     case ProgramStatus::PRE_ENTRY_START:
         _actionsHandler->needClusterDot();
-        _functionalSelector->incStatus();
+        _functionalSelector->nextStatus();
         break;
 
     case ProgramStatus::START_EXPLORER:
@@ -23,7 +23,7 @@ void Robot::statusHandler(){
 
     case ProgramStatus::PRE_ENTRY_FINISH:
         _actionsHandler->needClusterDot();
-        _functionalSelector->incStatus();
+        _functionalSelector->nextStatus();
         break;
 
     case ProgramStatus::START_EXPLORER_AFTER_FINISH:
@@ -53,7 +53,7 @@ void Robot::startExplorer(){
         return;
     }
 
-    _functionalSelector->incStatus();
+    _functionalSelector->nextStatus();
     _actionsHandler->needStartCellAligning();
     _cycloWorker->reload();
 }
@@ -70,7 +70,7 @@ void Robot::stepFloodFill(const Vec2 end_cell)
        forward_robot_vec.y == end_cell.y 
     ){
         _actionsHandler->needStop();
-        _functionalSelector->incStatus();
+        _functionalSelector->nextStatus();
         return;
     }
 
