@@ -39,7 +39,7 @@ namespace DEVICES{
         functionalSelector.init();
         optocoupler.init();
 
-        robot.init();
+        // robot.init();
 
         TIM2::INIT();
     }
@@ -162,18 +162,13 @@ namespace DEVICES{
         void CONVERT_PATH_TO_CYCLOGRAMS(){
             solver.MazeTestConfig();
 
-            // unnamed namespace
-            {
-                Vec2 __s = {0, 0}; Vec2 __f = {2, 2};    
-                solver.SolveBfsMaze(__s, __f);
-            }
+            Vec2 __s = {0, 0}; Vec2 __f = {2, 2};    
+            solver.SolveBfsMaze(__s, __f);
 
             maze.Print();
 
-            {   
-                Direction __sd = Direction::S;
-                actionsHandler.primitivesToExplorers(__sd);
-            }
+            Direction __sd = Direction::S;
+            actionsHandler.primitivesToExplorers(__sd);
 
             maze.PrintDirPath();
             cycloStore.printPrimitives();

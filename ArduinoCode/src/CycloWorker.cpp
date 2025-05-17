@@ -29,9 +29,11 @@ void CycloWorker::tryComplete(){
 
         _cur_smart_submis = cycloStore->popFrontSmartSubmission();
 
+        Serial.println(_prev_smart_submis.smart != _cur_smart_submis.smart);
+
         if(_cur_smart_submis.smart != SmartCycloAction_t::CLUSTER_DOT){
             if(_prev_smart_submis.smart != _cur_smart_submis.smart){
-                _reset_reg();
+                // _reset_reg();
             }
             _prev_smart_submis.smart = _cur_smart_submis.smart;
         }

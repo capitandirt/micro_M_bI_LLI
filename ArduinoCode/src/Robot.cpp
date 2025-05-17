@@ -6,13 +6,12 @@ void Robot::init(){
 }
 
 void Robot::statusHandler(){
-    Serial.print((int)_functionalSelector->getStatus());
-
     switch (_functionalSelector->getStatus())
     {
     case ProgramStatus::PRE_ENTRY_START:
         _actionsHandler->needClusterDot();
         _functionalSelector->incStatus();
+        break;
 
     case ProgramStatus::START_EXPLORER:
         startExplorer();
@@ -25,6 +24,7 @@ void Robot::statusHandler(){
     case ProgramStatus::PRE_ENTRY_FINISH:
         _actionsHandler->needClusterDot();
         _functionalSelector->incStatus();
+        break;
 
     case ProgramStatus::START_EXPLORER_AFTER_FINISH:
         startExplorer();
