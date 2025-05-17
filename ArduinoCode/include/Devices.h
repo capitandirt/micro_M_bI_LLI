@@ -3,7 +3,7 @@
 
 #include "Robot.h"
 #include "CycloWorker.h"
-#include "Drivers/FunctionalSelector.h"
+#include "Drivers/StatusSelector.h"
 #include "Drivers/Led.h"
 
 void left_encoder_ISR();
@@ -137,8 +137,14 @@ ActionsHandlerConnectionParams ahcp{
 ActionsHandler actionsHandler(&ahcp);
 
 Led indicator(INDICATOR_LED_PIN);
-StatusSelector functionalSelector(FUNCTION_PIN, &indicator);
 
+StatusSelectorConnectionParams sscp{
+    ._INPUT_PIN = FUNCTION_PIN,
+    ._indicator = &indicator,
+    ._optocouplers = &optocoupler
+};
+
+StatusSelector statusSelector(&sscp);
 
 RobotConnectionParams rcp{
     ._cycloWorker = &cycloWorker,
@@ -147,7 +153,7 @@ RobotConnectionParams rcp{
     ._solver = &solver,
     ._optocoupler = &optocoupler,
     ._odometry = &odometry,
-    ._functionalSelector = &functionalSelector,
+    ._statusSelector = &statusSelector,
 };
 Robot robot(&rcp);
 

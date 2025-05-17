@@ -6,11 +6,11 @@ void Robot::init(){
 }
 
 void Robot::statusHandler(){
-    switch (_functionalSelector->getStatus())
+    switch (_statusSelector->getStatus())
     {
     case ProgramStatus::PRE_ENTRY_START:
         _actionsHandler->needClusterDot();
-        _functionalSelector->nextStatus();
+        _statusSelector->nextStatus();
         break;
 
     case ProgramStatus::START_EXPLORER:
@@ -23,7 +23,7 @@ void Robot::statusHandler(){
 
     case ProgramStatus::PRE_ENTRY_FINISH:
         _actionsHandler->needClusterDot();
-        _functionalSelector->nextStatus();
+        _statusSelector->nextStatus();
         break;
 
     case ProgramStatus::START_EXPLORER_AFTER_FINISH:
@@ -54,7 +54,7 @@ void Robot::startExplorer(){
         return;
     }
 
-    _functionalSelector->nextStatus();
+    _statusSelector->nextStatus();
     _actionsHandler->needStartCellAligning();
     _cycloWorker->reload();
 }
@@ -72,7 +72,7 @@ void Robot::stepFloodFill(const Vec2 end_cell)
     ){
         _odometry->updateMazeCoords(forward_robot_vec);
         _actionsHandler->needStop();
-        _functionalSelector->nextStatus();
+        _statusSelector->nextStatus();
         return;
     }
 

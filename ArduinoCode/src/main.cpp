@@ -4,7 +4,7 @@
 
 void setup()
 {
-	// DEVICES::TEST::SET_SERIAL();
+	DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();    
 
     // DEVICES::TEST::CONVERT_TO_SMART();
@@ -23,7 +23,9 @@ void loop(){
     while(micros() - last_time < Ts_us)
         ;
     last_time = micros();
-
     DEVICES::TICK(last_time / 1000);
+
+
+    if(statusSelector.isSlideFromOpto()) Serial.println("slide");
     // DEVICES::TEST::OPTOCOUPLERS_MASK();
 }

@@ -5,7 +5,7 @@
 #include "Maze.h"
 #include "Solver.h"
 #include "Odometry.h"
-#include "Drivers/FunctionalSelector.h"
+#include "Drivers/StatusSelector.h"
 #include "Drivers/OptocouplerSensors.h"
 
 struct RobotConnectionParams{
@@ -15,7 +15,7 @@ struct RobotConnectionParams{
     Solver* _solver;
     OptocouplerSensors* _optocoupler;
     Odometry* _odometry;
-    StatusSelector* _functionalSelector;
+    StatusSelector* _statusSelector;
 };
 
 

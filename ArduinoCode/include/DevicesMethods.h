@@ -24,7 +24,6 @@ extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
-    functionalSelector.tick();
     optocoupler.tick();
 }
 
@@ -36,7 +35,7 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
-        functionalSelector.init();
+        statusSelector.init();
         optocoupler.init();
 
         robot.init();
@@ -54,7 +53,9 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
-        functionalSelector.passMillis(now_millis);
+        statusSelector.tick();
+
+        statusSelector.passMillis(now_millis);
 
         odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
