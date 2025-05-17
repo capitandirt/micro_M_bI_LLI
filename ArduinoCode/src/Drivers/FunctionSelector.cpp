@@ -12,7 +12,7 @@ void FunctionalSelector::plan(){
 
     if(_forward_front){
         _timer = _cur_millis;
-        _counter = (_counter + 1) % static_cast<uint8_t>(SelectorStatus::SIZE);
+        incStatus();
     } 
 
     if(_is_press){
@@ -20,8 +20,7 @@ void FunctionalSelector::plan(){
         _is_down = _time_in_press > NEED_TIME_TO_DOWN;
 
         if(_is_down) {
-            _counter = static_cast<uint8_t>(SelectorStatus::NONE);
-            _timer = _cur_millis;
+            _counter = static_cast<uint8_t>(ProgramStatus::NONE);
         }
     }
     else _timer = _cur_millis;
@@ -38,10 +37,15 @@ void FunctionalSelector::tick(){
     plan();
 }
 
-SelectorStatus FunctionalSelector::getStatus() const{   
-    _status = static_cast<SelectorStatus>(_counter);
+ProgramStatus FunctionalSelector::getStatus() const{   
+    _status = static_cast<ProgramStatus>(_counter);
     return _status;
 }
+
+void FunctionalSelector::incStatus(){
+    _counter = (1 + _counter) % static_cast<uint8_t>(ProgramStatus::SIZE);
+}
+
 
 void FunctionalSelector::passMillis(const uint32_t t){
     _cur_millis = t;

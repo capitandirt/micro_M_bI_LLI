@@ -4,8 +4,9 @@
 #include "CycloUtilits/ActionsHandler.h"
 #include "Maze.h"
 #include "Solver.h"
-#include "Drivers/OptocouplerSensors.h"
 #include "Odometry.h"
+#include "Drivers/FunctionalSelector.h"
+#include "Drivers/OptocouplerSensors.h"
 
 struct RobotConnectionParams{
     CycloWorker* _cycloWorker;
@@ -14,6 +15,7 @@ struct RobotConnectionParams{
     Solver* _solver;
     OptocouplerSensors* _optocoupler;
     Odometry* _odometry;
+    FunctionalSelector* _functionalSelector;
 };
 
 
@@ -23,9 +25,10 @@ public:
 
     void init();
 
+    void statusHandler();
     void startExplorer();
 
-    void stepFloodFill();
+    void stepFloodFill(const Vec2 end_cell);
 
 private:
     bool FLOOD_FILL_IS_FINISH = 0;

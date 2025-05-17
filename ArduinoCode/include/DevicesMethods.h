@@ -60,8 +60,7 @@ namespace DEVICES{
 
         cycloWorker.doCyclogram();
 
-        robot.startExplorer();
-        robot.stepFloodFill();
+        robot.statusHandler();
         
         cycloWorker.tryComplete();
     }

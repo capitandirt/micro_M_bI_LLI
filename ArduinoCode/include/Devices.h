@@ -135,6 +135,7 @@ ActionsHandlerConnectionParams ahcp{
 };
 ActionsHandler actionsHandler(&ahcp);
 
+FunctionalSelector functionalSelector(FUNCTION_PIN);
 
 RobotConnectionParams rcp{
     ._cycloWorker = &cycloWorker,
@@ -143,9 +144,9 @@ RobotConnectionParams rcp{
     ._solver = &solver,
     ._optocoupler = &optocoupler,
     ._odometry = &odometry,
+    ._functionalSelector = &functionalSelector,
 };
 Robot robot(&rcp);
 
-FunctionalSelector functionalSelector(FUNCTION_PIN);
 
 #endif // !_DEVICES_H_

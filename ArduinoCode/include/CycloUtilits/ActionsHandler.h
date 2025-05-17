@@ -20,6 +20,7 @@ public:
     
     void reload();
     void needStartCellAligning();
+    void needClusterDot();
     void needStop();
     Direction needTurn(Direction dir);
     

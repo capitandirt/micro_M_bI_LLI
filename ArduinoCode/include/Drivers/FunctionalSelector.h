@@ -4,10 +4,15 @@
 #include "Arduino.h"
 #include "Config.h"
 
-enum class SelectorStatus : uint8_t{
+enum class ProgramStatus : uint8_t{
     NONE, 
 
+    PRE_ENTRY_START,
+    START_EXPLORER,
     EXPLORER,
+    PRE_ENTRY_FINISH,
+    START_EXPLORER_AFTER_FINISH,
+    GO_TO_START,
     FAST,
     
     SIZE
@@ -21,8 +26,9 @@ public:
     void           init()                       noexcept;
     void           tick()                       noexcept;
 
-    SelectorStatus getStatus()                  const noexcept;
-    uint8_t        getCounter()                 const noexcept;
+    ProgramStatus  getStatus()                  const noexcept;
+    void           incStatus()                  noexcept;
+
     void           passMillis(const uint32_t t) noexcept;
 
 private:
@@ -32,7 +38,7 @@ private:
 private:
     static constexpr uint32_t NEED_TIME_TO_DOWN = 1000; // ms
     static constexpr uint16_t ADC_THRESHOLD = 1000; // crocodiles
-    mutable SelectorStatus _status = SelectorStatus::NONE;
+    mutable ProgramStatus _status = ProgramStatus::NONE;
 
     uint32_t _cur_millis;
     uint32_t _timer = 0;
