@@ -11,10 +11,9 @@ public:
     void blink(const uint8_t n);
 
     void passMillis(const uint32_t t);
-private:
 
 private:
-    static constexpr uint32_t TIME_FULL_SATURATION = 2000; // ms
+    static constexpr uint32_t TIME_FULL_SATURATION = 4000; // ms
 
     uint32_t _cur_millis  = 0;
     uint32_t _last_millis = 0;
