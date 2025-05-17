@@ -15,7 +15,7 @@ struct RobotConnectionParams{
     Solver* _solver;
     OptocouplerSensors* _optocoupler;
     Odometry* _odometry;
-    FunctionalSelector* _functionalSelector;
+    StatusSelector* _functionalSelector;
 };
 
 

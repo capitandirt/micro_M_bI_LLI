@@ -39,7 +39,7 @@ namespace DEVICES{
         functionalSelector.init();
         optocoupler.init();
 
-        // robot.init();
+        robot.init();
 
         TIM2::INIT();
     }
@@ -60,7 +60,7 @@ namespace DEVICES{
 
         cycloWorker.doCyclogram();
 
-        // robot.statusHandler();
+        robot.statusHandler();
         
         cycloWorker.tryComplete();
     }

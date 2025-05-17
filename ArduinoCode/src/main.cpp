@@ -4,7 +4,7 @@
 
 void setup()
 {
-	DEVICES::TEST::SET_SERIAL();
+	// DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();    
 
     // DEVICES::TEST::CONVERT_TO_SMART();
@@ -25,4 +25,5 @@ void loop(){
     last_time = micros();
 
     DEVICES::TICK(last_time / 1000);
+    // DEVICES::TEST::OPTOCOUPLERS_MASK();
 }

@@ -1,10 +1,10 @@
 #include "Drivers/FunctionalSelector.h"
 
-void FunctionalSelector::sense(){
+void StatusSelector::sense(){
     _adc_reading = analogRead(FUNCTION_PIN);
 }
 
-void FunctionalSelector::plan(){
+void StatusSelector::plan(){
     _state = _adc_reading >= ADC_THRESHOLD;
 
     _forward_front = _prev_state == 0 && _state == 1;
@@ -28,29 +28,32 @@ void FunctionalSelector::plan(){
     _prev_state = _state;
 }
 
-void FunctionalSelector::init(){
+void StatusSelector::init(){
     pinMode(_INPUT_PIN, INPUT);
     _indicator->init();
 }
 
-void FunctionalSelector::tick(){
+void StatusSelector::tick(){
     sense();
     plan();
 
     _indicator->blink(static_cast<uint8_t>(ProgramStatus::SIZE) - _counter);
 }
 
-ProgramStatus FunctionalSelector::getStatus() const{   
+ProgramStatus StatusSelector::getStatus() const{   
     const ProgramStatus _status = static_cast<ProgramStatus>(_counter);
     return _status;
 }
 
-void FunctionalSelector::nextStatus(){
+void StatusSelector::nextStatus(){
     _counter = (_counter + 1) % static_cast<uint8_t>(ProgramStatus::SIZE);
 }
 
+void StatusSelector::setNoneStatus(){
+    _counter = 0;
+}
 
-void FunctionalSelector::passMillis(const uint32_t t){
+void StatusSelector::passMillis(const uint32_t t){
     _cur_millis = t;
     _indicator->passMillis(t);
 }

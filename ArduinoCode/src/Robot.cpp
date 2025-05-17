@@ -37,7 +37,6 @@ void Robot::statusHandler(){
     default:
         break;
     }
-
 }
 
 void Robot::startExplorer(){
@@ -47,6 +46,8 @@ void Robot::startExplorer(){
     const WallState forward_wall = _optocoupler->getRelativeCell().north_wall;
     const Direction cur_dir = _odometry->getDir();
     
+    _odometry->printDir();
+
     if(forward_wall == WallState::HI){
         const Direction next_dir = _actionsHandler->needTurn(cur_dir);
         _odometry->updateDir(next_dir);
@@ -69,6 +70,7 @@ void Robot::stepFloodFill(const Vec2 end_cell)
     if(forward_robot_vec.x == end_cell.x &&
        forward_robot_vec.y == end_cell.y 
     ){
+        _odometry->updateMazeCoords(forward_robot_vec);
         _actionsHandler->needStop();
         _functionalSelector->nextStatus();
         return;

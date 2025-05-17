@@ -19,10 +19,10 @@ enum class ProgramStatus : uint8_t{
     SIZE
 };
 
-class FunctionalSelector
+class StatusSelector
 {
 public:
-    FunctionalSelector(const uint8_t PIN, Led* indicator):
+    StatusSelector(const uint8_t PIN, Led* indicator):
                         _INPUT_PIN(PIN),
                         _indicator(indicator){}
 
@@ -30,7 +30,8 @@ public:
     void           tick()                       noexcept;
 
     ProgramStatus  getStatus()                  const noexcept;
-    void           nextStatus()                  noexcept;
+    void           nextStatus()                 noexcept;
+    void           setNoneStatus()           noexcept;
 
     void           passMillis(const uint32_t t) noexcept;
 

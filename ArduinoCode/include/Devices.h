@@ -137,7 +137,7 @@ ActionsHandlerConnectionParams ahcp{
 ActionsHandler actionsHandler(&ahcp);
 
 Led indicator(INDICATOR_LED_PIN);
-FunctionalSelector functionalSelector(FUNCTION_PIN, &indicator);
+StatusSelector functionalSelector(FUNCTION_PIN, &indicator);
 
 
 RobotConnectionParams rcp{
