@@ -58,7 +58,7 @@ void Odometry::printDir() const{
     }
 }
 
-void Odometry::update(float omegaL, float omegaR)
+void Odometry::tick(float omegaL, float omegaR)
 {
     vL = omegaL * WHEEL_RADIUS;
     vR = omegaR * WHEEL_RADIUS;

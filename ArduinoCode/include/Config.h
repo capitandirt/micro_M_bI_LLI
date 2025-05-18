@@ -64,18 +64,17 @@
 /*==POWER END==*/
 
 /*==FUNCTIONAL SELECTOR BEGIN==*/
+#define INDICATOR_LED_PIN (6)
 #define FUNCTION_PIN A6
 /*==FUNCTIONAL SELECTOR END==*/
 
 /*==W MOTOT PIREG BEGIN==*/
-#define W_K_MOTOR (6.0 / 1.5) //он выдаёт примерно 6.5 рад/с на 1.5 Волта
+#define W_K_MOTOR (6 / 1.5) //он выдаёт примерно 6.5 рад/с на 1.5 Волта
 #define W_T_MOTOR 0.15 //210 мс - 70% времени от разгона от 0 до некой постоянной скорости при напряжении
 #define W_T_u (2 * Ts_s)
 
-// #define W_KP (W_T_MOTOR / (2 * W_K_MOTOR * W_T_u)) // Kp = K 
-// #define W_KI (W_KP / W_T_MOTOR) // Ki = K / T
-#define W_KP (0.4)
-#define W_KI (W_KP / 0.05)
+#define W_KP (0.4f) // Kp = K
+#define W_KI (W_KP / 0.05f) // Ki = K / T
 /*==W MOTOT PIREG END==*/
 
 /*==MAZE BEGIN==*/

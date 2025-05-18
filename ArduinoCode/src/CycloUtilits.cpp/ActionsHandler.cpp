@@ -117,10 +117,20 @@ Direction ActionsHandler::needTurn(Direction dir){
     return next_dir;
 }
 
+void ActionsHandler::needClusterDot(){
+    _cycloStore->reloadSmarts();
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
+}
+
 void ActionsHandler::needStop(){
     _cycloStore->reloadSmarts();
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
     _cycloStore->addSmart(SmartCycloAction_t::STOP);
+}
+
+void ActionsHandler::inIdle(){
+    _cycloStore->reloadSmarts();
+    _cycloStore->addSmart(SmartCycloAction_t::IDLE);
 }
 
 bool ActionsHandler::TO_IDLE(){

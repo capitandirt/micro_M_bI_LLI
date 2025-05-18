@@ -78,7 +78,7 @@ private:
 
     volatile bool CAN_READ = 0;
     Sense_mask_t _sense_mask;
-    OptocouplerSense _sense;
+    OptocouplerSense _sense;    
 };
 
 #endif // !_OPTOCOUPLER_H_

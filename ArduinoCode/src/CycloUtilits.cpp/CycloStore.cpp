@@ -1,7 +1,5 @@
 #include "CycloUtilits/CycloStore.h"
 
-// !Андрей, X используется только и только для fwd_x & diag_x, 
-// в иных случая функция будет игнорить аргумент.
 void CycloStore::addSmart(const SmartCycloAction_t smart, uint8_t x = toInt(X_t::NONE)){ 
     if(smart == SmartCycloAction_t::FWD_X || 
        smart == SmartCycloAction_t::DIAG_X)

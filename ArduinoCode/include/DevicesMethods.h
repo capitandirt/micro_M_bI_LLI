@@ -1,4 +1,7 @@
 #include "Robot.h"
+#include "Drivers/Led.h"
+#include "Drivers/SlideCatcher.h"
+#include "Drivers/StatusSelector.h"
 #include "TIM2_HANDLER.h"
 
 extern Encoder leftEncoder;
@@ -20,11 +23,14 @@ extern Maze maze;
 extern Solver solver;
 extern Odometry odometry;
 extern OptocouplerSensors optocoupler;
+extern Led indicator;
+extern SlideCatcher slideCatcher;
+extern StatusSelector statusSelector;
 extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
-    functionalSelector.tick();
+    indicator.tick();
     optocoupler.tick();
 }
 
@@ -36,7 +42,8 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
-        functionalSelector.init();
+        indicator.init();
+        statusSelector.init();
         optocoupler.init();
 
         robot.init();
@@ -44,7 +51,7 @@ namespace DEVICES{
         TIM2::INIT();
     }
 
-    void TICK(){
+    void TICK(uint32_t now_millis){
         leftEncoder.tick();
         rightEncoder.tick();
         
@@ -56,23 +63,17 @@ namespace DEVICES{
 
         leftServo.tick();
         rightServo.tick();
-
-        // Serial.print(leftServo.velocityEstimator->getW());
-        // Serial.print(' ');
-        // Serial.println(rightServo.velocityEstimator->getW());
         
-        functionalSelector.passMillis(millis());
+        statusSelector.passMillis(now_millis);
+        indicator.passMillis(now_millis);
 
+        statusSelector.tick();
 
+        if(statusSelector.getStatus() == ProgramStatus::NEED_START_COMMAND){
+            slideCatcher.tick();
+        }
 
-        odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
-
-        cycloWorker.doCyclogram();
-
-        robot.startExplorer();
-        robot.stepFloodFill();
-        
-        cycloWorker.tryComplete();
+        odometry.tick(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
     }
 
     namespace TEST{
@@ -172,18 +173,13 @@ namespace DEVICES{
         void CONVERT_PATH_TO_CYCLOGRAMS(){
             solver.MazeTestConfig();
 
-            // unnamed namespace
-            {
-                Vec2 __s = {0, 0}; Vec2 __f = {2, 2};    
-                solver.SolveBfsMaze(__s, __f);
-            }
+            Vec2 __s = {0, 0}; Vec2 __f = {2, 2};    
+            solver.SolveBfsMaze(__s, __f);
 
             maze.Print();
 
-            {   
-                Direction __sd = Direction::S;
-                actionsHandler.primitivesToExplorers(__sd);
-            }
+            Direction __sd = Direction::S;
+            actionsHandler.primitivesToExplorers(__sd);
 
             maze.PrintDirPath();
             cycloStore.printPrimitives();

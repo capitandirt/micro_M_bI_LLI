@@ -20,7 +20,10 @@ public:
     
     void reload();
     void needStartCellAligning();
+    void needClusterDot();
     void needStop();
+    void inIdle();
+
     Direction needTurn(Direction dir);
     
     void convertToSmart(); //экспериментальное

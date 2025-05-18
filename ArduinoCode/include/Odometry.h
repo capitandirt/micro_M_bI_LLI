@@ -67,7 +67,7 @@ public:
 
     void printDir() const noexcept;
 
-    void update(float omegaL, float omegaR) noexcept;
+    void tick(float omegaL, float omegaR) noexcept;
     void updateDir(Direction dir_) noexcept;
     void updateMazeCoords(Direction dir);
     void updateMazeCoords(Vec2 new_v);
