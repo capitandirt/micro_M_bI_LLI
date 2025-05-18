@@ -1,4 +1,7 @@
 #include "Robot.h"
+#include "Drivers/Led.h"
+#include "Drivers/SlideCatcher.h"
+#include "Drivers/StatusSelector.h"
 #include "TIM2_HANDLER.h"
 
 extern Encoder leftEncoder;
@@ -20,10 +23,14 @@ extern Maze maze;
 extern Solver solver;
 extern Odometry odometry;
 extern OptocouplerSensors optocoupler;
+extern Led indicator;
+extern SlideCatcher slideCatcher;
+extern StatusSelector statusSelector;
 extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
+    indicator.tick();
     optocoupler.tick();
 }
 
@@ -35,9 +42,10 @@ namespace DEVICES{
         leftMotor.init();
         rightMotor.init();
         
+        indicator.init();
         statusSelector.init();
         optocoupler.init();
-
+        
         robot.init();
 
         TIM2::INIT();
@@ -53,17 +61,16 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
+        statusSelector.passMillis(now_millis);
+        indicator.passMillis(now_millis);
+
         statusSelector.tick();
 
-        statusSelector.passMillis(now_millis);
+        if(statusSelector.getStatus() == ProgramStatus::NEED_START_COMMAND){
+            slideCatcher.tick();
+        }
 
-        odometry.update(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
-
-        cycloWorker.doCyclogram();
-
-        robot.statusHandler();
-        
-        cycloWorker.tryComplete();
+        odometry.tick(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
     }
 
     namespace TEST{

@@ -125,7 +125,12 @@ void ActionsHandler::needClusterDot(){
 void ActionsHandler::needStop(){
     _cycloStore->reloadSmarts();
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
-    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
+    _cycloStore->addSmart(SmartCycloAction_t::STOP);
+}
+
+void ActionsHandler::inIdle(){
+    _cycloStore->reloadSmarts();
+    _cycloStore->addSmart(SmartCycloAction_t::IDLE);
 }
 
 bool ActionsHandler::TO_IDLE(){

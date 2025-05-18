@@ -22,6 +22,8 @@ public:
     void needStartCellAligning();
     void needClusterDot();
     void needStop();
+    void inIdle();
+
     Direction needTurn(Direction dir);
     
     int convertToSmart(); //экспериментальное

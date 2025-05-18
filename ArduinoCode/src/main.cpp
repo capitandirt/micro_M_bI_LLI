@@ -25,7 +25,10 @@ void loop(){
     last_time = micros();
     DEVICES::TICK(last_time / 1000);
 
+    if(slideCatcher.isSlide()) Serial.println("slide");
+    Serial.print((int)statusSelector.getStatus());
 
-    if(statusSelector.isSlideFromOpto()) Serial.println("slide");
-    // DEVICES::TEST::OPTOCOUPLERS_MASK();
+    cycloWorker.doCyclogram();
+    robot.statusHandler();
+    cycloWorker.tryComplete();
 }

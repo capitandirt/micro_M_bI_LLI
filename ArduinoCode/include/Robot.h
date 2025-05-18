@@ -6,6 +6,7 @@
 #include "Solver.h"
 #include "Odometry.h"
 #include "Drivers/StatusSelector.h"
+#include "Drivers/SlideCatcher.h"
 #include "Drivers/OptocouplerSensors.h"
 
 struct RobotConnectionParams{
@@ -24,15 +25,11 @@ public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
     void init();
-
     void statusHandler();
-    void startExplorer();
-
-    void stepFloodFill(const Vec2 end_cell);
 
 private:
-    bool FLOOD_FILL_IS_FINISH = 0;
-    bool WAS_START_EXLORER = 0;
+    void start_explorer();
+    void step_flood_fill(const Vec2 end_cell);
 };
 
 #endif // !_ROBOT_H_

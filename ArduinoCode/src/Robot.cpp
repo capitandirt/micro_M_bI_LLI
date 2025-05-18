@@ -8,17 +8,22 @@ void Robot::init(){
 void Robot::statusHandler(){
     switch (_statusSelector->getStatus())
     {
+    case ProgramStatus::NONE:
+    case ProgramStatus::NEED_START_COMMAND:
+        _actionsHandler->inIdle();
+        break;
+
     case ProgramStatus::PRE_ENTRY_START:
         _actionsHandler->needClusterDot();
         _statusSelector->nextStatus();
         break;
 
     case ProgramStatus::START_EXPLORER:
-        startExplorer();
+        start_explorer();
         break;
     
     case ProgramStatus::EXPLORER:
-        stepFloodFill(FINISH_ROBOT_COORDS);
+        step_flood_fill(FINISH_ROBOT_COORDS);
         break;
 
     case ProgramStatus::PRE_ENTRY_FINISH:
@@ -27,11 +32,11 @@ void Robot::statusHandler(){
         break;
 
     case ProgramStatus::START_EXPLORER_AFTER_FINISH:
-        startExplorer();
+        start_explorer();
         break;
 
     case ProgramStatus::GO_TO_START:
-        stepFloodFill(START_ROBOT_COORDS);
+        step_flood_fill(START_ROBOT_COORDS);
         break;
 
     default:
@@ -39,15 +44,13 @@ void Robot::statusHandler(){
     }
 }
 
-void Robot::startExplorer(){
+void Robot::start_explorer(){
     if(!_cycloWorker->nowIsClusterDot()) return;
     _actionsHandler->reload();
 
     const WallState forward_wall = _optocoupler->getRelativeCell().north_wall;
     const Direction cur_dir = _odometry->getDir();
     
-    _odometry->printDir();
-
     if(forward_wall == WallState::HI){
         const Direction next_dir = _actionsHandler->needTurn(cur_dir);
         _odometry->updateDir(next_dir);
@@ -59,7 +62,7 @@ void Robot::startExplorer(){
     _cycloWorker->reload();
 }
 
-void Robot::stepFloodFill(const Vec2 end_cell)
+void Robot::step_flood_fill(const Vec2 end_cell)
 {
     if(!_cycloWorker->nowIsClusterDot()) return;
 
