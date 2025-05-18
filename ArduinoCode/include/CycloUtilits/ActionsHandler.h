@@ -28,18 +28,6 @@ public:
     
     void convertToSmart(); //экспериментальное
 private:
-    enum class SmartState
-    {
-        FORWARD,
-        RIGHT,
-        LEFT,
-        BACK,
-        DIAG_NE,
-        DIAG_NW,
-        DIAG_SE,
-        DIAG_SW
-    };
-
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
     void dirs_to_primitives();
     void start_explorer_process(Direction robot_dir);
