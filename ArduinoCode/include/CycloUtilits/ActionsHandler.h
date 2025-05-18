@@ -20,8 +20,8 @@ public:
     
     void reload();
     void needStartCellAligning();
-    void needGetOutImpasse();
     void needStop();
+    Direction needTurn(Direction dir);
     
     void convertToSmart(); //экспериментальное
 private:

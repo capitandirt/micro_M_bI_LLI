@@ -109,9 +109,12 @@ void ActionsHandler::needStartCellAligning(){
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
-void ActionsHandler::needGetOutImpasse(){
-    _cycloStore->addSmart(SmartCycloAction_t::IP180);
-    _cycloStore->addSmart(SmartCycloAction_t::FWD_X);
+Direction ActionsHandler::needTurn(Direction dir){
+    _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
+
+    Direction next_dir = decDir(dir);
+    return next_dir;
 }
 
 void ActionsHandler::needStop(){

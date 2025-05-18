@@ -110,7 +110,7 @@
 
 /*==ROBOT START PLACE BEGIN==*/
 #define START_CELL {WallState::HI, WallState::HI, WallState::LO, WallState::HI}
-#define START_ROBOT_DIRECTION (Direction::S)
+#define START_ROBOT_DIRECTION (Direction::E)
 #define START_ROBOT_COORDS {0, 0}
 /*==ROBOT START PLACE END==*/
 

@@ -3,16 +3,30 @@
 void Robot::init(){
     _maze->PrimaryFill();
     _maze->SetCell(START_CELL, START_ROBOT_COORDS);
-    
-    _actionsHandler->reload();
-    _actionsHandler->needStartCellAligning();
+}
 
-    _cycloWorker->init();
+void Robot::startExplorer(){
+    if(WAS_START_EXLORER || !(_cycloWorker->isCompleteCyclo() && _cycloWorker->nowIsClusterDot())) return;
+    _actionsHandler->reload();
+
+    const WallState forward_wall = _optocoupler->getRelativeCell().north_wall;
+    const Direction cur_dir = _odometry->getDir();
+    
+    if(forward_wall == WallState::HI){
+        const Direction next_dir = _actionsHandler->needTurn(cur_dir);
+        _odometry->updateDir(next_dir);
+
+        return;
+    }
+
+    WAS_START_EXLORER = 1;    
+    _actionsHandler->needStartCellAligning();
+    _cycloWorker->reload();
 }
 
 void Robot::stepFloodFill()
 {
-    if(!(_cycloWorker->isCompleteCyclo() && _cycloWorker->nowIsClusterDot()) || FLOOD_FILL_IS_FINISH){
+    if(!(_cycloWorker->isCompleteCyclo() && _cycloWorker->nowIsClusterDot()) || !WAS_START_EXLORER || FLOOD_FILL_IS_FINISH){
         return;
     }
 
