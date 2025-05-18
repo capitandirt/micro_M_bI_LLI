@@ -1,4 +1,4 @@
-# *MICRO MAZE WITH USING* C++
+# *MICROMOUSE WITH USING* C++
   Или же по-старославянски **micro_M_bI_LLI**
 
 ## Авторы ПО:
