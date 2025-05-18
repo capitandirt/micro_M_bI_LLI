@@ -46,7 +46,7 @@ namespace DEVICES{
         statusSelector.init();
         optocoupler.init();
         
-        robot.init();
+        // robot.init();
 
         TIM2::INIT();
     }

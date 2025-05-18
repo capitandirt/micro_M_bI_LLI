@@ -5,16 +5,9 @@
 void setup()
 {
 	DEVICES::TEST::SET_SERIAL();
-    DEVICES::INIT();    
+    DEVICES::INIT();
 
-    // DEVICES::TEST::CONVERT_TO_SMART();
-    //DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
-    // DEVICES::TEST::UNDEF_CELL_WALLS();
-    // DEVICES::TEST::FWDE();
-    // DEVICES::TEST::EXPLORER_LEFT_RIGHT_SMARTS();
-    // DEVICES::TEST::CYCLOGRAMS();
-    // DEVICES::TEST::BFS();
-    // DEVICES::TEST::CONVERT_PATH_TO_CYCLOGRAMS();
+    cycloStore.addSmart(SmartCycloAction_t::SS90ER);
 }
 
 
@@ -25,10 +18,9 @@ void loop(){
     last_time = micros();
     DEVICES::TICK(last_time / 1000);
 
-    if(slideCatcher.isSlide()) Serial.println("slide");
-    Serial.print((int)statusSelector.getStatus());
+    optocoupler.printSense();
 
     cycloWorker.doCyclogram();
-    robot.statusHandler();
+    // robot.statusHandler();
     cycloWorker.tryComplete();
 }
