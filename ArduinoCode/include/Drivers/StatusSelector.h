@@ -48,11 +48,12 @@ private:
 
 private:
     static constexpr uint32_t NEED_TIME_TO_DOWN = 1000; // ms
+    static constexpr uint32_t TIME_IN_BLINK = Led::TIME_FULL_SATURATION;
+
     static constexpr uint16_t ADC_THRESHOLD = 1000; // crocodiles
 
     uint32_t _cur_millis = 0;
     uint32_t _timer = 0;
-    uint32_t _time_in_press = 0;
 
     uint16_t _adc_reading = 0;
     bool _prev_but_state = 0;

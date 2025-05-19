@@ -58,9 +58,6 @@ namespace DEVICES{
         leftVelocityEstimator.tick();
         rightVelocityEstimator.tick();
         
-        // leftServo.setW(1);
-        // rightServo.setW(1);
-
         leftServo.tick();
         rightServo.tick();
         
@@ -123,7 +120,7 @@ namespace DEVICES{
             cycloStore.addSmart(SmartCycloAction_t::IP90R);
             cycloStore.addSmart(SmartCycloAction_t::IP180);
             cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 30);
-            cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
+            cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
             cycloStore.addSmart(SmartCycloAction_t::SD135SR);
 
             cycloStore.printPrimitives();
@@ -200,8 +197,8 @@ namespace DEVICES{
         }
 
         void ANDREI_MOMENT(){
-            // cycloStore.addSmart(SmartCycloAction_t::TO_ALIGN);
-            // cycloStore.addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
+            // cycloStore.addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+            // cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
 
             cycloStore.addSmart(SmartCycloAction_t::FWD_X, 1);
             cycloStore.addSmart(SmartCycloAction_t::SD135SL);

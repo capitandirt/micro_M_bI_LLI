@@ -22,6 +22,7 @@ void Led::tick(){
 
 void Led::blink(const uint8_t n){
     _blink_value = n;
+    if(_blink_value == 0) digitalWrite(_PIN, 0);
 }
 
 void Led::passMillis(const uint32_t t){

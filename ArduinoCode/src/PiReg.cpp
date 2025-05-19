@@ -32,5 +32,5 @@ void PiReg::tick(){
 }
 
 void PiReg::reload(){
-    _integrator = 0;
+    // _integrator = 0;
 }

@@ -5,6 +5,8 @@
 
 class Led{
 public:
+    static constexpr uint32_t TIME_FULL_SATURATION = 1500; // ms
+    
     Led(const uint8_t PIN) : _PIN(PIN) {}  
 
     void init();
@@ -15,7 +17,6 @@ public:
     void passMillis(const uint32_t t);
 
 private:
-    static constexpr uint32_t TIME_FULL_SATURATION = 4000; // ms
 
     uint8_t _blink_value;
 

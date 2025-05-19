@@ -27,7 +27,6 @@ void Robot::statusHandler(){
         break;
 
     case ProgramStatus::PRE_ENTRY_FINISH:
-        _actionsHandler->needClusterDot();
         _statusSelector->nextStatus();
         break;
 
@@ -46,7 +45,6 @@ void Robot::statusHandler(){
 
 void Robot::start_explorer(){
     if(!_cycloWorker->nowIsClusterDot()) return;
-    _actionsHandler->reload();
 
     const WallState forward_wall = _optocoupler->getRelativeCell().north_wall;
     const Direction cur_dir = _odometry->getDir();
@@ -57,9 +55,8 @@ void Robot::start_explorer(){
         return;
     }
 
-    _statusSelector->nextStatus();
     _actionsHandler->needStartCellAligning();
-    _cycloWorker->reload();
+    _statusSelector->nextStatus();
 }
 
 void Robot::step_flood_fill(const Vec2 end_cell)
@@ -74,7 +71,7 @@ void Robot::step_flood_fill(const Vec2 end_cell)
        forward_robot_vec.y == end_cell.y 
     ){
         _odometry->updateMazeCoords(forward_robot_vec);
-        _actionsHandler->needStop();
+        _actionsHandler->needFwdHalf();
         _statusSelector->nextStatus();
         return;
     }

@@ -25,8 +25,6 @@ CYCLOGRAM(STOP)
 }
 
 CYCLOGRAM(CLUSTER_DOT){
-    ms->v_f0 = 0;
-    ms->theta_i0 = 0;
     ms->isComplete = true;
 }
 
@@ -186,118 +184,43 @@ CYCLOGRAM(DIAG_X)
 //search turns 90
 CYCLOGRAM(SS90EL)
 {
+    ms->v_f0 = FORWARD_SPEED;
     constexpr float R = SEARCH_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4;
     
-    static bool FIRST_ENTRANCE = 1;
-    static bool NEED_FWD_ALIGN = 0;
-    static bool NEED_SIDE_ALIGN = 0;
-    
-    constexpr int16_t NEED_ERROR = 1;
-    const int16_t fwd_left_sense = s->optocoupler->getSense().forward_l;
-    const int16_t fwd_right_sense = s->optocoupler->getSense().forward_r;
-    const int16_t left_sense = s->optocoupler->getSense().left;
-    const int16_t right_sense = s->optocoupler->getSense().right;
-
-    const float theta_states[] { -theta_i / 2, theta_i / 2 };
-
-    if(FIRST_ENTRANCE){
-        NEED_FWD_ALIGN = toBool(s->optocoupler->getRelativeCell().north_wall);
-        NEED_SIDE_ALIGN = toBool(s->optocoupler->getRelativeCell().east_wall) && toBool(s->optocoupler->getRelativeCell().west_wall);
-
-        FIRST_ENTRANCE = 0;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist){
+        ms->theta_i0 = theta_i;
     }
-
-    ms->v_f0 = 0;
-
-    if(NEED_SIDE_ALIGN){
-        if(abs(left_sense - right_sense) > NEED_ERROR){
-            const bool state = fwd_left_sense > fwd_right_sense;
-            ms->theta_i0 = theta_states[state];
-        }
-        else NEED_SIDE_ALIGN = 0;
+    else ms->theta_i0 = 0;
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
+    {
+        ms->isComplete = true;
     }
-    else if(NEED_FWD_ALIGN){
-        if(abs(fwd_left_sense - fwd_right_sense) > NEED_ERROR){
-            const bool state = fwd_left_sense > fwd_right_sense;
-            ms->theta_i0 = theta_states[state];
-        }
-        else NEED_FWD_ALIGN = 0;
-    }
-    else{
-        ms->v_f0 = FORWARD_SPEED;
-        if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist){
-            ms->theta_i0 = theta_i;
-        }
-        else ms->theta_i0 = 0;
-        if(s->odometry->getDist() > 2 * forwDist + circleDist)
-        {
-            FIRST_ENTRANCE = 1;
-            ms->isComplete = true;
-        }
-        else ms->isComplete = false;
-    }
+    else ms->isComplete = false;
 }
 
 CYCLOGRAM(SS90ER)
 {
+    ms->v_f0 = FORWARD_SPEED;
     constexpr float R = SEARCH_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4;
     
-    static bool FIRST_ENTRANCE = 1;
-    static bool NEED_FWD_ALIGN = 0;
-    static bool NEED_SIDE_ALIGN = 0;
-    
-    constexpr int16_t NEED_ERROR = 1;
-    const int16_t fwd_left_sense = s->optocoupler->getSense().forward_l;
-    const int16_t fwd_right_sense = s->optocoupler->getSense().forward_r;
-    const int16_t left_sense = s->optocoupler->getSense().left;
-    const int16_t right_sense = s->optocoupler->getSense().right;
-
-    const float theta_states[] { -theta_i / 2, theta_i / 2 };
-
-    if(FIRST_ENTRANCE){
-        NEED_FWD_ALIGN = toBool(s->optocoupler->getRelativeCell().north_wall);
-        NEED_SIDE_ALIGN = toBool(s->optocoupler->getRelativeCell().east_wall) && toBool(s->optocoupler->getRelativeCell().west_wall);
-
-        FIRST_ENTRANCE = 0;
+    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist){
+        ms->theta_i0 = -theta_i;
     }
+    else ms->theta_i0 = 0;
+    if(s->odometry->getDist() > 2 * forwDist + circleDist)
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
 
-    ms->v_f0 = 0;
-
-    if(NEED_SIDE_ALIGN){
-        if(abs(left_sense - right_sense) > NEED_ERROR){
-            const bool state = fwd_left_sense > fwd_right_sense;
-            ms->theta_i0 = theta_states[state];
-        }
-        else NEED_SIDE_ALIGN = 0;
-    }
-    else if(NEED_FWD_ALIGN){
-        if(abs(fwd_left_sense - fwd_right_sense) > NEED_ERROR){
-            const bool state = fwd_left_sense > fwd_right_sense;
-            ms->theta_i0 = theta_states[state];
-        }
-        else NEED_FWD_ALIGN = 0;
-    }
-    else{
-        ms->v_f0 = FORWARD_SPEED;
-        if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist){
-            ms->theta_i0 = -theta_i;
-        }
-        else ms->theta_i0 = 0;
-        if(s->odometry->getDist() > 2 * forwDist + circleDist)
-        {
-            FIRST_ENTRANCE = 1;
-            ms->isComplete = true;
-        }
-        else ms->isComplete = false;
-    }
 }
 
 CYCLOGRAM(SS90SL)
@@ -418,30 +341,23 @@ CYCLOGRAM(IP180)
 
 CYCLOGRAM(IP90L)
 {
-    ms->v_f0 = 0;
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    ms->theta_i0 = 0;
+    ms->v_f0 = 0;
+    ms->theta_i0 = theta_i;
     
-    const float theta_states[] {
-        -theta_i / 3, theta_i / 3
-    };
-
-    
-    ms->isComplete = false;
-    return;
-
     if(s->odometry->getTheta() > HALF_PI)
     {
-         ms->isComplete = true;
+        ms->theta_i0 = 0;
+        ms->isComplete = true;
     }
     else ms->isComplete = false;
 }
 
 CYCLOGRAM(IP90R)
 {
-    ms->v_f0 = 0;
     constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    ms->theta_i0 = theta_i;
+    ms->v_f0 = 0;
+    ms->theta_i0 = -theta_i;
     if(s->odometry->getTheta() < -HALF_PI)
     {
         ms->isComplete = true;

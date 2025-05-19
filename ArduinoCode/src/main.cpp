@@ -7,7 +7,7 @@ void setup()
 	DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
 
-    cycloStore.addSmart(SmartCycloAction_t::SS90ER);
+    cycloStore.addSmart(SmartCycloAction_t::IP180);
 }
 
 
@@ -15,10 +15,8 @@ void loop(){
     static uint32_t last_time = 0;
     while(micros() - last_time < Ts_us)
         ;
-    DEVICES::TICK(last_time / 1000);
-    
     last_time = micros();
-    optocoupler.printSense();
+    DEVICES::TICK(last_time / 1000);
 
     cycloWorker.doCyclogram();
     // robot.statusHandler();

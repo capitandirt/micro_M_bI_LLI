@@ -18,10 +18,10 @@ public:
     void primitivesToExplorers(Direction robot_dir);
     void primitivesToFasts();
     
-    void reload();
+    void clear();
     void needStartCellAligning();
     void needClusterDot();
-    void needStop();
+    void needFwdHalf();
     void inIdle();
 
     Direction needTurn(Direction dir);

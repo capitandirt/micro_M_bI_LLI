@@ -49,15 +49,13 @@ private:
     Direction dir = START_ROBOT_DIRECTION;
 
 public:
-    float getX() const noexcept;
-    float getY() const noexcept;
-    float getTheta() const noexcept;
-    float getDist() const noexcept;
+    float getX() const;
+    float getY() const;
+    float getTheta() const;
+    float getDist() const;
 
-    float getRelativeX() const noexcept;
-    float getRelativeY() const noexcept;
-    float getRelativeTheta() const noexcept;
-    float getRelativeDist() const noexcept;
+    float getRelativeX() const;
+    float getRelativeY() const;
 
     void reset() noexcept;
     void updateRelative() noexcept;

@@ -40,7 +40,7 @@ void ActionsHandler::start_explorer_process(Direction robot_dir)
 }
 
 void ActionsHandler::loadExplorer(Direction robot_dir){
-    reload();
+    clear();
 
     const auto from_robot_dir = static_cast<int8_t>(robot_dir);
     const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
@@ -97,14 +97,14 @@ void ActionsHandler::primitivesToFasts()
     }
 }
 
-void ActionsHandler::reload(){
+void ActionsHandler::clear(){
     _cycloStore->reloadPrimitives();
     _cycloStore->reloadSmarts();
 }
 
 void ActionsHandler::needStartCellAligning(){
-    _cycloStore->addSmart(SmartCycloAction_t::TO_ALIGN);
-    _cycloStore->addSmart(SmartCycloAction_t::FROM_ALIGN_TO_CENTER);
+    _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
@@ -122,10 +122,10 @@ void ActionsHandler::needClusterDot(){
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
-void ActionsHandler::needStop(){
+void ActionsHandler::needFwdHalf(){
     _cycloStore->reloadSmarts();
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
-    _cycloStore->addSmart(SmartCycloAction_t::STOP);
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
 void ActionsHandler::inIdle(){

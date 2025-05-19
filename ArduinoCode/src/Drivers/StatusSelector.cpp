@@ -15,8 +15,6 @@ void StatusSelector::plan(){
     if(_forward_but_front){
         if(_counter == static_cast<uint8_t>(ProgramStatus::NONE)) nextStatus();
         else _counter = static_cast<uint8_t>(ProgramStatus::NONE);
-        
-        _timer = _cur_millis;
     } 
     _prev_but_state = _but_state;
 }   
@@ -29,7 +27,8 @@ void StatusSelector::tick(){
     sense();
     plan();
 
-    _indicator->blink(static_cast<uint8_t>(ProgramStatus::SIZE) - _counter);
+    if(_cur_millis - _timer < TIME_IN_BLINK) _indicator->blink(4);
+    else _indicator->blink(0);
 }
 
 ProgramStatus StatusSelector::getStatus() const{   
@@ -39,6 +38,7 @@ ProgramStatus StatusSelector::getStatus() const{
 
 void StatusSelector::nextStatus(){
     _counter = (_counter + 1) % static_cast<uint8_t>(ProgramStatus::SIZE);
+    _timer = _cur_millis;
 }
 
 void StatusSelector::setNoneStatus(){

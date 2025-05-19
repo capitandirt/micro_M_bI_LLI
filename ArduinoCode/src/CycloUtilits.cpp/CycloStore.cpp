@@ -158,6 +158,9 @@ void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::IP180               )] = IP180               ;
     _cyclograms[toInt(SmartCycloAction_t::IP90L               )] = IP90L               ;
     _cyclograms[toInt(SmartCycloAction_t::IP90R               )] = IP90R               ;
-    _cyclograms[toInt(SmartCycloAction_t::TO_ALIGN            )] = TO_ALIGN            ;
-    _cyclograms[toInt(SmartCycloAction_t::FROM_ALIGN_TO_CENTER)] = FROM_ALIGN_TO_CENTER;
+
+    _cyclograms[toInt(SmartCycloAction_t::TO_BACK_ALIGN               )] = TO_BACK_ALIGN               ;
+    _cyclograms[toInt(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER   )] = FROM_BACK_ALIGN_TO_CENTER   ;
+    _cyclograms[toInt(SmartCycloAction_t::TO_FORWARD_ALIGN            )] = TO_FORWARD_ALIGN            ;
+    _cyclograms[toInt(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER)] = FROM_FORWARD_ALIGN_TO_CENTER;
 }

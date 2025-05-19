@@ -2,7 +2,7 @@
 
 void CycloWorker::reload(){
     _cur_smart_submis = cycloStore->popFrontSmartSubmission();
-    _reset_reg();
+    // _reset_reg();
     _cyclo_context.reload();
 }
 
@@ -29,13 +29,6 @@ void CycloWorker::tryComplete(){
 
         _cur_smart_submis = cycloStore->popFrontSmartSubmission();
 
-        if(_cur_smart_submis.smart != SmartCycloAction_t::CLUSTER_DOT){
-            if(_prev_smart_submis.smart != _cur_smart_submis.smart){
-                // _reset_reg();
-            }
-            _prev_smart_submis.smart = _cur_smart_submis.smart;
-        }
-        
         _cyclo_context.reload();
     }
 };

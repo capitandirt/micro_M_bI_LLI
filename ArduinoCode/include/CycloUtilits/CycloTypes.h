@@ -31,8 +31,10 @@ enum class SmartCycloAction_t : uint8_t{
     IP180,
     IP90L,
     IP90R,
-    TO_ALIGN,
-    FROM_ALIGN_TO_CENTER,
+    TO_BACK_ALIGN,
+    FROM_BACK_ALIGN_TO_CENTER,
+    TO_FORWARD_ALIGN,
+    FROM_FORWARD_ALIGN_TO_CENTER,
 
     STOP // <! END OF ENUM
 };
@@ -128,8 +130,10 @@ inline const char* Str_SmartCyclogramAction[]{
     "IP180",
     "IP90L",
     "IP90R",
-    "TO_ALIGN",
-    "FROM_ALIGN_TO_CENTER",
+    "TO_BACK_ALIGN",
+    "FROM_BACK_ALIGN_TO_CENTER",
+    "TO_FORWARD_ALIGN",
+    "FROM_FORWARD_ALIGN_TO_CENTER",
 
     "STOP"
 };
