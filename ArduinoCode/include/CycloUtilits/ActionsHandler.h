@@ -4,24 +4,26 @@
 #include "CycloTypes.h"
 #include "Maze.h"
 #include "CycloStore.h"
+#include "MazeObserver.h"
 
 struct ActionsHandlerConnectionParams{
     Maze* _maze;
     CycloStore* _cycloStore;
+    MazeObserver* _mazeObserver;
 };
 
 class ActionsHandler : ActionsHandlerConnectionParams{
 public:
     ActionsHandler(ActionsHandlerConnectionParams* ahcp) : ActionsHandlerConnectionParams(*ahcp){}
     
-    void loadExplorer(Direction robot_dir);
+    void exeExplorer(Direction robot_dir);
     void primitivesToExplorers(Direction robot_dir);
     void primitivesToFasts();
     
     void clear();
     void needStartCellAligning();
     void needClusterDot();
-    void needFwdHalf();
+    void needToEnd();
     void inIdle();
 
     Direction needTurn(Direction dir);

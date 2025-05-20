@@ -71,7 +71,7 @@ void Robot::step_flood_fill(const Vec2 end_cell)
        forward_robot_vec.y == end_cell.y 
     ){
         _odometry->updateMazeCoords(forward_robot_vec);
-        _actionsHandler->needFwdHalf();
+        _actionsHandler->needToEnd();
         _statusSelector->nextStatus();
         return;
     }
@@ -79,7 +79,7 @@ void Robot::step_flood_fill(const Vec2 end_cell)
     _maze->SetCell(forward_cell, forward_robot_vec);
     _solver->SolveBfsMaze(forward_robot_vec, end_cell);
 
-    _actionsHandler->loadExplorer(cur_robot_dir);    
+    _actionsHandler->exeExplorer(cur_robot_dir);    
     
     const Direction next_robot_dir = _maze->GetPathDir(0);
 

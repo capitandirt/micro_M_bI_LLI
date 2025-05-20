@@ -6,6 +6,7 @@
 #include "Drivers/Led.h"
 #include "Drivers/StatusSelector.h"
 #include "Drivers/SlideCatcher.h"
+#include "MazeObserver.h"
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -131,9 +132,15 @@ Maze maze;
 
 Solver solver(&maze);
 
+MazeObserverConnectionParams mocp{
+    ._optocouplers = &optocoupler
+};
+MazeObserver mazeObserver(&mocp);
+
 ActionsHandlerConnectionParams ahcp{
     ._maze = &maze,
-    ._cycloStore = &cycloStore
+    ._cycloStore = &cycloStore,
+    ._mazeObserver = &mazeObserver,
 };
 ActionsHandler actionsHandler(&ahcp);
 

@@ -6,10 +6,7 @@ void setup()
 {
 	DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-
-    cycloStore.addSmart(SmartCycloAction_t::IP180);
 }
-
 
 void loop(){
     static uint32_t last_time = 0;
@@ -18,7 +15,9 @@ void loop(){
     last_time = micros();
     DEVICES::TICK(last_time / 1000);
 
+    // optocoupler.printSense();
+
     cycloWorker.doCyclogram();
-    // robot.statusHandler();
+    robot.statusHandler();
     cycloWorker.tryComplete();
 }

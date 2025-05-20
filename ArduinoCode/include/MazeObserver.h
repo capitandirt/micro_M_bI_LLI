@@ -4,16 +4,19 @@
 #include "Maze.h"
 #include "Odometry.h"
 #include "Drivers/OptocouplerSensors.h"
+#include "CycloUtilits/CycloTypes.h"
 
 enum class MazeCommand{
     NONE,
     ALIGN_IN_TURN,
-    ALIGN_IN_IP180
+    FWD_ALIGN_IN_IP180,
+    LEFT_ALIGN_IN_IP180,
+    RIGHT_ALIGN_IN_IP180,
 };
 
 struct MazeObserverConnectionParams{
-    Maze* _maze;
-    Odometry* _odometry;
+    // Maze* _maze;
+    // Odometry* _odometry;
     OptocouplerSensors* _optocouplers;
 };
 
@@ -22,11 +25,13 @@ public:
     MazeObserver(MazeObserverConnectionParams* mocp):
         MazeObserverConnectionParams(*mocp){}
     
-    MazeCommand getCommand();
+    MazeCommand getCommand(PrimitiveCycloAction_t primitive);
 private:
 
 private:
-    uint8_t _turn_counter = 0;
+    static constexpr int8_t MAX_NO_ALIGN_COUNTER = 2;
+
+    uint8_t _no_align_counter = 0;
 
     MazeCommand _cur_maze_command = MazeCommand::NONE;
 };
