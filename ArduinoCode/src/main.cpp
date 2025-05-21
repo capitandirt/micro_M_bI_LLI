@@ -15,8 +15,6 @@ void loop(){
     last_time = micros();
     DEVICES::TICK(last_time / 1000);
 
-    // optocoupler.printSense();
-
     cycloWorker.doCyclogram();
     robot.statusHandler();
     cycloWorker.tryComplete();
