@@ -9,7 +9,7 @@ MazeCommand MazeObserver::getCommand(PrimitiveCycloAction_t primitive){
 
     if(_no_align_counter < MAX_NO_ALIGN_COUNTER) return MazeCommand::NONE;
 
-    if((primitive == PrimitiveCycloAction_t::LEFT || 
+    if((primitive == PrimitiveCycloAction_t::LEFT ||
         primitive == PrimitiveCycloAction_t::RIGHT) &&
         forward_wall){
         

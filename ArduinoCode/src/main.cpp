@@ -5,8 +5,10 @@
 void setup()
 {
 	DEVICES::TEST::SET_SERIAL();
-    // DEVICES::INIT();
-    DEVICES::TEST::CONVERT_TO_SMART();
+    DEVICES::INIT();
+
+    DEVICES::TEST::BFS();
+    
 }
 
 void loop(){
@@ -15,8 +17,6 @@ void loop(){
         ;
     last_time = micros();
     // DEVICES::TICK(last_time / 1000);
-
-    // // optocoupler.printSense();
 
     // cycloWorker.doCyclogram();
     // robot.statusHandler();

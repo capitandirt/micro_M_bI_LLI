@@ -1,13 +1,13 @@
 #include "CycloUtilits/ActionsHandler.h"
 
-#define OUTPUT_DEBUG 1
+#define OUTPUT_DEBUG 0
 
 #if OUTPUT_DEBUG
     #define SERIAL_PRINT(x) Serial.print((x))
     #define SERIAL_PRINTLN(x) Serial.println((x))
 #else
-    #define SERIAL_PRINT((x))
-    #define SERIAL_PRINTLN((x))
+    #define SERIAL_PRINT(x)
+    #define SERIAL_PRINTLN(x)
 #endif
 
 const PrimitiveCycloAction_t ActionsHandler::calc_primitive_cyclo_action(const uint8_t ind){
@@ -506,8 +506,7 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
         }
         _cycloStore->printPrimitives();
     } 
-    if(lastTurn == PrimitiveCycloAction_t::LEFT) return RobotState_t::LEFT_FORWARD;
-    else return RobotState_t::RIGHT_FORWARD;
+    return toState(lastTurn);
 }
 
 ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startState)
@@ -536,7 +535,7 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startSt
 
     _cycloStore->addSmart(SmartCycloAction_t::DIAG_X, X);
     if(!(X % 2)) return startState;
-    else return startState == RobotState_t::LEFT_FORWARD ? RobotState_t::RIGHT_FORWARD : RobotState_t::LEFT_FORWARD;
+    else return startState == RobotState_t::LEFT ? RobotState_t::RIGHT : RobotState_t::LEFT;
 }
 
 

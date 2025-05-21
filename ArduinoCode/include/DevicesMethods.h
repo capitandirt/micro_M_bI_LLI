@@ -85,8 +85,6 @@ namespace DEVICES{
             
             maze.PrintDirPath();
             maze.Print();
-
-            maze.Clear();
         }
     
         void UNDEF_CELL_WALLS(){
@@ -118,7 +116,6 @@ namespace DEVICES{
             cycloStore.addSmart(SmartCycloAction_t::IP90L, 2);
             cycloStore.addSmart(SmartCycloAction_t::FWD_X, 8);
             cycloStore.addSmart(SmartCycloAction_t::IP90R);
-            cycloStore.addSmart(SmartCycloAction_t::IP180);
             cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 30);
             cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
             cycloStore.addSmart(SmartCycloAction_t::SD135SR);
@@ -159,7 +156,6 @@ namespace DEVICES{
             cycloStore.addSmart(SmartCycloAction_t::FWD_X);
             cycloStore.addSmart(SmartCycloAction_t::SS90EL);
             cycloStore.addSmart(SmartCycloAction_t::SS90ER);
-            cycloStore.addSmart(SmartCycloAction_t::IP180);
 
             cycloStore.printSmarts();
 

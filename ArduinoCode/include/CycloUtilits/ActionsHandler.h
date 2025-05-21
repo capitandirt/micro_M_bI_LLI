@@ -45,9 +45,7 @@ private:
     enum class RobotState_t : uint8_t
     {
         LEFT,
-        LEFT_FORWARD,
         FORWARD,
-        RIGHT_FORWARD,
         RIGHT,
 
         STOP,
