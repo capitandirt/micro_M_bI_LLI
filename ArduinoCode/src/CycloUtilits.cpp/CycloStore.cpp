@@ -44,7 +44,7 @@ SmartSubmission CycloStore::popFrontSmartSubmission(){
 PrimitiveCycloAction_t CycloStore::popFrontPrimitive(){
     if(_primitive_cyc_act_counter >= _primitive_cyc_act_end) return PrimitiveCycloAction_t::BLANK;
     
-    _virtual_primitive_cyc_act_counter++;
+    _virtual_primitive_cyc_act_counter = _primitive_cyc_act_counter+1;
     return _cyclo_program[_primitive_cyc_act_counter++].primitive;
 }
 

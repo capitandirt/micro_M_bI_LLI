@@ -5,7 +5,8 @@
 void setup()
 {
 	DEVICES::TEST::SET_SERIAL();
-    DEVICES::INIT();
+    // DEVICES::INIT();
+    DEVICES::TEST::CONVERT_TO_SMART();
 }
 
 void loop(){
@@ -13,11 +14,11 @@ void loop(){
     while(micros() - last_time < Ts_us)
         ;
     last_time = micros();
-    DEVICES::TICK(last_time / 1000);
+    // DEVICES::TICK(last_time / 1000);
 
-    // optocoupler.printSense();
+    // // optocoupler.printSense();
 
-    cycloWorker.doCyclogram();
-    robot.statusHandler();
-    cycloWorker.tryComplete();
+    // cycloWorker.doCyclogram();
+    // robot.statusHandler();
+    // cycloWorker.tryComplete();
 }

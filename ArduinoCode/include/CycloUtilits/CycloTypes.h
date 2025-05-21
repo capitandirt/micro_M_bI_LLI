@@ -39,7 +39,7 @@ enum class SmartCycloAction_t : uint8_t{
     STOP // <! END OF ENUM
 };
 
-enum class PrimitiveCycloAction_t : uint8_t{ // LEFT, RIGHT, FORWARD, BACK, STOP
+enum class PrimitiveCycloAction_t : uint8_t{ // FORWARD, LEFT, BACK, RIGHT, STOP, BLANK    
     FORWARD = 0,
     
     LEFT = 1,
