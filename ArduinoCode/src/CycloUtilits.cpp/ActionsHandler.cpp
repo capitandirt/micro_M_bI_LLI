@@ -462,25 +462,39 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
     
     for(;next2Prim[0] == next2Prim[1] && ((!(X%2) && next2Prim[0] == OP_TURN) || (X%2 && next2Prim[0] == TURN)); X++)
     {
+        SERIAL_PRINTLN("X: " + String(X));
         SERIAL_PRINTLN("next1: " + String(toInt(next2Prim[0])));
         SERIAL_PRINTLN("next2: " + String(toInt(next2Prim[1])));
         next2Prim[0] = _cycloStore->virtualPopFrontPrimitive();
         next2Prim[1] = _cycloStore->virtualPopFrontPrimitive();
     }
-    SERIAL_PRINTLN("end for");
+    SERIAL_PRINTLN("end for, X: " + String(X));
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive();
     if(curPrim != PrimitiveCycloAction_t::LEFT && curPrim != PrimitiveCycloAction_t::RIGHT)
     {
         SERIAL_PRINTLN("x--");
-        X-=2; // это выход в DS135S
+        X--; // это выход в DS135S
     }
     _cycloStore->virtualGoBack();
     
-    for(int i = 0; i < X; i++)
+    SERIAL_PRINTLN("final X: " + String(X));
+    
+    _cycloStore->printPrimitives();
+    if(TURN == PrimitiveCycloAction_t::LEFT) // добавляем 1 действие, которое определили ещё в entryHandler
+    {
+        _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
+        lastTurn = PrimitiveCycloAction_t::RIGHT;
+    } 
+    else
+    {
+        _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
+        lastTurn = PrimitiveCycloAction_t::LEFT;
+    }
+    for(int i = 1; i < X; i++)
     {
         _cycloStore->popFrontPrimitive();
         _cycloStore->popFrontPrimitive();
-        if(TURN == PrimitiveCycloAction_t::LEFT && (i % 2) || TURN == PrimitiveCycloAction_t::RIGHT && !(i % 2))
+        if(TURN == PrimitiveCycloAction_t::LEFT && !(i % 2) || TURN == PrimitiveCycloAction_t::RIGHT && (i % 2))
         {
             _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
             lastTurn = PrimitiveCycloAction_t::RIGHT;
@@ -490,8 +504,8 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
             _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
             lastTurn = PrimitiveCycloAction_t::LEFT;
         }
+        _cycloStore->printPrimitives();
     } 
-    _cycloStore->printPrimitives();
     if(lastTurn == PrimitiveCycloAction_t::LEFT) return RobotState_t::LEFT_FORWARD;
     else return RobotState_t::RIGHT_FORWARD;
 }
