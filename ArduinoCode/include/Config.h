@@ -37,7 +37,7 @@
 /*==ENCODER CONNECTION PINS END==*/
 
 /*==ROBOT PARAMS BEGIN==*/
-#define ROBOT_WIDTH 0.078f
+#define ROBOT_WIDTH 0.0685f
 #define WHEEL_RADIUS 0.01725f
 /*==ROBOT PARAMS END*/
 
@@ -70,7 +70,7 @@
 
 /*==W MOTOT PIREG BEGIN==*/
 #define W_K_MOTOR (6 / 1.5) //он выдаёт примерно 6.5 рад/с на 1.5 Волта
-#define W_T_MOTOR 0.15 //210 мс - 70% времени от разгона от 0 до некой постоянной скорости при напряжении
+#define W_T_MOTOR 0.15
 #define W_T_u (2 * Ts_s)
 
 #define W_KP (0.4f) // Kp = K
@@ -93,7 +93,7 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 5
+#define MAZE_SIDE_LENGTH 1
 
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)

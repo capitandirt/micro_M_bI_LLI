@@ -4,6 +4,7 @@
 #include "CycloUtilits/CycloTypes.h"
 #include "Cyclogram.config.h"
 
+#include "FWD_helpFunction.h"
 #include "smart45.h"
 #include "smart135.h"
 #include "alignment.h"
@@ -37,29 +38,20 @@ CYCLOGRAM(IDLE)
 
 CYCLOGRAM(FWD_HALF)
 {
-    ms->v_f0 = FORWARD_SPEED;
-    ms->theta_i0 = 0;
-
-    const int16_t left_sense = s->optocoupler->getSense().left;
-    const int16_t right_sense = s->optocoupler->getSense().right;
-    const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
-
-    // регулятор на положение по горизонтали при движении вперёд
-    const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
-
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
-
-    const float regulatorArray[4] = {
-        0,//ни один не видит стену
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
-    };
-
-    ms->theta_i0 = regulatorArray[regulatorState];
+    FWD_helpFunction(ms, s);
 
     if(s->odometry->getDist() > HALF(CELL_SIZE) )
+    {
+        ms->isComplete = true;
+    }
+    else ms->isComplete = false;
+}
+
+CYCLOGRAM(FWD_X)
+{
+    FWD_helpFunction(ms, s);
+
+    if(s->odometry->getDist() > CELL_SIZE * x)
     {
         ms->isComplete = true;
     }
@@ -110,6 +102,7 @@ CYCLOGRAM(FWDE)
     if(CAN_TRY_ALIGN && ((
         prev_left_wall_state == 1 && toBool(cell_from_sensors.west_wall) == 0) || (
        prev_right_wall_state == 1 && toBool(cell_from_sensors.east_wall) == 0))){
+            CAN_TRY_ALIGN = 0;
             NEED_ALIGN = 1;
             dist_buf = s->odometry->getDist();
     }
@@ -117,14 +110,13 @@ CYCLOGRAM(FWDE)
     prev_left_wall_state = toBool(cell_from_sensors.west_wall);
     prev_right_wall_state = toBool(cell_from_sensors.east_wall);
 
-    // if(NEED_ALIGN)
-    // {
-    //     if(s->odometry->getDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
-    //         ms->isComplete = true;
-    //     }
-    // }
-    // else if(s->odometry->getDist() > CELL_SIZE)
-    if(s->odometry->getDist() > CELL_SIZE)
+    if(NEED_ALIGN)
+    {
+        if(s->odometry->getDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
+            ms->isComplete = true;
+        }
+    }
+    else if(s->odometry->getDist() > CELL_SIZE)
     {
         ms->isComplete = true;
     }
@@ -137,37 +129,6 @@ CYCLOGRAM(FWDE)
         CAN_TRY_ALIGN = 0;
         NEED_ALIGN = 0;
     }
-}
-
-CYCLOGRAM(FWD_X)
-{
-    ms->v_f0 = FORWARD_SPEED;
-    ms->theta_i0 = 0;
-
-    const int16_t left_sense = s->optocoupler->getSense().left;
-    const int16_t right_sense = s->optocoupler->getSense().right;
-    const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
-
-    // регулятор на положение по горизонтали при движении вперёд
-    const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
-
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
-
-    const float regulatorArray[4] = {
-        0,//ни один не видит стену
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
-    };
-
-    ms->theta_i0 = regulatorArray[regulatorState];
-
-    if(s->odometry->getDist() > CELL_SIZE * x)
-    {
-        ms->isComplete = true;
-    }
-    else ms->isComplete = false;
 }
 
 CYCLOGRAM(DIAG_X)
@@ -231,10 +192,14 @@ CYCLOGRAM(SS90SL)
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
-    constexpr float circleDist = (2 * PI * R) / 4;
+    constexpr float circleDist = (TWO_PI * R) / 4;
 
     if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
-    else ms->theta_i0 = 0;
+    else
+    {
+        FWD_helpFunction(ms, s);
+    }
+
     if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
@@ -249,10 +214,14 @@ CYCLOGRAM(SS90SR)
     constexpr float theta_i = FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
-    constexpr float circleDist = (2 * PI * R) / 4;
+    constexpr float circleDist = (TWO_PI * R) / 4;
 
     if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
-    else ms->theta_i0 = 0;
+    else
+    {
+        FWD_helpFunction(ms, s);
+    }
+
     if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;

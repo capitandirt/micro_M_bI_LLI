@@ -52,6 +52,7 @@ private:
         NAS // not a state
     };
     RobotState_t toState(const PrimitiveCycloAction_t curPrim);
+    PrimitiveCycloAction_t fromState(const RobotState_t rs);
     uint8_t toIntFromState(const RobotState_t rs);
 
     RobotState_t TO_DD90X(const RobotState_t startState); 
