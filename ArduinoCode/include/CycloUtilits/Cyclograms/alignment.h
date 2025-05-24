@@ -24,7 +24,6 @@ CYCLOGRAM(FROM_BACK_ALIGN_TO_CENTER)
 
     if(s->odometry->getDist() > FROM_BACK_ALIGNMENT_TO_CENTER)
     {
-        ms->v_f0 = 0;
         ms->isComplete = true;
     }
     else ms->isComplete = false;

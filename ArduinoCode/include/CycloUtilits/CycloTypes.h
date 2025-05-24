@@ -7,6 +7,7 @@
 
 enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,
+    DELAY_05S,
     CLUSTER_DOT,
     FWD_HALF,
     FWDE,

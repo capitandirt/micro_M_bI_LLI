@@ -53,34 +53,7 @@ Cell OptocouplerSensors::getCell(Direction robot_dir){
     calc_sense_mask();
     calc_relative_cell();
 
-    Cell cell_from_sense;
-    switch (robot_dir)
-    {
-    case Direction::N:
-        cell_from_sense.north_wall = _relative_cell.north_wall;
-        cell_from_sense.east_wall  = _relative_cell.east_wall;
-        cell_from_sense.south_wall = _relative_cell.south_wall;
-        cell_from_sense.west_wall  = _relative_cell.west_wall;
-        break;
-    case Direction::E:
-        cell_from_sense.north_wall = _relative_cell.west_wall;
-        cell_from_sense.east_wall  = _relative_cell.north_wall;
-        cell_from_sense.south_wall = _relative_cell.east_wall;
-        cell_from_sense.west_wall  = _relative_cell.south_wall;
-        break;
-    case Direction::S:
-        cell_from_sense.north_wall = _relative_cell.south_wall;
-        cell_from_sense.east_wall  = _relative_cell.west_wall;
-        cell_from_sense.south_wall = _relative_cell.north_wall;
-        cell_from_sense.west_wall  = _relative_cell.east_wall;
-        break;
-    case Direction::W:
-        cell_from_sense.north_wall = _relative_cell.east_wall;
-        cell_from_sense.east_wall  = _relative_cell.south_wall;
-        cell_from_sense.south_wall = _relative_cell.west_wall;
-        cell_from_sense.west_wall  = _relative_cell.north_wall;
-        break;
-    }
+    Cell cell_from_sense = inDir(_relative_cell, robot_dir);
 
     return cell_from_sense;
 }

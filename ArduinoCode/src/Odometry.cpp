@@ -61,7 +61,7 @@ void Odometry::tick(float omegaL, float omegaR)
     v = (vR + vL) / 2;
     vX = v * cos(Theta.getOut());
     vY = v * sin(Theta.getOut());
-    //PRINTLN(v);
+
     Distance.tick(v);
     X.tick(vX);
     Y.tick(vY);

@@ -37,6 +37,7 @@ public:
     void           tick()                       noexcept;
 
     ProgramStatus  getStatus()                  const noexcept;
+    void           setStatus(ProgramStatus s)   noexcept;
     void           nextStatus()                 noexcept;
     void           setNoneStatus()              noexcept;
 

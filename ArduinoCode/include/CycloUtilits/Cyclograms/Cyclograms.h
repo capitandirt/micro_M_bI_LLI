@@ -36,6 +36,18 @@ CYCLOGRAM(IDLE)
     ms->isComplete = true;
 }
 
+CYCLOGRAM(DELAY_05S){
+    constexpr uint16_t DELAY_TIME = 500; // ms 
+
+    ms->v_f0 = 0;
+    ms->theta_i0 = 0;
+
+    if(s->time > DELAY_TIME){
+        ms->isComplete = 1;
+    }
+    else ms->isComplete = 0;
+}
+
 CYCLOGRAM(FWD_HALF)
 {
     FWD_helpFunction(ms, s);
@@ -312,7 +324,7 @@ CYCLOGRAM(IP180)
 CYCLOGRAM(IP90L)
 {
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 8 * PI / 180;
+    constexpr float THETA_ERROR = 2 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
@@ -328,7 +340,7 @@ CYCLOGRAM(IP90L)
 CYCLOGRAM(IP90R)
 {
     constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 8 * PI / 180;
+    constexpr float THETA_ERROR = 2 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;

@@ -24,6 +24,7 @@ public:
     void needStartCellAligning();
     void needClusterDot();
     void needToEnd();
+    void needDelay05();
     void inIdle();
 
     Direction needTurn(Direction dir);

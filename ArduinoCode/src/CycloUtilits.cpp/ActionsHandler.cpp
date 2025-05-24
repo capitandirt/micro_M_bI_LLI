@@ -112,11 +112,17 @@ void ActionsHandler::exeExplorer(Direction robot_dir){
         else if(maze_command == MazeCommand::FWD_ALIGN_IN_IP180){
             _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
             _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
-            _cycloStore->addSmart(SmartCycloAction_t::IP90L, 2);
+            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+            _cycloStore->addSmart(SmartCycloAction_t::DELAY_05S);
+            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+            _cycloStore->addSmart(SmartCycloAction_t::DELAY_05S);
             _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);   
         }
         else{
-            _cycloStore->addSmart(SmartCycloAction_t::IP90L, 2);
+            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+            _cycloStore->addSmart(SmartCycloAction_t::DELAY_05S);
+            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+            _cycloStore->addSmart(SmartCycloAction_t::DELAY_05S);
         }
         break;
 
@@ -155,11 +161,13 @@ void ActionsHandler::needStartCellAligning(){
 
 Direction ActionsHandler::needTurn(Direction dir){
     _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+    _cycloStore->addSmart(SmartCycloAction_t::DELAY_05S);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 
     Direction next_dir = decDir(dir);
     return next_dir;
 }
+
 
 void ActionsHandler::needClusterDot(){
     _cycloStore->reloadSmarts();
@@ -171,6 +179,12 @@ void ActionsHandler::needToEnd(){
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
     _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
     _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
+}
+
+void ActionsHandler::needDelay05(){
+    _cycloStore->reloadSmarts();
+    _cycloStore->addSmart(SmartCycloAction_t::DELAY_05S);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 

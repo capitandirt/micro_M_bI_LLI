@@ -2,7 +2,6 @@
 
 void Robot::init(){
     _maze->PrimaryFill();
-    _maze->SetCell(START_CELL, START_ROBOT_COORDS);
 }
 
 void Robot::statusHandler(){
@@ -14,7 +13,7 @@ void Robot::statusHandler(){
         break;
 
     case ProgramStatus::PRE_ENTRY_START:
-        _actionsHandler->needClusterDot();
+        _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
 
@@ -51,6 +50,12 @@ void Robot::start_explorer(){
     
     if(forward_wall == WallState::HI){
         const Direction next_dir = _actionsHandler->needTurn(cur_dir);
+        
+        const Vec2 cur_coords = _odometry->getMazeCoords();
+        const Cell rel_cell = {forward_wall, WallState::LO, WallState::LO, WallState::LO};
+        const Cell abs_cell = inDir(rel_cell, cur_dir);
+
+        _maze->SetCell(abs_cell, cur_coords);
         _odometry->updateDir(next_dir);
         return;
     }
