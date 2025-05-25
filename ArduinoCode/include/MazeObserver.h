@@ -8,14 +8,13 @@
 
 enum class MazeCommand{
     NONE,
+    START_ALIGN,
     ALIGN_IN_TURN,
-    FWD_ALIGN_IN_IP180,
-    LEFT_ALIGN_IN_IP180,
-    RIGHT_ALIGN_IN_IP180,
+    ALIGN_IN_IP180,
 };
 
 struct MazeObserverConnectionParams{
-    // Maze* _maze;
+    Maze* _maze;
     // Odometry* _odometry;
     OptocouplerSensors* _optocouplers;
 };

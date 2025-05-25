@@ -2,7 +2,7 @@
 #include "Cyclogram.config.h"
 
 
-inline void FWD_helpFunction(MotionStates* ms, const Sensors* s)
+inline void FWD_default(MotionStates* ms, const Sensors* s)
 {
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;

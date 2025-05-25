@@ -133,6 +133,7 @@ Maze maze;
 Solver solver(&maze);
 
 MazeObserverConnectionParams mocp{
+    ._maze = &maze,
     ._optocouplers = &optocoupler
 };
 MazeObserver mazeObserver(&mocp);

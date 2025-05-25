@@ -54,6 +54,8 @@ public:
     float getTheta() const;
     float getDist() const;
 
+    float getRelativeTheta() const;
+    float getRelativeDist() const;
     float getRelativeX() const;
     float getRelativeY() const;
 

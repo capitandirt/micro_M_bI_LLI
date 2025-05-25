@@ -15,6 +15,7 @@ void StatusSelector::plan(){
     if(_forward_but_front){
         nextStatus();
     } 
+    
     _prev_but_state = _but_state;
 }   
 

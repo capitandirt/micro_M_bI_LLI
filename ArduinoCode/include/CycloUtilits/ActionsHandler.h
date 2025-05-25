@@ -16,24 +16,23 @@ class ActionsHandler : ActionsHandlerConnectionParams{
 public:
     ActionsHandler(ActionsHandlerConnectionParams* ahcp) : ActionsHandlerConnectionParams(*ahcp){}
     
-    void exeExplorer(Direction robot_dir);
+    void loadExplorer(Direction robot_dir);
     void primitivesToExplorers(Direction robot_dir);
     void primitivesToFasts();
     
     void clear();
     void needStartCellAligning();
     void needClusterDot();
-    void needToEnd();
+    Direction needToEnd(Direction cur_dir);
     void needDelay05();
-    void inIdle();
+    void needIdle();
 
     Direction needTurn(Direction dir);
     
     void convertToSmart(); //экспериментальное
 private:
-    const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
+    PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
     void dirs_to_primitives();
-    void start_explorer_process(Direction robot_dir);
 
     bool TO_IDLE();
     bool TO_STOP();

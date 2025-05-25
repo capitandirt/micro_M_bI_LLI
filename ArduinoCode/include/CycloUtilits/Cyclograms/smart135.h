@@ -16,9 +16,9 @@ CYCLOGRAM(SD135SL)
 
     constexpr float circleDist = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
 
-    if(s->odometry->getDist() > forwDist1 && s->odometry->getDist() < forwDist1 + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getRelativeDist() > forwDist1 && s->odometry->getRelativeDist() < forwDist1 + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->odometry->getDist() > forwDist1 + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -35,9 +35,9 @@ CYCLOGRAM(SD135SR)
     constexpr float forwDist2 = CELL_SIZE * M_SQRT2 - R * (1 + M_SQRT2);
     constexpr float circleDist = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
 
-    if(s->odometry->getDist() > forwDist1 && s->odometry->getDist() < forwDist1 + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getRelativeDist() > forwDist1 && s->odometry->getRelativeDist() < forwDist1 + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->odometry->getDist() > forwDist1 + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -54,9 +54,9 @@ CYCLOGRAM(DS135SL)
     constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
     constexpr float circleDist = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
 
-    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getRelativeDist() > forwDist2 && s->odometry->getRelativeDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
-    if(s->odometry->getDist() > forwDist1 + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -73,9 +73,9 @@ CYCLOGRAM(DS135SR)
     constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
     constexpr float circleDist = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
 
-    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getRelativeDist() > forwDist2 && s->odometry->getRelativeDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
-    if(s->odometry->getDist() > forwDist1 + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }

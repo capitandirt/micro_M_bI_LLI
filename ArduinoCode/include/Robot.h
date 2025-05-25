@@ -30,6 +30,7 @@ public:
 private:
     void start_explorer();
     void step_flood_fill(const Vec2 end_cell);
+    bool try_end(const Vec2 cur, const Vec2 end);
 };
 
 #endif // !_ROBOT_H_

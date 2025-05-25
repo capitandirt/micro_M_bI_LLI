@@ -7,7 +7,7 @@
 
 enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,
-    DELAY_05S,
+    DELAY_025S,
     CLUSTER_DOT,
     FWD_HALF,
     FWDE,
@@ -158,6 +158,7 @@ struct CycloContext{
     void reload(){
         ms.isComplete = 0;
         s.odometry->updateRelative();
+
     }
 };
 

@@ -135,7 +135,7 @@ void CycloStore::load_cyclograms(){
     _cyclograms[toInt(SmartCycloAction_t::STOP                )] = STOP                ;
     _cyclograms[toInt(SmartCycloAction_t::CLUSTER_DOT         )] = CLUSTER_DOT         ;
     _cyclograms[toInt(SmartCycloAction_t::IDLE                )] = IDLE                ;
-    _cyclograms[toInt(SmartCycloAction_t::DELAY_05S           )] = DELAY_05S           ;
+    _cyclograms[toInt(SmartCycloAction_t::DELAY_025S           )] = DELAY_025S           ;
     _cyclograms[toInt(SmartCycloAction_t::FWD_HALF            )] = FWD_HALF            ;
     _cyclograms[toInt(SmartCycloAction_t::FWDE                )] = FWDE                ;
     _cyclograms[toInt(SmartCycloAction_t::FWD_X               )] = FWD_X               ;

@@ -14,10 +14,10 @@ CYCLOGRAM(SD45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -34,10 +34,10 @@ CYCLOGRAM(SD45SR)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -54,10 +54,10 @@ CYCLOGRAM(DS45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getRelativeDist() > forwDist2 && s->odometry->getRelativeDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
@@ -74,10 +74,10 @@ CYCLOGRAM(DS45SR)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getRelativeDist() > forwDist2 && s->odometry->getRelativeDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
 
-    if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
+    if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
     }
