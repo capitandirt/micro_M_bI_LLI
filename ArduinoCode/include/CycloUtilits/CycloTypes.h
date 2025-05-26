@@ -29,6 +29,7 @@ enum class SmartCycloAction_t : uint8_t{
     DS135SR,
     SS180SL,
     SS180SR,
+    IP180,
     IP90L,
     IP90R,
     TO_BACK_ALIGN,

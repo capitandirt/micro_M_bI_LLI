@@ -112,6 +112,11 @@ struct Cell{
     WallState west_wall;
 };
 
+union Cell_u{
+    Cell c;
+    WallState walls[DIRECTION_SIZE];
+};
+
 inline Cell inDir(const Cell c, const Direction d){
     Cell out_cell;
 

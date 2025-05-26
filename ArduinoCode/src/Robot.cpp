@@ -60,14 +60,17 @@ void Robot::start_explorer(){
         return;
     }
 
-    const Cell cur_cell = _maze->GetCell(cur_coords);
-    const WallState back_wall = inDir(cur_cell, toOpposite(cur_dir)).south_wall;
+    Cell_u cur_cell;
+    cur_cell.c = _maze->GetCell(cur_coords);
 
-    if(toBool(back_wall)){
+    const Direction back_dir  = toOpposite(cur_dir);
+    const WallState back_wall = cur_cell.walls[toInt(back_dir)];  
+
+    if(toBool(back_wall)){  
         _actionsHandler->needStartCellAligning();
     }
     else{
-        _actionsHandler->needClusterDot();
+        _actionsHandler->needFwdHalf();
     }
 
     _statusSelector->nextStatus();
@@ -96,13 +99,9 @@ void Robot::step_flood_fill(const Vec2 end_vec)
     _odometry->updateDir(next_robot_dir);
 }
 
-bool Robot::try_end(const Vec2 cur, const Vec2 end){
-    if(cur.x == end.x &&
-       cur.y == end.y 
-    ){
-        const Direction cur_dir = _odometry->getDir();
-        const Direction next_dir = _actionsHandler->needToEnd(cur_dir);
-
+bool Robot::try_end(const Vec2& cur, const Vec2& end){
+    if(cur.x == end.x && cur.y == end.y){
+        _actionsHandler->needFwdHalf();
         _statusSelector->nextStatus();
         return true;
     }

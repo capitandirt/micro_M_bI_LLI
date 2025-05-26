@@ -28,7 +28,7 @@ public:
 private:
 
 private:
-    static constexpr int8_t MAX_NO_ALIGN_COUNTER = 3;
+    static constexpr int8_t MAX_NO_ALIGN_COUNTER = 2;
 
     uint8_t _no_align_counter = 0;
 

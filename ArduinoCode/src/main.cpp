@@ -4,7 +4,6 @@
 
 void setup()
 {
-    DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
 }
 

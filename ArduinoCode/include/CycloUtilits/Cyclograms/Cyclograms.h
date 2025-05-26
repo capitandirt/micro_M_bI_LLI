@@ -122,13 +122,13 @@ CYCLOGRAM(FWDE)
     prev_left_wall_state = toBool(cell_from_sensors.west_wall);
     prev_right_wall_state = toBool(cell_from_sensors.east_wall);
 
-    // if(NEED_ALIGN)
-    // {
-    //     if(s->odometry->getRelativeDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
-    //         ms->isComplete = true;
-    //     }
-    // }
-    if(s->odometry->getRelativeDist() > CELL_SIZE)
+    if(NEED_ALIGN)
+    {
+        if(s->odometry->getRelativeDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
+            ms->isComplete = true;
+        }
+    }
+    else if(s->odometry->getRelativeDist() > CELL_SIZE)
     {
         ms->isComplete = true;
     }
@@ -311,10 +311,13 @@ CYCLOGRAM(SS180SR)
 
 CYCLOGRAM(IP180)
 {
-    ms->v_f0 = 0;
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
+    constexpr float THETA_ERROR = 3.5 * PI / 180;
+
+    ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
-    if(s->odometry->getRelativeTheta() >= PI)
+
+    if(s->odometry->getRelativeTheta() >= PI - THETA_ERROR)
     {
         ms->isComplete = true;
     }
@@ -324,7 +327,7 @@ CYCLOGRAM(IP180)
 CYCLOGRAM(IP90L)
 {
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 2 * PI / 180;
+    constexpr float THETA_ERROR = 2.7 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
@@ -340,7 +343,7 @@ CYCLOGRAM(IP90L)
 CYCLOGRAM(IP90R)
 {
     constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 2 * PI / 180;
+    constexpr float THETA_ERROR = 2.7 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;

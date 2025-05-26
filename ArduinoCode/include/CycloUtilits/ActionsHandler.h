@@ -23,7 +23,8 @@ public:
     void clear();
     void needStartCellAligning();
     void needClusterDot();
-    Direction needToEnd(Direction cur_dir);
+    void needEnd();
+    void needFwdHalf();
     void needDelay05();
     void needIdle();
 

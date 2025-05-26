@@ -67,15 +67,10 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
             _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
             _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
             _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
-            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
-            _cycloStore->addSmart(SmartCycloAction_t::IDLE);
-            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
-            _cycloStore->addSmart(SmartCycloAction_t::IDLE);
+            _cycloStore->addSmart(SmartCycloAction_t::IP180);
             _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);   
         }
-        else{
-            _cycloStore->addSmart(SmartCycloAction_t::IP90L, 2);
-        }
+        else _cycloStore->addSmart(SmartCycloAction_t::IP180);
         break;
 
     default:
@@ -112,7 +107,7 @@ void ActionsHandler::needStartCellAligning(){
 
 Direction ActionsHandler::needTurn(Direction dir){
     _cycloStore->addSmart(SmartCycloAction_t::IP90L);
-    _cycloStore->addSmart(SmartCycloAction_t::IDLE);
+    _cycloStore->addSmart(SmartCycloAction_t::DELAY_025S);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 
     Direction next_dir = decDir(dir);
@@ -124,24 +119,16 @@ void ActionsHandler::needClusterDot(){
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
-Direction ActionsHandler::needToEnd(Direction cur_dir){
+void ActionsHandler::needEnd(){
     _cycloStore->reloadSmarts();
+    _cycloStore->addSmart(SmartCycloAction_t::IP180);
+    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+}
 
-    if(_mazeObserver->getCommand(PrimitiveCycloAction_t::BACK) == MazeCommand::ALIGN_IN_IP180){
-        _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
-        _cycloStore->addSmart(SmartCycloAction_t::IP90L, 2);
-        _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
-        _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
-
-        return toOpposite(cur_dir);
-    }
-    else{
-        _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
-        _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
-
-        return cur_dir;
-    }
-    
+void ActionsHandler::needFwdHalf(){
+    _cycloStore->reloadSmarts();
+    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
 void ActionsHandler::needDelay05(){
