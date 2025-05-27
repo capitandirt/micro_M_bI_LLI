@@ -61,6 +61,8 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
+        optocoupler.calc();
+
         statusSelector.passMillis(now_millis);
         indicator.passMillis(now_millis);
 

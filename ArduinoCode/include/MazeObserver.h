@@ -30,7 +30,7 @@ private:
 private:
     static constexpr int8_t MAX_NO_ALIGN_COUNTER = 2;
 
-    uint8_t _no_align_counter = 0;
+    int8_t _no_align_counter = 0;
 
     MazeCommand _cur_maze_command = MazeCommand::NONE;
 };

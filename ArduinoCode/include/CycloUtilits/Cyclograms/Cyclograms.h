@@ -312,7 +312,7 @@ CYCLOGRAM(SS180SR)
 CYCLOGRAM(IP180)
 {
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 3.5 * PI / 180;
+    constexpr float THETA_ERROR = 6 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
@@ -326,13 +326,53 @@ CYCLOGRAM(IP180)
 
 CYCLOGRAM(IP90L)
 {
-    constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 2.7 * PI / 180;
+    // constexpr float alpha = HALF_PI;
+    // constexpr float theta = FORWARD_SPEED / (ROBOT_WIDTH / 2);
+
+    // constexpr float t_0 = alpha / theta;
+    // constexpr float saturation = 0.1; // [0 > saturation < 1]
+    // constexpr float k_a = HALF(saturation); 
+    
+    // constexpr float T = t_0 / (1 - k_a);
+    // constexpr float a = k_a * T;
+
+    // constexpr float angle_in_acc = theta * a;
+    // constexpr float theta_error = 2 * PI / 180;
+
+    // constexpr float acc = theta / a;
+
+    // const float cur_theta = s->odometry->getRelativeTheta();
+
+    // ms->v_f0 = 0;
+
+    // float acc_i = 0;
+    // if(cur_theta < angle_in_acc){
+    //     acc_i = acc;
+    // }
+    // else if(cur_theta > (alpha - angle_in_acc)){
+    //     acc_i = -acc;
+    // }
+    // else acc_i = 0;
+
+    // ms->theta_i0 += acc_i;
+
+    // Serial.print(cur_theta);
+    // Serial.print('\t');
+    // Serial.println(ms->theta_i0);
+
+    // if(cur_theta >= alpha){
+    //     ms->isComplete = 1;
+    //     ms->theta_i0 = 0;
+    // }
+    // else ms->isComplete = 0;
+
+    constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
+    constexpr float THETA_ERROR = 3 * PI / 180;
 
     ms->v_f0 = 0;
-    ms->theta_i0 = theta_i;
-    
-    if(s->odometry->getRelativeTheta() >= HALF_PI - THETA_ERROR)
+    ms->theta_i0 = -theta_i;
+
+    if(s->odometry->getRelativeTheta() <= -HALF_PI + THETA_ERROR)
     {
         ms->theta_i0 = 0;
         ms->isComplete = true;
@@ -343,7 +383,7 @@ CYCLOGRAM(IP90L)
 CYCLOGRAM(IP90R)
 {
     constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 2.7 * PI / 180;
+    constexpr float THETA_ERROR = 3 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
