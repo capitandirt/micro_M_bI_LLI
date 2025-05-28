@@ -59,9 +59,6 @@ void OptocouplerSensors::tick(){
 }
 
 void OptocouplerSensors::calc(){
-    while(!CAN_GET_SENSE)
-        ;
-
     calc_sense_mask();
     calc_relative_cell();
 }

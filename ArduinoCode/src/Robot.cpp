@@ -61,7 +61,7 @@ void Robot::start_explorer(){
     }
 
     Cell_u cur_cell;
-    cur_cell.c = _maze->GetCell(cur_coords);
+    cur_cell.raw = _maze->GetCell(cur_coords);
 
     const Direction back_dir  = toOpposite(cur_dir);
     const WallState back_wall = cur_cell.walls[toInt(back_dir)];  

@@ -312,7 +312,7 @@ CYCLOGRAM(SS180SR)
 CYCLOGRAM(IP180)
 {
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 6 * PI / 180;
+    constexpr float THETA_ERROR = 10 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
@@ -366,13 +366,13 @@ CYCLOGRAM(IP90L)
     // }
     // else ms->isComplete = 0;
 
-    constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 3 * PI / 180;
+    constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
+    constexpr float THETA_ERROR = 6 * PI / 180;
 
     ms->v_f0 = 0;
-    ms->theta_i0 = -theta_i;
+    ms->theta_i0 = theta_i;
 
-    if(s->odometry->getRelativeTheta() <= -HALF_PI + THETA_ERROR)
+    if(s->odometry->getRelativeTheta() >= HALF_PI - THETA_ERROR)
     {
         ms->theta_i0 = 0;
         ms->isComplete = true;
@@ -383,12 +383,12 @@ CYCLOGRAM(IP90L)
 CYCLOGRAM(IP90R)
 {
     constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 3 * PI / 180;
+    constexpr float THETA_ERROR = 6 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
 
-    if(s->odometry->getRelativeTheta() <= -HALF_PI + THETA_ERROR)
+    if(s->odometry->getRelativeTheta() <= -(HALF_PI - THETA_ERROR))
     {
         ms->theta_i0 = 0;
         ms->isComplete = true;

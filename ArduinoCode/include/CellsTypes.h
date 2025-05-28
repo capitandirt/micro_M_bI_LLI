@@ -113,7 +113,7 @@ struct Cell{
 };
 
 union Cell_u{
-    Cell c;
+    Cell raw;
     WallState walls[DIRECTION_SIZE];
 };
 

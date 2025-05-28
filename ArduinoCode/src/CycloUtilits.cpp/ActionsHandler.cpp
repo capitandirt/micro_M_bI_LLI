@@ -31,12 +31,12 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
     const auto from_robot_dir = static_cast<int8_t>(robot_dir);
     const auto from_path_dir  = static_cast<int8_t>(_maze->GetPathDir(0));
 
-    const auto first_primitive = static_cast<PrimitiveCycloAction_t>(
+    const auto explorer_primitive = static_cast<PrimitiveCycloAction_t>(
         (from_robot_dir - from_path_dir + DIRECTION_SIZE) % DIRECTION_SIZE);
 
-    MazeCommand maze_command = _mazeObserver->getCommand(first_primitive);
+    MazeCommand maze_command = _mazeObserver->getCommand(explorer_primitive);
 
-    switch (first_primitive)
+    switch (explorer_primitive)
     {
     case PrimitiveCycloAction_t::FORWARD:
         _cycloStore->addSmart(SmartCycloAction_t::FWDE);

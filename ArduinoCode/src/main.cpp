@@ -6,10 +6,6 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-
-    cycloStore.addSmart(SmartCycloAction_t::DELAY_025S, 4);
-    cycloStore.addSmart(SmartCycloAction_t::IP90L);
-    cycloStore.addSmart(SmartCycloAction_t::DELAY_025S, 4);
 }
 
 void loop(){
@@ -20,7 +16,9 @@ void loop(){
 
     DEVICES::TICK(last_time / 1000);
 
+    optocoupler.printSense();
+
     cycloWorker.doCyclogram();
-    // robot.statusHandler();
+    robot.statusHandler();
     cycloWorker.tryComplete();
 }
