@@ -37,7 +37,7 @@
 /*==ALIGNMENT CONSTS END==*/
 
 /*==ANGLE REGULATOR==*/
-#define ANGLE_REG_KP 0.1
+#define ANGLE_REG_KP 20
 /*===================*/
 
 #endif // !_CYCLOGRAM_CONFIG_H_

@@ -38,7 +38,7 @@ CYCLOGRAM(IDLE)
 
 CYCLOGRAM(FWD_HALF)
 {
-    FWD_helpFunction(ms, s);
+    FWD_helpFunction(ms, s, ms->theta_0);
 
     if(s->odometry->getDist() > HALF(CELL_SIZE) )
     {
@@ -49,7 +49,7 @@ CYCLOGRAM(FWD_HALF)
 
 CYCLOGRAM(FWD_X)
 {
-    FWD_helpFunction(ms, s);
+    FWD_helpFunction(ms, s, ms->theta_0);
 
     if(s->odometry->getDist() > CELL_SIZE * x)
     {
@@ -194,14 +194,19 @@ CYCLOGRAM(SS90SL)
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
 
-    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 + HALF_PI);
     }
 
     if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
+        ms->theta_0 += HALF_PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -218,11 +223,15 @@ CYCLOGRAM(SS90SR)
     constexpr float circleDist = (TWO_PI * R) / 4;
     
 
-    if(s->odometry->getDist() > forwDist && abs(s->odometry->getTheta()) > HALF_PI) ms->theta_i0 = theta_i; 
-    //if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    //if(s->odometry->getDist() > forwDist && abs(s->odometry->getTheta()) < HALF_PI) ms->theta_i0 = theta_i; 
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 - HALF_PI);
     }
     
     if(s->odometry->getDist() > 2 * forwDist + circleDist)
@@ -247,6 +256,7 @@ CYCLOGRAM(DD90SL)
     if(s->odometry->getDist() > forwDist + circleDist + forwDist)
     {
         ms->isComplete = true;
+        ms->theta_0 += HALF_PI;
     }
     else ms->isComplete = false;
 }
@@ -264,6 +274,7 @@ CYCLOGRAM(DD90SR)
     if(s->odometry->getDist() > forwDist + circleDist + forwDist)
     {
         ms->isComplete = true;
+        ms->theta_0 -= HALF_PI;
     }
     else ms->isComplete = false;
 }
@@ -277,14 +288,20 @@ CYCLOGRAM(SS180SL)
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 + PI);
     }
+
     if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
+        ms->theta_0 += PI;
     }
     else ms->isComplete = false;
 }
@@ -296,13 +313,18 @@ CYCLOGRAM(SS180SR)
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 + PI);
     }
     if(s->odometry->getDist() > 2 * forwDist + circleDist)
     {
+        ms->theta_0 -= PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -315,6 +337,7 @@ CYCLOGRAM(IP180)
     ms->theta_i0 = theta_i;
     if(s->odometry->getTheta() >= PI)
     {
+        ms->theta_0 += PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -330,7 +353,7 @@ CYCLOGRAM(IP90L)
     
     if(s->odometry->getTheta() >= HALF_PI - THETA_ERROR)
     {
-        ms->theta_i0 = 0;
+        ms->theta_i0 += HALF_PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -346,7 +369,7 @@ CYCLOGRAM(IP90R)
 
     if(s->odometry->getTheta() <= -HALF_PI + THETA_ERROR)
     {
-        ms->theta_i0 = 0;
+        ms->theta_i0 -= HALF_PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;

@@ -7,10 +7,10 @@
 CYCLOGRAM(TO_BACK_ALIGN)
 {
     ms->v_f0 = -FORWARD_SPEED;
-    ms->theta_i0 = 0;
 
     if(s->time > BACK_ALIGNMENT_TIME)
     {
+        s->odometry->setTheta(ms->theta_0);
         ms->v_f0 = 0;
         ms->isComplete = true;
     }
@@ -36,6 +36,7 @@ CYCLOGRAM(TO_FORWARD_ALIGN)
     ms->theta_i0 = 0;
 
     if(s->time > FORWARD_ALIGNMENT_TIME){
+        s->odometry->setTheta(ms->theta_0);
         ms->v_f0 = 0;
         ms->isComplete = true;
     }

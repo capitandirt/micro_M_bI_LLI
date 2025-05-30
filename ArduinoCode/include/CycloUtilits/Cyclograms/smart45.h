@@ -15,14 +15,19 @@ CYCLOGRAM(SD45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 + HALF(HALF_PI));
     }
 
     if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
+        ms->theta_0 += HALF(HALF_PI);
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -38,14 +43,19 @@ CYCLOGRAM(SD45SR)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 - HALF(HALF_PI));
     }
 
     if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
+        ms->theta_0 -= HALF(HALF_PI);
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -61,14 +71,19 @@ CYCLOGRAM(DS45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 + HALF(HALF_PI));
     }
 
     if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
+        ms->theta_0 += HALF(HALF_PI);
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -84,14 +99,19 @@ CYCLOGRAM(DS45SR)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FORWARD_SPEED / R;
 
-    if(s->odometry->getDist() > forwDist2 && s->odometry->getDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getDist() < forwDist) 
+    {
+        FWD_helpFunction(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getDist() > forwDist && s->odometry->getDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else
     {
-        FWD_helpFunction(ms, s);
+        FWD_helpFunction(ms, s, ms->theta_0 - HALF(HALF_PI));
     }
 
     if(s->odometry->getDist() > forwDist + circleDist + forwDist2)
     { 
+        ms->theta_0 -= HALF(HALF_PI);
         ms->isComplete = true;
     }
     else ms->isComplete = false;

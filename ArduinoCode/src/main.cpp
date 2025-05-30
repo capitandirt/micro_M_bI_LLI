@@ -22,7 +22,7 @@ void loop(){
     last_time = micros();
     DEVICES::TICK(last_time / 1000);
 
-    //Serial.println(odometry.getTheta() * RAD_TO_DEG);
+    //Serial.print(String(odometry.getTheta() * RAD_TO_DEG) + "\t"); 
     cycloWorker.doCyclogram();
     // robot.statusHandler();
     cycloWorker.tryComplete();
