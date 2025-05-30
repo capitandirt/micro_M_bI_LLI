@@ -3,12 +3,14 @@
 
 #include "Arduino.h"
 #include "Config.h"
+#include "Battery.h"
 
 struct MotorConnectionParams{
     uint8_t
         DIR, 
         PWM,
         M_POLARITY;
+    Battery _battery;
 };
 
 class Motor : public MotorConnectionParams{
