@@ -16,6 +16,7 @@ enum class ProgramStatus : uint8_t{
     PRE_ENTRY_FINISH,
     START_EXPLORER_AFTER_FINISH,
     GO_TO_START,
+    PRE_ENTRY_FAST,
     FAST,
     
     SIZE
@@ -37,6 +38,7 @@ public:
     void           tick()                       noexcept;
 
     ProgramStatus  getStatus()                  const noexcept;
+    void           setStatus(ProgramStatus s)   noexcept;
     void           nextStatus()                 noexcept;
     void           setNoneStatus()              noexcept;
 

@@ -2,7 +2,6 @@
 
 void CycloWorker::reload(){
     _cur_smart_submis = cycloStore->popFrontSmartSubmission();
-    // _reset_reg();
     _cyclo_context.reload();
 }
 

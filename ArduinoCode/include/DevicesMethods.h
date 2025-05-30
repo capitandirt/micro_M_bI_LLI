@@ -61,6 +61,8 @@ namespace DEVICES{
         leftServo.tick();
         rightServo.tick();
         
+        optocoupler.calc();
+
         statusSelector.passMillis(now_millis);
         indicator.passMillis(now_millis);
 
@@ -96,7 +98,7 @@ namespace DEVICES{
 
             solver.SolveBfsMaze({0, 0}, {2, 2});
 
-            Vec2 v = solver.FirstCellWithUndefWallsInPath();
+            Vec2 v = solver.firstUndefCellCoords();
 
             // need {0, 1}
             maze.Print();

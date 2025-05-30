@@ -112,6 +112,46 @@ struct Cell{
     WallState west_wall;
 };
 
+union Cell_u{
+    Cell raw;
+    WallState walls[DIRECTION_SIZE];
+};
+
+inline Cell inDir(const Cell c, const Direction d){
+    Cell out_cell;
+
+    switch (d)
+    {
+    case Direction::N:
+        out_cell.north_wall = c.north_wall;
+        out_cell.east_wall  = c.east_wall;
+        out_cell.south_wall = c.south_wall;
+        out_cell.west_wall  = c.west_wall;
+        break;
+    case Direction::E:
+        out_cell.north_wall = c.west_wall;
+        out_cell.east_wall  = c.north_wall;
+        out_cell.south_wall = c.east_wall;
+        out_cell.west_wall  = c.south_wall;
+        break;
+    case Direction::S:
+        out_cell.north_wall = c.south_wall;
+        out_cell.east_wall  = c.west_wall;
+        out_cell.south_wall = c.north_wall;
+        out_cell.west_wall  = c.east_wall;
+        break;
+    case Direction::W:
+        out_cell.north_wall = c.east_wall;
+        out_cell.east_wall  = c.south_wall;
+        out_cell.south_wall = c.west_wall;
+        out_cell.west_wall  = c.north_wall;
+        break;
+    }
+
+    return out_cell;
+}
+
+
 // N | E | S | W
 inline uint8_t toInt(Cell c){
     return toInt(c.north_wall) << 6 | toInt(c.east_wall) << 4 | 

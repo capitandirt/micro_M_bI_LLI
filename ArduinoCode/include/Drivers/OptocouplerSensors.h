@@ -18,10 +18,10 @@ struct OprocouplerConnectionParams{
 };
 
 struct Sense_t{
-    uint16_t left;
-    uint16_t forward_l;
-    uint16_t forward_r;
-    uint16_t right;
+    int16_t left;
+    int16_t forward_l;
+    int16_t forward_r;
+    int16_t right;
 };
 
 struct Sense_mask_t{
@@ -43,13 +43,13 @@ public:
 
     static constexpr uint8_t getSenseSize(){ return SENSORS_NUMBER; }
     
-    Sense_t get() const {return _from; }
+    Sense_t get() const { return _from; }
     uint16_t& operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
 
 private:
-    static constexpr uint8_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(uint16_t);
+    static constexpr uint8_t SENSORS_NUMBER = sizeof(Sense_t) / sizeof(int16_t);
     union{
-        Sense_t _from;
+        Sense_t _from = {};
         uint16_t _sense[SENSORS_NUMBER];
     };
 };
@@ -58,26 +58,32 @@ class OptocouplerSensors : public OprocouplerConnectionParams{
 public:
     OptocouplerSensors(OprocouplerConnectionParams* ocp) : OprocouplerConnectionParams(*ocp){}
 
-    void init();
-    void tick();
-    Sense_t getSense();
-    Cell getRelativeCell();
-    Cell getCell(Direction robotDir);
+    void    init();
+    void    tick();
+    void    calc();
 
-    bool cellIsImpasse();
+    Sense_t getSense()                  const;
+    Cell    getRelativeCell()           const;
+    Cell    getCell(Direction robotDir) const;
 
-    void printAbsCell();
-    void printMask();
-    void printSense();
-private:
-    void calc_sense_mask();
-    void calc_relative_cell();
+    void    printAbsCell()              const;
+    void    printMask()                 const;
+    void    printSense()                const;
+    Sense_t dark_sense;
 
 private:
+    void    calc_sense_mask();
+    void    calc_relative_cell();
+
+private:
+    static constexpr float K_F = 0.99;
+
     Cell _relative_cell;
 
-    volatile bool CAN_READ = 0;
+    volatile bool CAN_GET_SENSE = 0;
+
     Sense_mask_t _sense_mask;
+    
     OptocouplerSense _sense;    
 };
 

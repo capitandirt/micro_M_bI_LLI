@@ -4,15 +4,8 @@
 
 void setup()
 {
-	DEVICES::TEST::SET_SERIAL();
+    DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-
-    //DEVICES::TEST::CONVERT_TO_SMART();
-    //cycloStore.addSmart(SmartCycloAction_t::FWD_X, 1);
-    cycloStore.addSmart(SmartCycloAction_t::SS90SR);
-    cycloStore.addSmart(SmartCycloAction_t::SS90SR);
-    cycloStore.addSmart(SmartCycloAction_t::SS90SR);
-    cycloStore.addSmart(SmartCycloAction_t::SS90SR);
 }
 
 void loop(){
@@ -20,10 +13,10 @@ void loop(){
     while(micros() - last_time < Ts_us)
         ;
     last_time = micros();
+
     DEVICES::TICK(last_time / 1000);
 
-    //Serial.println(odometry.getTheta() * RAD_TO_DEG);
     cycloWorker.doCyclogram();
-    // robot.statusHandler();
+    robot.statusHandler();
     cycloWorker.tryComplete();
 }
