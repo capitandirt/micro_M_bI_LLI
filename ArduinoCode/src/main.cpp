@@ -16,8 +16,6 @@ void loop(){
 
     DEVICES::TICK(last_time / 1000);
 
-    optocoupler.printSense();
-
     cycloWorker.doCyclogram();
     robot.statusHandler();
     cycloWorker.tryComplete();

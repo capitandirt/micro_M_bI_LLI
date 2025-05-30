@@ -36,6 +36,10 @@ void Robot::statusHandler(){
     case ProgramStatus::GO_TO_START:
         step_flood_fill(START_ROBOT_COORDS);
         break;
+        
+    case ProgramStatus::PRE_ENTRY_FAST:
+        start_fast();
+        break;
 
     default:
         break;
@@ -76,7 +80,7 @@ void Robot::start_explorer(){
     _statusSelector->nextStatus();
 }
 
-void Robot::step_flood_fill(const Vec2 end_vec)
+void Robot::step_flood_fill(const Vec2 end_vec, const ExplorerStatus expl_status)
 {
     if(!_cycloWorker->nowIsClusterDot()) return;
 
@@ -86,7 +90,17 @@ void Robot::step_flood_fill(const Vec2 end_vec)
 
     _odometry->updateMazeCoords(forward_vec);
 
-    if(try_end(forward_vec, end_vec)) return;
+    switch (expl_status)
+    {
+    case TO_START:
+        try_end_to_finish(forward_vec, end_vec);
+        break;
+    
+    case TO_FINISH:
+        // ... 
+        break;
+    }
+    if(try_end_to_finish(forward_vec, end_vec)) return;
 
     if(_maze->UndefWallInCell(forward_vec)){
         _maze->SetCell(forward_cell, forward_vec);
@@ -99,7 +113,7 @@ void Robot::step_flood_fill(const Vec2 end_vec)
     _odometry->updateDir(next_robot_dir);
 }
 
-bool Robot::try_end(const Vec2& cur, const Vec2& end){
+bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end){
     if(cur.x == end.x && cur.y == end.y){
         _actionsHandler->needFwdHalf();
         _statusSelector->nextStatus();
@@ -107,4 +121,8 @@ bool Robot::try_end(const Vec2& cur, const Vec2& end){
     }
 
     return false;
+}
+
+void Robot::start_fast(){
+    
 }
