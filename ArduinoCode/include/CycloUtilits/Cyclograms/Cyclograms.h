@@ -65,6 +65,7 @@ CYCLOGRAM(FWD_X)
 
     if(s->odometry->getRelativeDist() > CELL_SIZE * x)
     {
+        s->odometry->setTheta(ms->theta_0); //после проезда мы выровнились по стенкам и можем считать угол идеальным
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -171,6 +172,7 @@ CYCLOGRAM(SS90EL)
     else ms->theta_i0 = 0;
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
+        ms->theta_0 += HALF_PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -191,6 +193,7 @@ CYCLOGRAM(SS90ER)
     else ms->theta_i0 = 0;
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
+        ms->theta_0 -= HALF_PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -266,8 +269,8 @@ CYCLOGRAM(DD90SL)
 
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist)
     {
-        ms->isComplete = true;
         ms->theta_0 += HALF_PI;
+        ms->isComplete = true;
     }
     else ms->isComplete = false;
 }
@@ -284,8 +287,8 @@ CYCLOGRAM(DD90SR)
 
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist)
     {
-        ms->isComplete = true;
         ms->theta_0 -= HALF_PI;
+        ms->isComplete = true;
     }
     else ms->isComplete = false;
 }
@@ -311,8 +314,8 @@ CYCLOGRAM(SS180SL)
 
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
-        ms->isComplete = true;
         ms->theta_0 += PI;
+        ms->isComplete = true;
     }
     else ms->isComplete = false;
 }
@@ -415,11 +418,11 @@ CYCLOGRAM(IP90L)
 
 CYCLOGRAM(IP90R)
 {
-    constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
+    constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
     constexpr float THETA_ERROR = 6 * PI / 180;
 
     ms->v_f0 = 0;
-    ms->theta_i0 = theta_i;
+    ms->theta_i0 = -theta_i;
 
     if(s->odometry->getRelativeTheta() <= -(HALF_PI - THETA_ERROR))
     {
