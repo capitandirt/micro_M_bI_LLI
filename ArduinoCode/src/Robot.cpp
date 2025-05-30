@@ -12,29 +12,30 @@ void Robot::statusHandler(){
         _actionsHandler->needIdle();
         break;
 
-    case ProgramStatus::PRE_ENTRY_START:
+    case ProgramStatus::DELAY_BEFORE_GO_FINISH:
         _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
 
-    case ProgramStatus::START_EXPLORER:
+    case ProgramStatus::PRE_ENTRY_GO_FINISH:
         start_explorer();
         break;
     
-    case ProgramStatus::EXPLORER:
-        step_flood_fill(FINISH_ROBOT_COORDS);
+    case ProgramStatus::GO_FINISH:
+        step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
         break;
 
-    case ProgramStatus::PRE_ENTRY_FINISH:
+    case ProgramStatus::DELAY_BEFORE_GO_START:
+        _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
 
-    case ProgramStatus::START_EXPLORER_AFTER_FINISH:
+    case ProgramStatus::PRE_ENTRY_GO_START:
         start_explorer();
         break;
 
-    case ProgramStatus::GO_TO_START:
-        step_flood_fill(START_ROBOT_COORDS);
+    case ProgramStatus::GO_START:
+        step_flood_fill(START_ROBOT_COORDS, TO_START);
         break;
         
     case ProgramStatus::PRE_ENTRY_FAST:

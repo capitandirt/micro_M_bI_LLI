@@ -30,6 +30,7 @@ extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
+    battery.tick();
     indicator.tick();
     optocoupler.tick();
 }

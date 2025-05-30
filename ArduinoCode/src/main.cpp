@@ -16,6 +16,8 @@ void loop(){
 
     DEVICES::TICK(last_time / 1000);
 
+    Serial.println(battery.volts());
+
     cycloWorker.doCyclogram();
     robot.statusHandler();
     cycloWorker.tryComplete();

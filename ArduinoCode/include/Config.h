@@ -156,5 +156,9 @@
 #define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (50)
 /*==OPTOCOUPLER END==*/
 
+/*==BATTERY BEGIN==*/
+#define BATTERY_PIN (A7)
+/*==BATTERY END*/
+
 
 #endif // !_CONFIG_H_
