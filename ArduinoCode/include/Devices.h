@@ -51,19 +51,23 @@ VelocityEstimatorConnectionParams right_vecp {
 
 VelocityEstimator rightVelocityEstimator(&right_vecp);
 
+Battery battery(BATTERY_PIN);
+
 Odometry odometry;
 
 MotorConnectionParams left_mcp {
     .DIR = LEFT_MOTOR_DIR,
     .PWM = LEFT_MOTOR_PWM,
-    .M_POLARITY = LEFT_MOTOR_POLARITY
+    .M_POLARITY = LEFT_MOTOR_POLARITY,
+    ._battery = battery
 };
 Motor leftMotor(&left_mcp);
 
 MotorConnectionParams right_mcp {
     .DIR = RIGHT_MOTOR_DIR,
     .PWM = RIGHT_MOTOR_PWM,
-    .M_POLARITY = RIGHT_MOTOR_POLARITY
+    .M_POLARITY = RIGHT_MOTOR_POLARITY,
+    ._battery = battery
 };
 Motor rightMotor(&right_mcp);
 
@@ -146,8 +150,6 @@ ActionsHandlerConnectionParams ahcp{
     ._mazeObserver = &mazeObserver,
 };
 ActionsHandler actionsHandler(&ahcp);
-
-Battery battery(BATTERY_PIN);
 
 Led indicator(INDICATOR_LED_PIN);
 

@@ -236,7 +236,7 @@ CYCLOGRAM(SS90SR)
     
 
     //if(s->odometry->getRelativeDist()() > forwDist && abs(s->odometry->getTheta()) < HALF_PI) ms->theta_i0 = theta_i; 
-    if(s->odometry->getRelativeDist()() < forwDist) 
+    if(s->odometry->getRelativeDist() < forwDist) 
     {
         FWD_helpFunction(ms, s, ms->theta_0);
     }
