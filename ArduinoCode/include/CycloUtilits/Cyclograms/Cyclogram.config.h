@@ -36,4 +36,8 @@
 #define FORWARD_ALIGNMENT_TIME (HALF(CELL_SIZE)/FORWARD_SPEED * 1000 + 300) // ms
 /*==ALIGNMENT CONSTS END==*/
 
+/*==ANGLE REGULATOR==*/
+#define ANGLE_REG_KP 0.1
+/*===================*/
+
 #endif // !_CYCLOGRAM_CONFIG_H_

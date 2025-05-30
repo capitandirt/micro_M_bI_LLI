@@ -24,7 +24,8 @@ public:
         _cyclo_context {
             .ms = { .v_f0 = 0,
                     .theta_i0 = 0,
-                    .isComplete = false},
+                    .isComplete = false,
+                    .theta_0 = 0},
 
             .s = {  .time = 0,
                     .odometry = cwcp->odometry,

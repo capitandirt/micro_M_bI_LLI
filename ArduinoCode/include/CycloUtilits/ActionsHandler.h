@@ -27,11 +27,11 @@ public:
     void inIdle();
 
     Direction needTurn(Direction dir);
-    
+
+    void dirs_to_primitives();
     void convertToSmart(); //экспериментальное
 private:
     const PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
-    void dirs_to_primitives();
     void start_explorer_process(Direction robot_dir);
 
     bool TO_IDLE();

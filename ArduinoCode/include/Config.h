@@ -157,4 +157,9 @@
 /*==OPTOCOUPLER END==*/
 
 
+/*==BATTERY BEGIN==*/
+#define BATTERY_VOLTS A7
+/*==BATTERY END==*/
+
+
 #endif // !_CONFIG_H_

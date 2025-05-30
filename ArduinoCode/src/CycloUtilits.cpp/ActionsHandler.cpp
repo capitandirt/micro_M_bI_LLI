@@ -20,6 +20,8 @@ const PrimitiveCycloAction_t ActionsHandler::calc_primitive_cyclo_action(const u
 }
 
 void ActionsHandler::dirs_to_primitives(){
+    _cycloStore->addPrimitive(PrimitiveCycloAction_t::FORWARD);
+
     for(uint8_t i = 0; i < _maze->GetPathSize(); i++){
         _cycloStore->addPrimitive(calc_primitive_cyclo_action(i));
     }
@@ -201,16 +203,16 @@ bool ActionsHandler::TO_FWD_X()
 {
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
         uint8_t X = 1;
-        for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
-        {
-            _cycloStore->virtualPrimitiveRelease();
-        }
-        _cycloStore->virtualGoBack();
+        for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++);
         
         _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
+        _cycloStore->virtualGoBack();
+        for(uint8_t i = 0; i < X-1; i++) _cycloStore->virtualPopFrontPrimitive();
+        _cycloStore->virtualPrimitiveRelease();
+        
         SERIAL_PRINTLN("X= " + String(X));
         
-        _cycloStore->virtualPrimitiveRelease();
+        
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -366,6 +368,10 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
 {
     static int entryCounter = 0;
     entryCounter++;
+
+    #if OUTPUT_DEBUG
+        _cycloStore->printPrimitives();
+    #endif
     //=====================================================================================================================
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
     SERIAL_PRINTLN("act1: " + String(toInt(curPrim)));
@@ -461,15 +467,18 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
 
 ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startState)
 {
+    PRINTLN("TO_DD90X");
     int X = 1;
 
     const auto TURN = _cycloStore->virtualPopFrontPrimitive();
     const auto OP_TURN = toOpposite(TURN);
     PrimitiveCycloAction_t lastTurn = OP_TURN;
 
+    PRINTLN("TURN: " + String(toInt(TURN)));
     if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT)
     {
         SERIAL_PRINTLN("err in EH");
+        _cycloStore->virtualGoBack();
         return startState;
     };
 
@@ -499,34 +508,33 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
     #if OUTPUT_DEBUG 
     _cycloStore->printPrimitives();
     #endif
-    if(TURN == PrimitiveCycloAction_t::LEFT) // добавляем 1 действие, которое определили ещё в entryHandler
+
+    if(X) //если после рассчётов X = 0, то нам не нужно добавлять ничего
     {
-        _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
-        lastTurn = PrimitiveCycloAction_t::RIGHT;
-    } 
-    else
-    {
-        _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
-        lastTurn = PrimitiveCycloAction_t::LEFT;
-    }
-    for(int i = 1; i < X; i++)
-    {
-        _cycloStore->popFrontPrimitive();
-        _cycloStore->popFrontPrimitive();
-        if(TURN == PrimitiveCycloAction_t::LEFT && !(i % 2) || TURN == PrimitiveCycloAction_t::RIGHT && (i % 2))
+        for(int i = 0; i < X; i++)
         {
-            _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
-            lastTurn = PrimitiveCycloAction_t::RIGHT;
+            _cycloStore->popFrontPrimitive();
+            _cycloStore->popFrontPrimitive();
+            if(TURN == PrimitiveCycloAction_t::LEFT && !(i % 2) || TURN == PrimitiveCycloAction_t::RIGHT && (i % 2))
+            {
+                _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
+                lastTurn = PrimitiveCycloAction_t::RIGHT;
+            } 
+            else
+            {
+                _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
+                lastTurn = PrimitiveCycloAction_t::LEFT;
+            }
+            #if OUTPUT_DEBUG 
+            _cycloStore->printPrimitives();
+            #endif
         } 
-        else
-        {
-            _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
-            lastTurn = PrimitiveCycloAction_t::LEFT;
-        }
-        #if OUTPUT_DEBUG 
-        _cycloStore->printPrimitives();
-        #endif
-    } 
+    }
+    PRINT("finale prims:");
+    #if OUTPUT_DEBUG 
+    _cycloStore->printPrimitives();
+    #endif
+    
     return toState(lastTurn);
 }
 
@@ -564,7 +572,7 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startSt
     #if OUTPUT_DEBUG 
     _cycloStore->printPrimitives();
     #endif
-    if(!(X % 2)) return startState;
+    if(X % 2) return startState;
     else return startState == RobotState_t::LEFT ? RobotState_t::RIGHT : RobotState_t::LEFT;
 }
 
@@ -579,7 +587,7 @@ ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotStat
         SERIAL_PRINTLN("exit FWD_X");
         return RobotState_t::FORWARD;
     }
-
+    SERIAL_PRINTLN("act1&2:");
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
     SERIAL_PRINTLN(toInt(curPrim));
     PrimitiveCycloAction_t nextPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действие
@@ -595,14 +603,11 @@ ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotStat
     }
     if(nextPrim == TURN)
     {
-        _cycloStore->virtualPrimitiveRelease();
-        SERIAL_PRINTLN("to DD90S");
         return TO_DD90X(startState); // на этот момент X = 1
     }
     else if(nextPrim == OP_TURN)
     {
         _cycloStore->virtualPrimitiveRelease();
-        SERIAL_PRINTLN("to DIA");
         return TO_DIA_X(startState); // на этот момент X = 2
     } 
     else 
@@ -622,6 +627,9 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
         return RobotState_t::STOP;
     }
     PrimitiveCycloAction_t curPrim = _cycloStore->popFrontPrimitive(); // 1 действие
+    #if OUTPUT_DEBUG
+    _cycloStore->printPrimitives();
+    #endif
     SERIAL_PRINTLN("act1: " + String(toInt(curPrim)));
     const auto TURN = curPrim;
     const auto OP_TURN = toOpposite(TURN);

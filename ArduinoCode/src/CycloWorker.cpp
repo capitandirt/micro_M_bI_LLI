@@ -11,6 +11,8 @@ void CycloWorker::doCyclogram(){
     _cyclo_context.s.time = _cur_time - _last_time;
 
     cycloStore->executeSmart(_cur_smart_submis, &_cyclo_context);
+
+    Serial.println(_cyclo_context.ms.theta_0);
     
     mixer->impactVelocity(_cyclo_context.ms.theta_i0, _cyclo_context.ms.v_f0);
 }
