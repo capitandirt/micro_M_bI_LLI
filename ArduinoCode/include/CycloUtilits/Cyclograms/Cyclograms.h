@@ -410,7 +410,7 @@ CYCLOGRAM(IP90L)
 
     if(s->odometry->getRelativeTheta() >= HALF_PI - THETA_ERROR)
     {
-        ms->theta_i0 += HALF_PI;
+        ms->theta_0 += HALF_PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -426,7 +426,7 @@ CYCLOGRAM(IP90R)
 
     if(s->odometry->getRelativeTheta() <= -(HALF_PI - THETA_ERROR))
     {
-        ms->theta_i0 -= HALF_PI;
+        ms->theta_0 -= HALF_PI;
         ms->isComplete = true;
     }
     else ms->isComplete = false;

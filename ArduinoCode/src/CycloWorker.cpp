@@ -11,7 +11,6 @@ void CycloWorker::doCyclogram(){
 
     cycloStore->executeSmart(_cur_smart_submis, &_cyclo_context);
 
-    //Serial.println(_cyclo_context.ms.theta_0);
     
     mixer->impactVelocity(_cyclo_context.ms.theta_i0, _cyclo_context.ms.v_f0);
 }
@@ -26,6 +25,8 @@ bool CycloWorker::isCompleteCyclo() const{
 
 void CycloWorker::tryComplete(){
     if(_cyclo_context.ms.isComplete){
+        Serial.println(_cyclo_context.ms.theta_0);
+
         _last_time = _cur_time; 
 
         _cur_smart_submis = cycloStore->popFrontSmartSubmission();

@@ -10,7 +10,7 @@ inline void FWD_helpFunction(MotionStates* ms, const Sensors* s, const float THE
     ms->v_f0 = FORWARD_SPEED;
     //ms->theta_i0 = 0;
     float theta_err = THETA_0 - s->odometry->getTheta();
-    ms->theta_i0 = theta_err * ANGLE_REG_KP;
+    ms->theta_i0 = 0;//theta_err * ANGLE_REG_KP;
 
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;
@@ -30,7 +30,7 @@ inline void FWD_helpFunction(MotionStates* ms, const Sensors* s, const float THE
     };
 
     ms->theta_i0 += regulatorArray[regulatorState];
-    Serial.println(theta_err * ANGLE_REG_KP);
+    //Serial.println(theta_err * ANGLE_REG_KP);
 }
 
 #endif // !_FWD_HELPFUNCTION_H_
