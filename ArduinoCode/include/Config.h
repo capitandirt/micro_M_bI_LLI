@@ -37,7 +37,7 @@
 /*==ENCODER CONNECTION PINS END==*/
 
 /*==ROBOT PARAMS BEGIN==*/
-#define ROBOT_WIDTH 0.0685f
+#define ROBOT_WIDTH 0.076f
 #define WHEEL_RADIUS 0.01725f
 /*==ROBOT PARAMS END*/
 
@@ -93,7 +93,7 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 1
+#define MAZE_SIDE_LENGTH 11
 
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)
@@ -109,7 +109,7 @@
 
 /*==ROBOT START PLACE BEGIN==*/
 #define START_CELL {WallState::HI, WallState::HI, WallState::LO, WallState::HI}
-#define START_ROBOT_DIRECTION (Direction::S)
+#define START_ROBOT_DIRECTION (Direction::E)
 #define START_ROBOT_COORDS {0, 0}
 /*==ROBOT START PLACE END==*/
 
@@ -155,6 +155,10 @@
 #define OPTOCOUPLER_SENSE_THRESHOLD_FWD_R (40)
 #define OPTOCOUPLER_SENSE_THRESHOLD_RIGHT (50)
 /*==OPTOCOUPLER END==*/
+
+/*==BATTERY BEGIN==*/
+#define BATTERY_PIN (A7)
+/*==BATTERY END*/
 
 
 /*==BATTERY BEGIN==*/

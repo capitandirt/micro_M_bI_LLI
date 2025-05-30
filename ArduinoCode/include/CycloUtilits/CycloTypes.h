@@ -7,6 +7,7 @@
 
 enum class SmartCycloAction_t : uint8_t{
     IDLE = 0,
+    DELAY_025S,
     CLUSTER_DOT,
     FWD_HALF,
     FWDE,
@@ -28,6 +29,7 @@ enum class SmartCycloAction_t : uint8_t{
     DS135SR,
     SS180SL,
     SS180SR,
+    IP180,
     IP90L,
     IP90R,
     TO_BACK_ALIGN,
@@ -158,6 +160,7 @@ struct CycloContext{
     void reload(){
         ms.isComplete = 0;
         s.odometry->updateRelative();
+
     }
 };
 

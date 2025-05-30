@@ -6,6 +6,7 @@
 #include "Drivers/Led.h"
 #include "Drivers/StatusSelector.h"
 #include "Drivers/SlideCatcher.h"
+#include "Drivers/Battery.h"
 #include "MazeObserver.h"
 
 void left_encoder_ISR();
@@ -133,6 +134,8 @@ Maze maze;
 Solver solver(&maze);
 
 MazeObserverConnectionParams mocp{
+    ._maze = &maze,
+    ._odometry = &odometry,
     ._optocouplers = &optocoupler
 };
 MazeObserver mazeObserver(&mocp);
@@ -143,6 +146,8 @@ ActionsHandlerConnectionParams ahcp{
     ._mazeObserver = &mazeObserver,
 };
 ActionsHandler actionsHandler(&ahcp);
+
+Battery battery(BATTERY_PIN);
 
 Led indicator(INDICATOR_LED_PIN);
 

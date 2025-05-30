@@ -55,6 +55,8 @@ public:
     float setTheta(float theta_) noexcept;
     float getDist() const;
 
+    float getRelativeTheta() const;
+    float getRelativeDist() const;
     float getRelativeX() const;
     float getRelativeY() const;
 

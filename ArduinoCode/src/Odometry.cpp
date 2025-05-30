@@ -28,6 +28,14 @@ float Odometry::getRelativeY() const{
     return Y - Y_r;
 }
 
+float Odometry::getRelativeTheta() const{
+    return Theta - Theta_r;
+}
+
+float Odometry::getRelativeDist() const{
+    return Distance - Distance_r;
+}
+
 Vec2 Odometry::getMazeCoords() const{
     return mazeCoord;
 }
@@ -65,7 +73,7 @@ void Odometry::tick(float omegaL, float omegaR)
     v = (vR + vL) / 2;
     vX = v * cos(Theta.getOut());
     vY = v * sin(Theta.getOut());
-    //PRINTLN(v);
+
     Distance.tick(v);
     X.tick(vX);
     Y.tick(vY);
@@ -101,11 +109,8 @@ void Odometry::reset()
 
 void Odometry::updateRelative()
 {
-    // X_r = X;
-    // Y_r = Y;
-    // Theta_r = Theta;
-    // Distance_r = Distance;
-
-    Distance.reset();
-    //Theta.reset();
+    X_r = X;
+    Y_r = Y;
+    Theta_r = Theta;
+    Distance_r = Distance;
 }

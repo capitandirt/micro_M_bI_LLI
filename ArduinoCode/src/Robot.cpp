@@ -2,7 +2,6 @@
 
 void Robot::init(){
     _maze->PrimaryFill();
-    _maze->SetCell(START_CELL, START_ROBOT_COORDS);
 }
 
 void Robot::statusHandler(){
@@ -10,32 +9,37 @@ void Robot::statusHandler(){
     {
     case ProgramStatus::NONE:
     case ProgramStatus::NEED_START_COMMAND:
-        _actionsHandler->inIdle();
+        _actionsHandler->needIdle();
         break;
 
-    case ProgramStatus::PRE_ENTRY_START:
-        _actionsHandler->needClusterDot();
+    case ProgramStatus::DELAY_BEFORE_GO_FINISH:
+        _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
 
-    case ProgramStatus::START_EXPLORER:
+    case ProgramStatus::PRE_ENTRY_GO_FINISH:
         start_explorer();
         break;
     
-    case ProgramStatus::EXPLORER:
-        step_flood_fill(FINISH_ROBOT_COORDS);
+    case ProgramStatus::GO_FINISH:
+        step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
         break;
 
-    case ProgramStatus::PRE_ENTRY_FINISH:
+    case ProgramStatus::DELAY_BEFORE_GO_START:
+        _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
 
-    case ProgramStatus::START_EXPLORER_AFTER_FINISH:
+    case ProgramStatus::PRE_ENTRY_GO_START:
         start_explorer();
         break;
 
-    case ProgramStatus::GO_TO_START:
-        step_flood_fill(START_ROBOT_COORDS);
+    case ProgramStatus::GO_START:
+        step_flood_fill(START_ROBOT_COORDS, TO_START);
+        break;
+        
+    case ProgramStatus::PRE_ENTRY_FAST:
+        start_fast();
         break;
 
     default:
@@ -48,41 +52,78 @@ void Robot::start_explorer(){
 
     const WallState forward_wall = _optocoupler->getRelativeCell().north_wall;
     const Direction cur_dir = _odometry->getDir();
-    
+    const Vec2 cur_coords = _odometry->getMazeCoords();
+
     if(forward_wall == WallState::HI){
         const Direction next_dir = _actionsHandler->needTurn(cur_dir);
+        
+        const Cell rel_cell = {forward_wall, WallState::LO, WallState::LO, WallState::LO};
+        const Cell abs_cell = inDir(rel_cell, cur_dir);
+
+        _maze->SetCell(abs_cell, cur_coords);
         _odometry->updateDir(next_dir);
         return;
     }
 
-    _actionsHandler->needStartCellAligning();
+    Cell_u cur_cell;
+    cur_cell.raw = _maze->GetCell(cur_coords);
+
+    const Direction back_dir  = toOpposite(cur_dir);
+    const WallState back_wall = cur_cell.walls[toInt(back_dir)];  
+
+    if(toBool(back_wall)){  
+        _actionsHandler->needStartCellAligning();
+    }
+    else{
+        _actionsHandler->needFwdHalf();
+    }
+
     _statusSelector->nextStatus();
 }
 
-void Robot::step_flood_fill(const Vec2 end_cell)
+void Robot::step_flood_fill(const Vec2 end_vec, const ExplorerStatus expl_status)
 {
     if(!_cycloWorker->nowIsClusterDot()) return;
 
-    const Direction cur_robot_dir = _odometry->getDir();
-    const Vec2 forward_robot_vec  = _odometry->getMazeCoords().plusOrtVector(cur_robot_dir);
-    const Cell forward_cell       = _optocoupler->getCell(cur_robot_dir);
+    const Direction cur_dir = _odometry->getDir();
+    const Vec2 forward_vec  = _odometry->getMazeCoords().plusOrtVector(cur_dir);
+    const Cell forward_cell = _optocoupler->getCell(cur_dir);
 
-    if(forward_robot_vec.x == end_cell.x &&
-       forward_robot_vec.y == end_cell.y 
-    ){
-        _odometry->updateMazeCoords(forward_robot_vec);
-        _actionsHandler->needToEnd();
-        _statusSelector->nextStatus();
-        return;
+    _odometry->updateMazeCoords(forward_vec);
+
+    switch (expl_status)
+    {
+    case TO_START:
+        try_end_to_finish(forward_vec, end_vec);
+        break;
+    
+    case TO_FINISH:
+        // ... 
+        break;
+    }
+    if(try_end_to_finish(forward_vec, end_vec)) return;
+
+    if(_maze->UndefWallInCell(forward_vec)){
+        _maze->SetCell(forward_cell, forward_vec);
     }
 
-    _maze->SetCell(forward_cell, forward_robot_vec);
-    _solver->SolveBfsMaze(forward_robot_vec, end_cell);
-
-    _actionsHandler->exeExplorer(cur_robot_dir);    
+    _solver->SolveBfsMaze(forward_vec, end_vec);
+    _actionsHandler->loadExplorer(cur_dir);    
     
     const Direction next_robot_dir = _maze->GetPathDir(0);
-
     _odometry->updateDir(next_robot_dir);
-    _odometry->updateMazeCoords(forward_robot_vec);
+}
+
+bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end){
+    if(cur.x == end.x && cur.y == end.y){
+        _actionsHandler->needFwdHalf();
+        _statusSelector->nextStatus();
+        return true;
+    }
+
+    return false;
+}
+
+void Robot::start_fast(){
+    
 }

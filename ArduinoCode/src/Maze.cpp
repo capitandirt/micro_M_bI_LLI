@@ -218,7 +218,7 @@ bool Maze::UndefWallInCell(const Vec2 v){
     Cell cell = GetCell(v);
     
     // UNDEF = 0B10
-    // but we need 0Bx1x1x1x1, then we can determine undef walls,
+    // if we have 0Bx1x1x1x1, then we can determine undef walls,
     // because all that more 0B01010101 storage undef wall
 
     const uint8_t not_undef = (~toInt(WallState::UNDEF)) & 0B1;

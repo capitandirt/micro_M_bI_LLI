@@ -23,7 +23,7 @@ void PiReg::tick(){
 
     _constrained_u = constrain(_u, NEG_MAX_U, MAX_U);
 
-    if(_u == _constrained_u || _P < 0){
+    if(_u == _constrained_u){
         _integrator += _err * Ts_s;
     }
     else{

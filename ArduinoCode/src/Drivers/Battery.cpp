@@ -1,12 +1,12 @@
-#include "Battery.h"
+#include "Drivers/Battery.h"
 
-const float Battery::volts() {return batteryVolts;}
+float Battery::volts() {
+    return _voltage;
+}
 
-Battery& Battery::tick() 
+void Battery::tick() 
 {
-    const float batteryDividerRatio = 2.0f;
-    int adcValue = analogRead(BATTERY_VOLTS);
-    float volts = adcValue * (5.0f * batteryDividerRatio / 1023.0f);
-    batteryVolts = volts;
-    return *this;
+    const uint16_t adc_value = analogRead(_PIN);
+    const float volts = adc_value * DIVIDER_RATION;
+    _voltage = volts;
 }
