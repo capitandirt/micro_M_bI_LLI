@@ -22,7 +22,7 @@ void Robot::statusHandler(){
         break;
     
     case ProgramStatus::EXPLORER:
-        step_flood_fill(FINISH_ROBOT_COORDS);
+        step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
         break;
 
     case ProgramStatus::PRE_ENTRY_FINISH:
@@ -34,7 +34,7 @@ void Robot::statusHandler(){
         break;
 
     case ProgramStatus::GO_TO_START:
-        step_flood_fill(START_ROBOT_COORDS);
+        step_flood_fill(START_ROBOT_COORDS, TO_START);
         break;
         
     case ProgramStatus::PRE_ENTRY_FAST:
