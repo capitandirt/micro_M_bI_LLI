@@ -5,9 +5,10 @@
 #include "Cyclogram.config.h"
 
 
-inline void FWD_helpFunction(MotionStates* ms, const Sensors* s, const float THETA_0)
+inline void FWD_helpFunction(MotionStates* ms, const Sensors* s, const float THETA_0, bool isSmartSpeed = false)
 {
     ms->v_f0 = FORWARD_SPEED;
+    if(isSmartSpeed) ms->v_f0 = SMART_FORWARD_SPEED;
     //ms->theta_i0 = 0;
     float theta_err = THETA_0 - s->odometry->getTheta();
     ms->theta_i0 = 0;//theta_err * ANGLE_REG_KP;
