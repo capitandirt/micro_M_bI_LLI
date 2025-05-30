@@ -29,8 +29,7 @@ public:
     void needIdle();
 
     Direction needTurn(Direction dir);
-
-    void dirs_to_primitives();
+    
     void convertToSmart(); //экспериментальное
 private:
     PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
