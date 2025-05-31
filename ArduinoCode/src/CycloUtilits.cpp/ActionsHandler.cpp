@@ -106,6 +106,9 @@ void ActionsHandler::needStartCellAligning(){
 }
 
 Direction ActionsHandler::needTurn(Direction dir){
+    _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
+
     _cycloStore->addSmart(SmartCycloAction_t::IP90L);
     _cycloStore->addSmart(SmartCycloAction_t::DELAY_025S);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
@@ -686,5 +689,6 @@ void ActionsHandler::convertToSmart()
         
     }
 }
+
 
 #undef OUTPUT_DEBUG

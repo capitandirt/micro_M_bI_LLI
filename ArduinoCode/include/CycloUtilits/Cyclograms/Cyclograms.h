@@ -72,7 +72,7 @@ CYCLOGRAM(FWD_X)
 
 CYCLOGRAM(FWDE)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = FORWARD_SPEED * 1.32;
     ms->theta_i0 = 0;
 
     static bool FIRST_ENTRANCE = 1;
@@ -168,7 +168,10 @@ CYCLOGRAM(SS90EL)
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
         ms->theta_i0 = theta_i;
     }
-    else ms->theta_i0 = 0;
+    else
+    {
+        FWD_default(ms, s);
+    }
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
@@ -188,7 +191,10 @@ CYCLOGRAM(SS90ER)
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
         ms->theta_i0 = -theta_i;
     }
-    else ms->theta_i0 = 0;
+    else
+    {
+        FWD_default(ms, s);
+    }
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;

@@ -4,7 +4,7 @@
 
 inline void FWD_default(MotionStates* ms, const Sensors* s)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = FORWARD_SPEED * 1.2;
     ms->theta_i0 = 0;
 
     const int16_t left_sense = s->optocoupler->getSense().left;
