@@ -176,7 +176,7 @@ bool ActionsHandler::TO_FWD_X_TEMPLATE()
 {
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
         _cycloStore->virtualPrimitiveRelease(); 
-        uint8_t X = 2;
+        uint8_t X = 1;
         for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
         {
             _cycloStore->virtualPrimitiveRelease();

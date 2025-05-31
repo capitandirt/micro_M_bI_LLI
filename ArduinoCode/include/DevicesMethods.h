@@ -284,7 +284,9 @@ namespace DEVICES{
 
             cycloStore.printPrimitives();
             cycloStore.printSmarts();
+
             actionsHandler.primitivesToFasts();
+            
             cycloStore.printSmarts();
         }
     }

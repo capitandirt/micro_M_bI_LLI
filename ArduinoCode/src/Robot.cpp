@@ -122,6 +122,5 @@ void Robot::fast(){
     _odometry->updateDir(START_ROBOT_DIRECTION);
 
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
-    //_actionsHandler->primitivesToFasts();
-    _actionsHandler->convertToSmart();
+    _actionsHandler->primitivesToFasts();
 }

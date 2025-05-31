@@ -107,11 +107,12 @@ inline X_t toX_t(const SmartCycloAction_t val){
 
 inline const char* Str_SmartCyclogramAction[]{
     "IDLE",
+    "DELAY_025S",
     "CLUSTER_DOT",
     "FWD_HALF",
     "FWDE",
-    "FWD_",
-    "DIAG_",
+    "FWD_X",
+    "DIAG_X",
     "SS90EL",
     "SS90ER",
     "SS90SL",
@@ -128,6 +129,7 @@ inline const char* Str_SmartCyclogramAction[]{
     "DS135SR",
     "SS180SL",
     "SS180SR",
+    "IP180",
     "IP90L",
     "IP90R",
     "TO_BACK_ALIGN",
