@@ -259,5 +259,10 @@ namespace DEVICES{
             actionsHandler.convertToSmart();
             cycloStore.printSmarts();
         }
+
+        void PRIM_TO_FAST()
+        {
+            _actionsHandler->primitivesToFasts();
+        }
     }
 }

@@ -39,11 +39,13 @@ void Robot::statusHandler(){
     //     break;
         
     case ProgramStatus::PRE_ENTRY_FAST:
+        Serial.println("PRE_ENTRY_FAST");
         break;
 
     case ProgramStatus::FAST:
         fast();
         break;
+
     default:
         break;
     }

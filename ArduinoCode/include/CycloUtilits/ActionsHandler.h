@@ -38,6 +38,7 @@ private:
     bool TO_IDLE();
     bool TO_STOP();
     bool TO_FWD_X();
+    bool TO_FWD_X_TEMPLATE();
     bool TO_SS90E();
     bool TO_SS90S();
     bool TO_SD45S_DS45S();

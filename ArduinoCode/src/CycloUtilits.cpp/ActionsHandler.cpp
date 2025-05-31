@@ -85,7 +85,8 @@ void ActionsHandler::primitivesToFasts()
 {
     dirs_to_primitives();
 
-    while(!_cycloStore->primitiveIsEmpty()){
+    while(_cycloStore->virtualPopFrontPrimitive() != PrimitiveCycloAction_t::STOP){
+        _cycloStore->virtualGoBack();
         if(TO_SD45S_DS45S());
         else if (TO_SD135S_DS45S());
         else if (TO_SS90E());
@@ -170,9 +171,30 @@ bool ActionsHandler::TO_STOP(){
     return false;
 }
 
+bool ActionsHandler::TO_FWD_X_TEMPLATE()
+{
+    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){ 
+        uint8_t X = 1;
+        for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
+        {
+            _cycloStore->virtualPrimitiveRelease();
+        }
+        _cycloStore->virtualGoBack();
+        
+        _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
+        SERIAL_PRINTLN("X= " + String(X));
+        
+        _cycloStore->virtualPrimitiveRelease();
+        return true;
+    }
+    else _cycloStore->virtualGoBack();
+
+    return false;
+}
+
 bool ActionsHandler::TO_FWD_X()
 {
-    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
+    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){ 
         uint8_t X = 1;
         for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
         {
@@ -252,7 +274,6 @@ bool ActionsHandler::TO_SD45S_DS45S(){
                 }
                 _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                 _cycloStore->virtualPrimitiveRelease();
-                
                 return true;
             }
         }
