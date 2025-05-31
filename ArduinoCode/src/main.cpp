@@ -6,6 +6,8 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
+    //DEVICES::TEST::PRIM_TO_FAST();
+    //while(true);
 }
 
 void loop(){

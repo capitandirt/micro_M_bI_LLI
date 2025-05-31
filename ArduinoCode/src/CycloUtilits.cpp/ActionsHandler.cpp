@@ -85,12 +85,13 @@ void ActionsHandler::primitivesToFasts()
 {
     dirs_to_primitives();
 
+    _cycloStore->virtualPopFrontPrimitive();
     while(_cycloStore->virtualPopFrontPrimitive() != PrimitiveCycloAction_t::STOP){
         _cycloStore->virtualGoBack();
         if(TO_SD45S_DS45S());
         else if (TO_SD135S_DS45S());
         else if (TO_SS90E());
-        else if (TO_FWD_X());
+        else if (TO_FWD_X_TEMPLATE());
         else if (TO_SS90E());
         else if (TO_STOP());
         else if (TO_IDLE());
@@ -173,8 +174,9 @@ bool ActionsHandler::TO_STOP(){
 
 bool ActionsHandler::TO_FWD_X_TEMPLATE()
 {
-    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){ 
-        uint8_t X = 1;
+    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
+        _cycloStore->virtualPrimitiveRelease(); 
+        uint8_t X = 2;
         for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
         {
             _cycloStore->virtualPrimitiveRelease();
@@ -182,9 +184,10 @@ bool ActionsHandler::TO_FWD_X_TEMPLATE()
         _cycloStore->virtualGoBack();
         
         _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
-        SERIAL_PRINTLN("X= " + String(X));
+        
         
         _cycloStore->virtualPrimitiveRelease();
+        SERIAL_PRINTLN("add FWD with X= " + String(X));
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -192,7 +195,7 @@ bool ActionsHandler::TO_FWD_X_TEMPLATE()
     return false;
 }
 
-bool ActionsHandler::TO_FWD_X()
+bool ActionsHandler::TO_FWD_X() //тут может быть ошибка см FWD_TEMPLATE
 {
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){ 
         uint8_t X = 1;
@@ -217,6 +220,7 @@ bool ActionsHandler::TO_SS90E(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::LEFT){
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
         _cycloStore->virtualPrimitiveRelease();
+        
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -224,6 +228,7 @@ bool ActionsHandler::TO_SS90E(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
         _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         _cycloStore->virtualPrimitiveRelease();
+        
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -234,8 +239,9 @@ bool ActionsHandler::TO_SS90E(){
 bool ActionsHandler::TO_SS90S(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::LEFT){
         if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
-            _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
+            _cycloStore->addSmart(SmartCycloAction_t::SS90SL);
             _cycloStore->virtualPrimitiveRelease();
+            SERIAL_PRINTLN("add SS90SL");
             return true;
         }
     }
@@ -244,8 +250,9 @@ bool ActionsHandler::TO_SS90S(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
        if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD)
        { 
-            _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+            _cycloStore->addSmart(SmartCycloAction_t::SS90SR);
             _cycloStore->virtualPrimitiveRelease();
+            SERIAL_PRINTLN("add SS90SR");
             return true;
        }
     }
@@ -274,6 +281,7 @@ bool ActionsHandler::TO_SD45S_DS45S(){
                 }
                 _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                 _cycloStore->virtualPrimitiveRelease();
+                SERIAL_PRINTLN("add 45chain");
                 return true;
             }
         }
@@ -307,6 +315,7 @@ bool ActionsHandler::TO_SD135S_DS45S()
                             _cycloStore->addSmart(SmartCycloAction_t::DS45SL);
                         }
                         _cycloStore->virtualPrimitiveRelease();
+                        SERIAL_PRINTLN("add 135chain");
                         return true;
                     }   
                 }
@@ -690,6 +699,8 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
 
 void ActionsHandler::convertToSmart()
 {
+    dirs_to_primitives();
+
     PrimitiveCycloAction_t curPrim = PrimitiveCycloAction_t::BLANK;
     
     while(curPrim != PrimitiveCycloAction_t::STOP) // пока не стоит остановка
@@ -723,6 +734,7 @@ void ActionsHandler::convertToSmart()
         } while (exitState != RobotState_t::STOP);
         
     }
+    //_cycloStore->printSmarts();
 }
 
 
