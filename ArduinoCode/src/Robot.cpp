@@ -25,18 +25,18 @@ void Robot::statusHandler(){
         step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
         break;
 
-    case ProgramStatus::DELAY_BEFORE_GO_START:
-        _actionsHandler->needDelay05();
-        _statusSelector->nextStatus();
-        break;
+    // case ProgramStatus::DELAY_BEFORE_GO_START:
+    //     _actionsHandler->needDelay05();
+    //     _statusSelector->nextStatus();
+    //     break;
 
-    case ProgramStatus::PRE_ENTRY_GO_START:
-        start_explorer();
-        break;
+    // case ProgramStatus::PRE_ENTRY_GO_START:
+    //     start_explorer();
+    //     break;
 
-    case ProgramStatus::GO_START:
-        step_flood_fill(START_ROBOT_COORDS, TO_START);
-        break;
+    // case ProgramStatus::GO_START:
+    //     step_flood_fill(START_ROBOT_COORDS, TO_START);
+    //     break;
         
     case ProgramStatus::PRE_ENTRY_FAST:
         start_fast();
@@ -118,5 +118,9 @@ bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end){
 }
 
 void Robot::start_fast(){
-    
+    _odometry->updateDir(START_ROBOT_DIRECTION);
+
+    _actionsHandler->primitivesToFasts();
+
+    _statusSelector->nextStatus();
 }

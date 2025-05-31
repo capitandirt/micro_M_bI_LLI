@@ -13,9 +13,9 @@ enum class ProgramStatus : uint8_t{
     DELAY_BEFORE_GO_FINISH,
     PRE_ENTRY_GO_FINISH,
     GO_FINISH,
-    DELAY_BEFORE_GO_START,
-    PRE_ENTRY_GO_START,
-    GO_START,
+    // DELAY_BEFORE_GO_START,
+    // PRE_ENTRY_GO_START,
+    // GO_START,
     PRE_ENTRY_FAST,
     FAST,
     

@@ -18,7 +18,6 @@ public:
     
     void loadExplorer(Direction robot_dir);
     void primitivesToFasts();
-    void primitivesToFasts();
     
     void clear();
     void needStartCellAligning();
