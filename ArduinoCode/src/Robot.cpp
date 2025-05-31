@@ -12,35 +12,39 @@ void Robot::statusHandler(){
         _actionsHandler->needIdle();
         break;
 
-    case ProgramStatus::PRE_ENTRY_START:
+    case ProgramStatus::DELAY_BEFORE_GO_FINISH:
         _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
 
-    case ProgramStatus::START_EXPLORER:
+    case ProgramStatus::PRE_ENTRY_GO_FINISH:
         start_explorer();
         break;
     
-    case ProgramStatus::EXPLORER:
-        step_flood_fill(FINISH_ROBOT_COORDS);
+    case ProgramStatus::GO_FINISH:
+        step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
         break;
 
-    case ProgramStatus::PRE_ENTRY_FINISH:
+    case ProgramStatus::DELAY_BEFORE_GO_START:
+        _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
 
-    case ProgramStatus::START_EXPLORER_AFTER_FINISH:
+    case ProgramStatus::PRE_ENTRY_GO_START:
         start_explorer();
         break;
 
-    case ProgramStatus::GO_TO_START:
-        step_flood_fill(START_ROBOT_COORDS);
+    case ProgramStatus::GO_START:
+        step_flood_fill(START_ROBOT_COORDS, TO_START);
         break;
         
     case ProgramStatus::PRE_ENTRY_FAST:
         start_fast();
         break;
 
+    case ProgramStatus::FAST:
+
+        break;
     default:
         break;
     }
@@ -90,23 +94,13 @@ void Robot::step_flood_fill(const Vec2 end_vec, const ExplorerStatus expl_status
 
     _odometry->updateMazeCoords(forward_vec);
 
-    switch (expl_status)
-    {
-    case TO_START:
-        try_end_to_finish(forward_vec, end_vec);
-        break;
-    
-    case TO_FINISH:
-        // ... 
-        break;
-    }
     if(try_end_to_finish(forward_vec, end_vec)) return;
 
     if(_maze->UndefWallInCell(forward_vec)){
         _maze->SetCell(forward_cell, forward_vec);
     }
 
-    _solver->SolveBfsMaze(forward_vec, end_vec);
+    _solver->ExplorerSolveBfsMaze(forward_vec, end_vec);
     _actionsHandler->loadExplorer(cur_dir);    
     
     const Direction next_robot_dir = _maze->GetPathDir(0);

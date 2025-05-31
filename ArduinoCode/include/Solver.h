@@ -10,7 +10,7 @@ public:
     Solver(Maze* maze) : _maze(maze){}
     
     void MazeTestConfig() noexcept;
-    void SolveBfsMaze(const Vec2 start, const Vec2 finish);
+    void ExplorerSolveBfsMaze(const Vec2 start, const Vec2 finish);
     
     Vec2 firstUndefCellCoords();
 private:

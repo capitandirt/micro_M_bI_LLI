@@ -106,12 +106,20 @@ void ActionsHandler::needStartCellAligning(){
 }
 
 Direction ActionsHandler::needTurn(Direction dir){
+    _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
+
     _cycloStore->addSmart(SmartCycloAction_t::IP90L);
     _cycloStore->addSmart(SmartCycloAction_t::DELAY_025S);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 
     Direction next_dir = decDir(dir);
     return next_dir;
+}
+
+Direction needDirection(const Direction cur,  const Direction need){
+    const PrimitiveCycloAction_t primitive = static_cast<PrimitiveCycloAction_t>(
+        (toInt(need) - toInt(cur) + DIRECTION_SIZE) % DIRECTION_SIZE);
 }
 
 void ActionsHandler::needClusterDot(){

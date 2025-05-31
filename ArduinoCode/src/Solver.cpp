@@ -106,7 +106,7 @@ void Solver::MazeTestConfig(){
     _maze->PrimaryFill();
 }
 
-void Solver::SolveBfsMaze(const Vec2 start, const Vec2 finish){
+void Solver::ExplorerSolveBfsMaze(const Vec2 start, const Vec2 finish){
     uint8_t ind_s = Maze::Vec2ToInd(start);    
     uint8_t ind_f = Maze::Vec2ToInd(finish);
     
