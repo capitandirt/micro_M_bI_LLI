@@ -3,7 +3,6 @@
 
 /*==GENERAL CYCLOGRAM CONSTS BEGIN==*/
 #define FORWARD_SPEED 0.22
-#define SMART_FORWARD_SPEED 0.4
 #define CELL_SIZE 0.18
 /*==GENERAL CYCLOGRAM CONSTS END==*/
 
@@ -14,7 +13,7 @@
 /*==SMART CYCLOGRAM CONSTS BEGIN==*/
 #define SS90S_TURN_RADIUS 0.04
 #define DD90S_TURN_RADIUS 0.06 // максимум - CELL_SIZE / M_SQRT2
-#define SD45S_FORW_DIST (CELL_SIZE / 4) // путь до начала поворота, максимум - CELL_SIZE / 2
+#define SD45S_FORW_DIST (CELL_SIZE / 3) // путь до начала поворота, максимум - CELL_SIZE / 2
 #define SD135S_TURN_RADIUS 0.07
 #define SS180S_FORW_DIST 0.11
 /*==SMART CYCLOGRAM CONSTS END==*/
@@ -36,9 +35,5 @@
 #define BACK_ALIGNMENT_TIME (HALF(CELL_SIZE)/FORWARD_SPEED * 1000 + 500) // ms
 #define FORWARD_ALIGNMENT_TIME (HALF(CELL_SIZE)/FORWARD_SPEED * 1000 + 300) // ms
 /*==ALIGNMENT CONSTS END==*/
-
-/*==ANGLE REGULATOR==*/
-#define ANGLE_REG_KP 20
-/*===================*/
 
 #endif // !_CYCLOGRAM_CONFIG_H_

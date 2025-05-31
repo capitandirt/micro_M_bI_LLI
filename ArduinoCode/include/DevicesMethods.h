@@ -30,7 +30,6 @@ extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
-    battery.tick();
     indicator.tick();
     optocoupler.tick();
 }
@@ -213,95 +212,49 @@ namespace DEVICES{
             // cycloStore.addSmart(SmartCycloAction_t::DS45SL);
         }
 
-        void addTestMaze1()  
-        {
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
-        }
-
-        void addTestMaze2()
-        {
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
-        }
-
-        void addTestMaze3()
-        {
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
-        }
-
-        void addTestMaze4()
-        {
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
-        }
-
         void CONVERT_TO_SMART()
         {
-            //addTestMaze1();
+            //======TEST MAZE 1======
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
+            //======================
 
-            //addTestMaze2();
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
 
-            //addTestMaze3();
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
 
-            //addTestMaze4();
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
 
-            // solver.MazeTestConfig();
-            // solver.SolveBfsMaze({0, 4}, {0, 0});
             
-            // actionsHandler.dirs_to_primitives();
-            // maze.Print();
-
             cycloStore.printPrimitives();
             actionsHandler.convertToSmart();
             cycloStore.printSmarts();

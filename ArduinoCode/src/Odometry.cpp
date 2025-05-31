@@ -12,10 +12,6 @@ float Odometry::getTheta() const{
     return Theta.getOut();
 }
 
-float Odometry::setTheta(float theta_) noexcept{
-    Theta = theta_;
-}
-
 float Odometry::getDist() const{
     return Distance.getOut();
 }

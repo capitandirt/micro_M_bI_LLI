@@ -1,17 +1,11 @@
-#ifndef _FWD_HELPFUNCTION_H_
-#define _FWD_HELPFUNCTION_H_
-
 #include "../CycloTypes.h"
 #include "Cyclogram.config.h"
 
 
-inline void FWD_helpFunction(MotionStates* ms, const Sensors* s, const float THETA_0, bool isSmartSpeed = false)
+inline void FWD_default(MotionStates* ms, const Sensors* s)
 {
     ms->v_f0 = FORWARD_SPEED;
-    if(isSmartSpeed) ms->v_f0 = SMART_FORWARD_SPEED;
-    //ms->theta_i0 = 0;
-    float theta_err = THETA_0 - s->odometry->getTheta();
-    ms->theta_i0 = 0;//theta_err * ANGLE_REG_KP;
+    ms->theta_i0 = 0;
 
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;
@@ -30,8 +24,5 @@ inline void FWD_helpFunction(MotionStates* ms, const Sensors* s, const float THE
         ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 
-    ms->theta_i0 += regulatorArray[regulatorState];
-    //Serial.println(theta_err * ANGLE_REG_KP);
+    ms->theta_i0 = regulatorArray[regulatorState];
 }
-
-#endif // !_FWD_HELPFUNCTION_H_

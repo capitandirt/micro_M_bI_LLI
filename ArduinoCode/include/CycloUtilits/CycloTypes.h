@@ -150,7 +150,6 @@ struct MotionStates
     float v_f0;
     float theta_i0;
     bool isComplete;
-    float theta_0;
 };
 
 struct CycloContext{
