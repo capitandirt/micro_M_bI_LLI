@@ -81,7 +81,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
 }
 
 /*useless code*/
-void ActionsHandler::primitivesToExplorers(Direction robot_dir)
+void ActionsHandler::primitivesToFasts()
 {
     dirs_to_primitives();
 
