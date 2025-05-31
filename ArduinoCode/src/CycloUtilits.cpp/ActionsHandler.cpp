@@ -117,6 +117,11 @@ Direction ActionsHandler::needTurn(Direction dir){
     return next_dir;
 }
 
+Direction needDirection(const Direction cur,  const Direction need){
+    const PrimitiveCycloAction_t primitive = static_cast<PrimitiveCycloAction_t>(
+        (toInt(need) - toInt(cur) + DIRECTION_SIZE) % DIRECTION_SIZE);
+}
+
 void ActionsHandler::needClusterDot(){
     _cycloStore->reloadSmarts();
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);

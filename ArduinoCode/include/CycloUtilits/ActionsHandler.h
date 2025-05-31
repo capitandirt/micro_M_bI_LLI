@@ -29,6 +29,7 @@ public:
     void needIdle();
 
     Direction needTurn(Direction dir);
+    Direction needDirection(const Direction cur,  const Direction need);
     
     void convertToSmart(); //экспериментальное
 private:

@@ -83,7 +83,7 @@ namespace DEVICES{
         void BFS(){
             solver.MazeTestConfig();
             
-            solver.SolveBfsMaze({0, 0}, {5, 5});
+            solver.ExplorerSolveBfsMaze({0, 0}, {5, 5});
             
             maze.PrintDirPath();
             maze.Print();
@@ -96,7 +96,7 @@ namespace DEVICES{
             maze.SetCell({WallState::UNDEF, WallState::UNDEF, WallState::HI, WallState::UNDEF}, {2, 1});
             maze.SetCell({WallState::LO, WallState::LO, WallState::LO, WallState::LO}, {0, 0});
 
-            solver.SolveBfsMaze({0, 0}, {2, 2});
+            solver.ExplorerSolveBfsMaze({0, 0}, {2, 2});
 
             Vec2 v = solver.firstUndefCellCoords();
 
@@ -169,7 +169,7 @@ namespace DEVICES{
             solver.MazeTestConfig();
 
             Vec2 __s = {0, 0}; Vec2 __f = {2, 2};    
-            solver.SolveBfsMaze(__s, __f);
+            solver.ExplorerSolveBfsMaze(__s, __f);
 
             maze.Print();
 
