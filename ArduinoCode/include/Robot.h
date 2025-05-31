@@ -39,7 +39,7 @@ private:
     bool try_end_to_finish(const Vec2& cur, const Vec2& end);
     bool try_end_to_start(const Vec2& cur, const Vec2& end);
 
-    void start_fast();
+    void fast();
 };
 
 #endif // !_ROBOT_H_

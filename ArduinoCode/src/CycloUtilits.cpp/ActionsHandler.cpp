@@ -143,7 +143,6 @@ void ActionsHandler::needFwdHalf(){
 }
 
 void ActionsHandler::needDelay05(){
-    _cycloStore->reloadSmarts();
     _cycloStore->addSmart(SmartCycloAction_t::DELAY_025S, 2);
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }

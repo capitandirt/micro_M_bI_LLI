@@ -174,7 +174,7 @@ namespace DEVICES{
             maze.Print();
 
             Direction __sd = Direction::S;
-            actionsHandler.primitivesToFasts(__sd);
+            // actionsHandler.primitivesToFasts(__sd);
 
             maze.PrintDirPath();
             cycloStore.printPrimitives();

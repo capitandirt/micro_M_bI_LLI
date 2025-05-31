@@ -39,11 +39,10 @@ void Robot::statusHandler(){
     //     break;
         
     case ProgramStatus::PRE_ENTRY_FAST:
-        start_fast();
         break;
 
     case ProgramStatus::FAST:
-
+        fast();
         break;
     default:
         break;
@@ -117,10 +116,9 @@ bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end){
     return false;
 }
 
-void Robot::start_fast(){
+void Robot::fast(){
     _odometry->updateDir(START_ROBOT_DIRECTION);
 
+    _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
     _actionsHandler->primitivesToFasts();
-
-    _statusSelector->nextStatus();
 }
