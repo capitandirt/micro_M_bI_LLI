@@ -11,6 +11,7 @@ public:
     
     void MazeTestConfig() noexcept;
     void ExplorerSolveBfsMaze(const Vec2 start, const Vec2 finish);
+    void FastSolveBfsMaze(const Vec2 start, const Vec2 finish);
     
     Vec2 firstUndefCellCoords();
 private:

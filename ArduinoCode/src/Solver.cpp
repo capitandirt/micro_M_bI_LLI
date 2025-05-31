@@ -177,6 +177,77 @@ void Solver::ExplorerSolveBfsMaze(const Vec2 start, const Vec2 finish){
     calc_path(ind_s, ind_f);
 }
 
+void Solver::FastSolveBfsMaze(const Vec2 start, const Vec2 finish){
+    uint8_t ind_s = Maze::Vec2ToInd(start);    
+    uint8_t ind_f = Maze::Vec2ToInd(finish);
+    
+    _maze->UndefDirs();
+    _queue.clear();
+
+    _queue.pushBack(ind_f);
+
+    while(!_queue.isEmpty()){
+        uint8_t cur_cell_ind = _queue.popFront();
+
+        if(cur_cell_ind == ind_s){
+            break;
+        }
+
+        Cell cur_cell;
+        Vec2 cur_cell_vec2 = Maze::IndToVec2(cur_cell_ind);
+        _maze->GetCell(cur_cell, cur_cell_vec2);
+
+        if(cur_cell.north_wall != WallState::HI && cur_cell.north_wall != WallState::UNDEF){
+            Vec2 checked_cell_vec = {cur_cell_vec2.x, cur_cell_vec2.y - 1};
+
+            _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
+            
+            if(_buf_cell_dir.is_def_cell_dir != DirectionState::DEF){
+                _maze->SetCellDir(Direction::S, checked_cell_vec);
+
+                _queue.pushBack(cur_cell_ind - MAZE_SIDE_LENGTH); // cur_y--
+            }
+        }
+
+        if(cur_cell.east_wall != WallState::HI && cur_cell.east_wall != WallState::UNDEF){
+            Vec2 checked_cell_vec = {cur_cell_vec2.x + 1, cur_cell_vec2.y};
+
+            _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
+
+            if(_buf_cell_dir.is_def_cell_dir != DirectionState::DEF){
+                _maze->SetCellDir(Direction::W, checked_cell_vec);
+                _queue.pushBack(cur_cell_ind + 1); // cur_x++
+            }
+        }
+
+        if(cur_cell.south_wall != WallState::HI && cur_cell.south_wall != WallState::UNDEF){
+            Vec2 checked_cell_vec = {cur_cell_vec2.x, cur_cell_vec2.y + 1};
+
+            _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
+
+            if(_buf_cell_dir.is_def_cell_dir != DirectionState::DEF){
+                _maze->SetCellDir(Direction::N, checked_cell_vec);
+                _queue.pushBack(cur_cell_ind + MAZE_SIDE_LENGTH); // cur_y++
+            }
+        }
+
+        if(cur_cell.west_wall != WallState::HI && cur_cell.west_wall != WallState::UNDEF){
+            Vec2 checked_cell_vec = {cur_cell_vec2.x - 1, cur_cell_vec2.y};
+
+            _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
+
+            if(_buf_cell_dir.is_def_cell_dir != DirectionState::DEF){
+                _maze->SetCellDir(Direction::E, checked_cell_vec);
+                _queue.pushBack(cur_cell_ind - 1); // cur_x--
+            }
+        }
+    }
+
+    _maze->UndefCell(finish);
+
+    calc_path(ind_s, ind_f);
+}
+
 Vec2 Solver::firstUndefCellCoords(){
     return _first_undef_cell_coords;
 }
