@@ -24,6 +24,7 @@ public:
         _cyclo_context {
             .ms = { .v_f0 = 0,
                     .theta_i0 = 0,
+                    .theta_0 = 0,
                     .isComplete = false},
 
             .s = {  .time = 0,

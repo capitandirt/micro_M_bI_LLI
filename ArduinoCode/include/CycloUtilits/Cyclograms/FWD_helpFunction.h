@@ -2,10 +2,12 @@
 #include "Cyclogram.config.h"
 
 
-inline void FWD_default(MotionStates* ms, const Sensors* s)
+inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
-    ms->v_f0 = FORWARD_SPEED * 1.2;
-    ms->theta_i0 = 0;
+    ms->v_f0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
+    //ms->theta_i0 = 0;
+    float theta_err = THETA_0 - s->odometry->getTheta();
+    ms->theta_i0 = 0;//theta_err * ANGLE_REG_KP;
 
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;
@@ -19,9 +21,9 @@ inline void FWD_default(MotionStates* ms, const Sensors* s)
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
+        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 
     ms->theta_i0 = regulatorArray[regulatorState];

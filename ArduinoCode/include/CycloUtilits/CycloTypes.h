@@ -151,6 +151,7 @@ struct MotionStates
 {
     float v_f0;
     float theta_i0;
+    float theta_0;
     bool isComplete;
 };
 

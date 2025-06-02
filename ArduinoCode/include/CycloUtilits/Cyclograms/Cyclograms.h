@@ -50,7 +50,7 @@ CYCLOGRAM(DELAY_025S){
 
 CYCLOGRAM(FWD_HALF)
 {
-    FWD_default(ms, s);
+    FWD_default(ms, s, ms->theta_0);
 
     if(s->odometry->getRelativeDist() > HALF(CELL_SIZE) )
     {
@@ -61,10 +61,11 @@ CYCLOGRAM(FWD_HALF)
 
 CYCLOGRAM(FWD_X)
 {
-    FWD_default(ms, s);
+    FWD_default(ms, s, ms->theta_0);
 
     if(s->odometry->getRelativeDist() > CELL_SIZE * x)
     {
+        s->odometry->setTheta(ms->theta_0);
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -72,7 +73,7 @@ CYCLOGRAM(FWD_X)
 
 CYCLOGRAM(FWDE)
 {
-    ms->v_f0 = FORWARD_SPEED * 1.32;
+    ms->v_f0 = FORWARD_SPEED * FWDE_SPEED_MULTIPLIER;
     ms->theta_i0 = 0;
 
     static bool FIRST_ENTRANCE = 1;
@@ -96,9 +97,9 @@ CYCLOGRAM(FWDE)
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
+        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 
     if(FIRST_ENTRANCE){
@@ -145,7 +146,7 @@ CYCLOGRAM(FWDE)
 
 CYCLOGRAM(DIAG_X)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = SMART_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     ms->theta_i0 = 0;
 
     if(s->odometry->getRelativeDist() > CELL_SIZE / M_SQRT2 * x)
@@ -165,12 +166,16 @@ CYCLOGRAM(SS90EL)
     constexpr float forwDist = CELL_SIZE / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4;
     
-    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
+    if(s->odometry->getRelativeDist() < forwDist)
+    {
+        FWD_default(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
         ms->theta_i0 = theta_i;
     }
     else
     {
-        FWD_default(ms, s);
+        FWD_default(ms, s, ms->theta_0 + HALF_PI);
     }
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
@@ -188,12 +193,16 @@ CYCLOGRAM(SS90ER)
     constexpr float forwDist = CELL_SIZE / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4;
     
-    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
+    if(s->odometry->getRelativeDist() < forwDist)
+    {
+        FWD_default(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
         ms->theta_i0 = -theta_i;
     }
     else
     {
-        FWD_default(ms, s);
+        FWD_default(ms, s, ms->theta_0 - HALF_PI);
     }
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
@@ -205,17 +214,23 @@ CYCLOGRAM(SS90ER)
 
 CYCLOGRAM(SS90SL)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = SMART_FORWARD_SPEED;
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = SMART_FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
 
-    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
+    if(s->odometry->getRelativeDist() < forwDist)
+    {
+        FWD_default(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
+        ms->theta_i0 = theta_i;
+    }
     else
     {
-        FWD_default(ms, s);
+        FWD_default(ms, s, ms->theta_0 + HALF_PI);
     }
 
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
@@ -227,17 +242,23 @@ CYCLOGRAM(SS90SL)
 
 CYCLOGRAM(SS90SR)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = SMART_FORWARD_SPEED;
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = SMART_FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
 
-    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
+    if(s->odometry->getRelativeDist() < forwDist)
+    {
+        FWD_default(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
+        ms->theta_i0 = -theta_i;
+    }
     else
     {
-        FWD_default(ms, s);
+        FWD_default(ms, s, ms->theta_0 - HALF_PI);
     }
 
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
@@ -248,11 +269,11 @@ CYCLOGRAM(SS90SR)
 }
 CYCLOGRAM(DD90SL)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = SMART_FORWARD_SPEED;
     constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
     constexpr float forwDist = CELL_SIZE / M_SQRT2 - R + 0.005;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
-    float theta_i = FORWARD_SPEED / R;
+    float theta_i = SMART_FORWARD_SPEED / R;
 
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
@@ -265,11 +286,11 @@ CYCLOGRAM(DD90SL)
 }
 CYCLOGRAM(DD90SR)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = SMART_FORWARD_SPEED;
     constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
     constexpr float forwDist = CELL_SIZE / M_SQRT2 - R;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
-    float theta_i = FORWARD_SPEED / R;
+    float theta_i = SMART_FORWARD_SPEED / R;
 
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
@@ -284,14 +305,23 @@ CYCLOGRAM(DD90SR)
 
 CYCLOGRAM(SS180SL)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = SMART_FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = SMART_FORWARD_SPEED / R;
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
-    else ms->theta_i0 = 0;
+    if(s->odometry->getRelativeDist() < forwDist)
+    {
+        FWD_default(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
+        ms->theta_i0 = theta_i;
+    }
+    else
+    {
+        FWD_default(ms, s, ms->theta_0 + PI);
+    }
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
@@ -300,14 +330,23 @@ CYCLOGRAM(SS180SL)
 }
 CYCLOGRAM(SS180SR)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = SMART_FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = SMART_FORWARD_SPEED / R;
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
-    else ms->theta_i0 = 0;
+    if(s->odometry->getRelativeDist() < forwDist)
+    {
+        FWD_default(ms, s, ms->theta_0);
+    }
+    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist){
+        ms->theta_i0 = -theta_i;
+    }
+    else
+    {
+        FWD_default(ms, s, ms->theta_0 - PI);
+    }
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
