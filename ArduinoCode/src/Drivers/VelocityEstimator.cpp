@@ -1,7 +1,7 @@
 #include "Drivers/VelocityEstimator.h"
 
 void VelocityEstimator::tick(){ 
-    _w = encoder->getDPhi() / Ts_s;
+    _w = _encoder->getDPhi() / Ts_s;
 }
 
 float VelocityEstimator::getW() const{

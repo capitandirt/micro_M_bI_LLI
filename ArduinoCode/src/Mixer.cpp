@@ -31,6 +31,6 @@ void Mixer::impactVelocity(float theta, float forward_velocity)
     _w_left_motor = _rad_forward_velocity - HALF(_rad_theta);
     _w_right_motor = _rad_forward_velocity + HALF(_rad_theta);
 
-    leftServo->setW(_w_left_motor);
-    rightServo->setW(_w_right_motor);
+    _leftServo->setW(_w_left_motor);
+    _rightServo->setW(_w_right_motor);
 }

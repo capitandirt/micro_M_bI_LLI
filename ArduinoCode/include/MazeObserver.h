@@ -14,12 +14,12 @@ enum class MazeCommand{
 };
 
 struct MazeObserverConnectionParams{
-    Maze* _maze;
-    Odometry* _odometry;
-    OptocouplerSensors* _optocouplers;
+    Maze* const _maze;
+    Odometry* const _odometry;
+    OptocouplerSensors* const _optocouplers;
 };
 
-class MazeObserver : public MazeObserverConnectionParams{
+class MazeObserver : private MazeObserverConnectionParams{
 public:
     MazeObserver(MazeObserverConnectionParams* mocp):
         MazeObserverConnectionParams(*mocp){}

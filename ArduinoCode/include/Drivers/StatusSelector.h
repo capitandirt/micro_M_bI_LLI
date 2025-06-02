@@ -13,9 +13,9 @@ enum class ProgramStatus : uint8_t{
     DELAY_BEFORE_GO_FINISH,
     PRE_ENTRY_GO_FINISH,
     GO_FINISH,
-    // DELAY_BEFORE_GO_START,
-    // PRE_ENTRY_GO_START,
-    // GO_START,
+    DELAY_BEFORE_GO_START,
+    PRE_ENTRY_GO_START,
+    GO_START,
     PRE_ENTRY_FAST,
     FAST,
     
@@ -24,11 +24,11 @@ enum class ProgramStatus : uint8_t{
 
 struct StatusSelectorConnectionParams{
     const uint8_t _INPUT_PIN;
-    Led* _indicator;
-    SlideCatcher* _slideCatcher;
+    Led* const _indicator;
+    SlideCatcher* const _slideCatcher;
 };
 
-class StatusSelector : public StatusSelectorConnectionParams
+class StatusSelector : private StatusSelectorConnectionParams
 {
 public:
     StatusSelector(StatusSelectorConnectionParams* sscp):

@@ -122,9 +122,31 @@ Direction ActionsHandler::needTurn(Direction dir){
     return next_dir;
 }
 
-Direction needDirection(const Direction cur,  const Direction need){
+void ActionsHandler::needDirection(const Direction cur,  const Direction need){
+    _cycloStore->reloadSmarts();
+
     const PrimitiveCycloAction_t primitive = static_cast<PrimitiveCycloAction_t>(
         (toInt(need) - toInt(cur) + DIRECTION_SIZE) % DIRECTION_SIZE);
+
+    switch (primitive)
+    {
+    case PrimitiveCycloAction_t::LEFT:
+        _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+        break;
+    
+    case PrimitiveCycloAction_t::RIGHT:
+        _cycloStore->addSmart(SmartCycloAction_t::IP90R);
+        break;
+    
+    case PrimitiveCycloAction_t::BACK:
+        _cycloStore->addSmart(SmartCycloAction_t::IP180);
+        break;
+
+    default:
+        break;
+    }
+
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
 void ActionsHandler::needClusterDot(){

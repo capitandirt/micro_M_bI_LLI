@@ -6,13 +6,13 @@
 
 struct EncoderConnectionParams
 {
-    uint8_t CLK_A_PIN;
-    uint8_t B_PIN;
-    int8_t ENC_DIR;
+    const uint8_t CLK_A_PIN;
+    const uint8_t B_PIN;
+    const int8_t ENC_DIR;
     void (*ISR)();
 };
 
-class Encoder : public EncoderConnectionParams{
+class Encoder : private EncoderConnectionParams{
 public:
     Encoder(EncoderConnectionParams *ecp) : EncoderConnectionParams(*ecp){}
 

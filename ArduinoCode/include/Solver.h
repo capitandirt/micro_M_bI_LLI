@@ -14,6 +14,7 @@ public:
     void FastSolveBfsMaze(const Vec2 start, const Vec2 finish);
     
     Vec2 firstUndefCellCoords();
+    
 private:
     void calc_path(const uint8_t ind_s, const uint8_t ind_f);
 

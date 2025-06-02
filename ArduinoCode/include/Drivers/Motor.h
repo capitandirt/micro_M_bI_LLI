@@ -3,12 +3,14 @@
 
 #include "Arduino.h"
 #include "Config.h"
+#include "Battery.h"
 
 struct MotorConnectionParams{
-    uint8_t
+    const uint8_t
         DIR, 
         PWM,
         M_POLARITY;
+    Battery* const _battery;
 };
 
 class Motor : public MotorConnectionParams{
@@ -16,6 +18,9 @@ public:
     Motor(MotorConnectionParams* mcp) : MotorConnectionParams(*mcp){}
     void init();
     void drive(float u);
+
+private:
+    static constexpr float MAX_PMW = 255;
 };
 
 #endif // !_MOTOR_H_

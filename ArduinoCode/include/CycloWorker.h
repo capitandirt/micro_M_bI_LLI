@@ -10,14 +10,14 @@
 #include "CycloUtilits/CycloStore.h"
 
 struct CycloWorkerConnectionParams{
-    Mixer* mixer; 
-    Odometry* odometry;  
-    CycloStore* cycloStore;
-    OptocouplerSensors* optocoupler;
-    void (*_reset_reg)();
+    Mixer* const _mixer; 
+    Odometry* const _odometry;  
+    CycloStore* const _cycloStore;
+    OptocouplerSensors* const _optocoupler;
+    void (*_reset_reg)() ;
 };
 
-class CycloWorker : public CycloWorkerConnectionParams{
+class CycloWorker : private CycloWorkerConnectionParams{
 public:
     CycloWorker(CycloWorkerConnectionParams* cwcp) :
         CycloWorkerConnectionParams(*cwcp), 
@@ -28,8 +28,8 @@ public:
                     .isComplete = false},
 
             .s = {  .time = 0,
-                    .odometry = cwcp->odometry,
-                    .optocoupler = cwcp->optocoupler}}{}
+                    .odometry = cwcp->_odometry,
+                    .optocoupler = cwcp->_optocoupler}}{}
 
     void reload();
     void doCyclogram();

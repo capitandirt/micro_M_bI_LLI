@@ -39,13 +39,13 @@ void right_encoder_ISR()
 }
 
 VelocityEstimatorConnectionParams left_vecp {
-    .encoder = &leftEncoder
+    ._encoder = &leftEncoder
 };
 
 VelocityEstimator leftVelocityEstimator(&left_vecp);
 
 VelocityEstimatorConnectionParams right_vecp {
-    .encoder = &rightEncoder
+    ._encoder = &rightEncoder
 };
 
 VelocityEstimator rightVelocityEstimator(&right_vecp);
@@ -67,14 +67,15 @@ MotorConnectionParams right_mcp {
 Motor rightMotor(&right_mcp);
 
 PiRegConnectionParams left_w_prcp{
-    .Kp = W_KP,
-    .Ki = W_KI
+    .KP = W_KP,
+    .KI = W_KI,
+    .TS_S = Ts_s
 };
 PiReg left_w_PiReg(&left_w_prcp);
 
 PiRegConnectionParams right_w_prcp{
-    .Kp = W_KP,
-    .Ki = W_KI
+    .KP = W_KP,
+    .KI = W_KI
 };
 PiReg right_w_PiReg(&right_w_prcp);
 
@@ -93,8 +94,8 @@ ServoConnectionParams right_scp{
 Servo rightServo(&right_scp);
 
 MotionControlConnectionParams mccp{
-    .leftServo = &leftServo,
-    .rightServo = &rightServo
+    ._leftServo = &leftServo,
+    ._rightServo = &rightServo
 };
 Mixer mixer(&mccp);
 
@@ -120,10 +121,10 @@ OprocouplerConnectionParams ocp{
 OptocouplerSensors optocoupler(&ocp);
 
 CycloWorkerConnectionParams cwcp{
-    .mixer = &mixer,
-    .odometry = &odometry,
-    .cycloStore = &cycloStore,
-    .optocoupler = &optocoupler,
+    ._mixer = &mixer,
+    ._odometry = &odometry,
+    ._cycloStore = &cycloStore,
+    ._optocoupler = &optocoupler,
     ._reset_reg = reset_pi
 };
 CycloWorker cycloWorker(&cwcp);

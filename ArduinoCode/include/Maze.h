@@ -57,6 +57,7 @@ public:
 
     uint8_t static Vec2ToInd(Vec2 v);
     Vec2 static IndToVec2(uint8_t ind);
+    
 private:
     bool cell_request_is_out_of_range_cell_blocks(const Vec2& v) const noexcept;
 

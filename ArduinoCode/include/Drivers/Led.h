@@ -17,7 +17,6 @@ public:
     void passMillis(const uint32_t t);
 
 private:
-
     uint8_t _blink_value;
 
     uint32_t _cur_millis  = 0;

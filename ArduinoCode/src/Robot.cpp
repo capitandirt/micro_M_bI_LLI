@@ -25,21 +25,20 @@ void Robot::statusHandler(){
         step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
         break;
 
-    // case ProgramStatus::DELAY_BEFORE_GO_START:
-    //     _actionsHandler->needDelay05();
-    //     _statusSelector->nextStatus();
-    //     break;
+    case ProgramStatus::DELAY_BEFORE_GO_START:
+        _actionsHandler->needDelay05();
+        _statusSelector->nextStatus();
+        break;
 
-    // case ProgramStatus::PRE_ENTRY_GO_START:
-    //     start_explorer();
-    //     break;
+    case ProgramStatus::PRE_ENTRY_GO_START:
+        start_explorer();
+        break;
 
-    // case ProgramStatus::GO_START:
-    //     step_flood_fill(START_ROBOT_COORDS, TO_START);
-    //     break;
+    case ProgramStatus::GO_START:
+        step_flood_fill(START_ROBOT_COORDS, TO_START);
+        break;
         
     case ProgramStatus::PRE_ENTRY_FAST:
-        Serial.println("PRE_ENTRY_FAST");
         break;
 
     case ProgramStatus::FAST:

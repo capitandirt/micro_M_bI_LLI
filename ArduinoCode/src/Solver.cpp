@@ -197,7 +197,7 @@ void Solver::FastSolveBfsMaze(const Vec2 start, const Vec2 finish){
         Vec2 cur_cell_vec2 = Maze::IndToVec2(cur_cell_ind);
         _maze->GetCell(cur_cell, cur_cell_vec2);
 
-        if(cur_cell.north_wall != WallState::HI && cur_cell.north_wall != WallState::UNDEF){
+        if(cur_cell.north_wall == WallState::LO){
             Vec2 checked_cell_vec = {cur_cell_vec2.x, cur_cell_vec2.y - 1};
 
             _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
@@ -209,7 +209,7 @@ void Solver::FastSolveBfsMaze(const Vec2 start, const Vec2 finish){
             }
         }
 
-        if(cur_cell.east_wall != WallState::HI && cur_cell.east_wall != WallState::UNDEF){
+        if(cur_cell.east_wall == WallState::LO){
             Vec2 checked_cell_vec = {cur_cell_vec2.x + 1, cur_cell_vec2.y};
 
             _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
@@ -220,7 +220,7 @@ void Solver::FastSolveBfsMaze(const Vec2 start, const Vec2 finish){
             }
         }
 
-        if(cur_cell.south_wall != WallState::HI && cur_cell.south_wall != WallState::UNDEF){
+        if(cur_cell.south_wall == WallState::LO){
             Vec2 checked_cell_vec = {cur_cell_vec2.x, cur_cell_vec2.y + 1};
 
             _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);
@@ -231,7 +231,7 @@ void Solver::FastSolveBfsMaze(const Vec2 start, const Vec2 finish){
             }
         }
 
-        if(cur_cell.west_wall != WallState::HI && cur_cell.west_wall != WallState::UNDEF){
+        if(cur_cell.west_wall == WallState::LO){
             Vec2 checked_cell_vec = {cur_cell_vec2.x - 1, cur_cell_vec2.y};
 
             _maze->GetCellDir(_buf_cell_dir, checked_cell_vec);

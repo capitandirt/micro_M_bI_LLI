@@ -54,7 +54,7 @@ private:
     };
 };
 
-class OptocouplerSensors : public OprocouplerConnectionParams{ 
+class OptocouplerSensors : private OprocouplerConnectionParams{ 
 public:
     OptocouplerSensors(OprocouplerConnectionParams* ocp) : OprocouplerConnectionParams(*ocp){}
 
@@ -69,20 +69,18 @@ public:
     void    printAbsCell()              const;
     void    printMask()                 const;
     void    printSense()                const;
-    Sense_t dark_sense;
-
+    
 private:
     void    calc_sense_mask();
     void    calc_relative_cell();
 
 private:
-    static constexpr float K_F = 0.99;
-
-    Cell _relative_cell;
-
-    volatile bool CAN_GET_SENSE = 0;
-
-    Sense_mask_t _sense_mask;
+    Cell             _relative_cell;
+    
+    volatile bool    CAN_GET_SENSE = 0;
+    
+    Sense_t          dark_sense;
+    Sense_mask_t     _sense_mask;
     
     OptocouplerSense _sense;    
 };

@@ -92,13 +92,13 @@ CYCLOGRAM(FWDE)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_THRESHOLD = OPTOCOUPLER_SENSE_THRESHOLD_LEFT;
+    const int16_t RIGHT_THRESHOLD = OPTOCOUPLER_SENSE_THRESHOLD_RIGHT;
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_THRESHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_THRESHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
         ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 

@@ -1,16 +1,16 @@
 #ifndef _PI_REGULATOR_H_
 #define _PI_REGULATOR_H_
 
-#include "Config.h"
 #include "Drivers/VelocityEstimator.h"
 #include "Arduino.h"
 
 struct PiRegConnectionParams{
-    float Kp;
-    float Ki;
+    const float KP;
+    const float KI;
+    const float TS_S;
 };
 
-class PiReg : public PiRegConnectionParams{
+class PiReg : private PiRegConnectionParams{
 public:
     PiReg(PiRegConnectionParams *prcp) : PiRegConnectionParams(*prcp){}     
 

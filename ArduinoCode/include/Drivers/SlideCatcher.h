@@ -12,7 +12,7 @@ public:
     void tick();
 
 private:
-    OptocouplerSensors* _optocouplers;
+    OptocouplerSensors* const _optocouplers;
 
     enum OptoPeriod { ZERO, FRONT, IN_ON, CLOSE, SLIDE } 
         _opto_previod; 

@@ -6,10 +6,10 @@
 
 struct VelocityEstimatorConnectionParams
 {
-    Encoder *encoder;
+    Encoder * const _encoder;
 };
 
-class VelocityEstimator : public VelocityEstimatorConnectionParams{
+class VelocityEstimator : private VelocityEstimatorConnectionParams{
 public:
     VelocityEstimator(VelocityEstimatorConnectionParams *vecp) : VelocityEstimatorConnectionParams(*vecp){}
 

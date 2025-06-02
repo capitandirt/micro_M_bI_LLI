@@ -143,8 +143,8 @@ inline const char* Str_SmartCyclogramAction[]{
 struct Sensors
 {
     float time;
-    Odometry* odometry;
-    OptocouplerSensors* optocoupler;
+    Odometry* const odometry;
+    OptocouplerSensors* const optocoupler;
 };
 
 struct MotionStates

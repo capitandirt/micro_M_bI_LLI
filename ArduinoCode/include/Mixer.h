@@ -4,8 +4,8 @@
 #include "Drivers/Servo.h"
 
 struct MotionControlConnectionParams{
-    Servo *leftServo;
-    Servo *rightServo;
+    Servo* const _leftServo;
+    Servo* const _rightServo;
 };
 
 class Mixer : public MotionControlConnectionParams{
