@@ -1,6 +1,6 @@
 #include "CycloUtilits/ActionsHandler.h"
 
-#define OUTPUT_DEBUG 1
+#define OUTPUT_DEBUG 0
 
 #if OUTPUT_DEBUG
     #define SERIAL_PRINT(x) Serial.print((x))
@@ -84,18 +84,19 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
 void ActionsHandler::primitivesToFasts()
 {
     dirs_to_primitives();
-
-    _cycloStore->virtualPopFrontPrimitive();
+    bool isStart = true;
+    _cycloStore->popFrontPrimitive();
     while(_cycloStore->virtualPopFrontPrimitive() != PrimitiveCycloAction_t::STOP){
         _cycloStore->virtualGoBack();
-        if(TO_SD45S_DS45S());
-        else if (TO_SD135S_DS45S());
-        else if (TO_SS90E());
+        if(TO_SD45S_DS45S(isStart));
+        else if (TO_SD135S_DS45S(isStart));
         else if (TO_FWD_X_TEMPLATE());
-        else if (TO_SS90E());
+        else if (TO_SS90E(isStart));
         else if (TO_STOP());
         else if (TO_IDLE());
+        isStart = false;
     }
+    PRINTLN("finish convert");
 }
 
 void ActionsHandler::clear(){
@@ -162,9 +163,9 @@ bool ActionsHandler::TO_IDLE(){
 
 bool ActionsHandler::TO_STOP(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::STOP){
-        _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
         _cycloStore->addSmart(SmartCycloAction_t::STOP);
         _cycloStore->virtualPrimitiveRelease();
+        PRINTLN("add FWD_HALF and STOP");
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -216,19 +217,20 @@ bool ActionsHandler::TO_FWD_X() //тут может быть ошибка см F
     return false;
 }
 
-bool ActionsHandler::TO_SS90E(){
+bool ActionsHandler::TO_SS90E(bool isStart){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::LEFT){
+        if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
         _cycloStore->virtualPrimitiveRelease();
-        
+        PRINTLN("add SS90EL");
         return true;
     }
     else _cycloStore->virtualGoBack();
 
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
-        _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+        if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         _cycloStore->virtualPrimitiveRelease();
-        
+        PRINTLN("add SS90ER");
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -261,7 +263,7 @@ bool ActionsHandler::TO_SS90S(){
     return false;
 }
 
-bool ActionsHandler::TO_SD45S_DS45S(){
+bool ActionsHandler::TO_SD45S_DS45S(bool isStart){
     const PrimitiveCycloAction_t turn = _cycloStore->virtualPopFrontPrimitive();
         
     if(turn == PrimitiveCycloAction_t::LEFT || turn == PrimitiveCycloAction_t::RIGHT){
@@ -269,7 +271,7 @@ bool ActionsHandler::TO_SD45S_DS45S(){
 
         if(toInt(op_turn) == toInt(toOpposite(turn))){
             if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
-                _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+                if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                 
                 if(turn == PrimitiveCycloAction_t::LEFT){
                     _cycloStore->addSmart(SmartCycloAction_t::SD45SL);
@@ -290,7 +292,7 @@ bool ActionsHandler::TO_SD45S_DS45S(){
     return false;
 }
 
-bool ActionsHandler::TO_SD135S_DS45S()
+bool ActionsHandler::TO_SD135S_DS45S(bool isStart)
 {
     const PrimitiveCycloAction_t TURN = _cycloStore->virtualPopFrontPrimitive(); // получение второго действия и приравнивание его к основному повороту
     const auto OP_TURN = toOpposite(TURN);
@@ -304,6 +306,7 @@ bool ActionsHandler::TO_SD135S_DS45S()
                 {
                     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD)
                     {
+                        if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                         if(TURN == PrimitiveCycloAction_t::LEFT)
                         {
                             _cycloStore->addSmart(SmartCycloAction_t::SD135SL);
@@ -314,6 +317,7 @@ bool ActionsHandler::TO_SD135S_DS45S()
                             _cycloStore->addSmart(SmartCycloAction_t::SD135SR);
                             _cycloStore->addSmart(SmartCycloAction_t::DS45SL);
                         }
+                        _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                         _cycloStore->virtualPrimitiveRelease();
                         SERIAL_PRINTLN("add 135chain");
                         return true;

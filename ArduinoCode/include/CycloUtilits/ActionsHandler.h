@@ -39,10 +39,10 @@ private:
     bool TO_STOP();
     bool TO_FWD_X();
     bool TO_FWD_X_TEMPLATE();
-    bool TO_SS90E();
+    bool TO_SS90E(bool isStart);
     bool TO_SS90S();
-    bool TO_SD45S_DS45S();
-    bool TO_SD135S_DS45S();
+    bool TO_SD45S_DS45S(bool isStart);
+    bool TO_SD135S_DS45S(bool isStart);
 
     enum class RobotState_t : uint8_t
     {

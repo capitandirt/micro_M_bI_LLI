@@ -4,7 +4,7 @@ void Robot::init(){
     _maze->PrimaryFill();
 }
 
-void Robot::statusHandler(){
+void Robot::statusHandler(const uint8_t FUNCTION_SELECTOR_DATA){
     switch (_statusSelector->getStatus())
     {
     case ProgramStatus::NONE:
@@ -16,13 +16,12 @@ void Robot::statusHandler(){
         _actionsHandler->needDelay05();
         _statusSelector->nextStatus();
         break;
-
     case ProgramStatus::PRE_ENTRY_GO_FINISH:
-        start_explorer();
+        start_explorer(FUNCTION_SELECTOR_DATA);
         break;
     
     case ProgramStatus::GO_FINISH:
-        step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
+        step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH, FUNCTION_SELECTOR_DATA);
         break;
 
     // case ProgramStatus::DELAY_BEFORE_GO_START:
@@ -37,9 +36,9 @@ void Robot::statusHandler(){
     // case ProgramStatus::GO_START:
     //     step_flood_fill(START_ROBOT_COORDS, TO_START);
     //     break;
-        
-    case ProgramStatus::PRE_ENTRY_FAST:
-        Serial.println("PRE_ENTRY_FAST");
+    case ProgramStatus::DELAY_BEFORE_FAST:
+        _actionsHandler->needDelay05();
+        _statusSelector->nextStatus();
         break;
 
     case ProgramStatus::FAST:
@@ -51,8 +50,19 @@ void Robot::statusHandler(){
     }
 }
 
-void Robot::start_explorer(){
+void Robot::start_explorer(const uint8_t FUNC_SELECTOR_DATA){
     if(!_cycloWorker->nowIsClusterDot()) return;
+
+    if(FUNC_SELECTOR_DATA % 2 == 1) // если пин 4 на функселекторе включён, то мы меняем стартовое направление с востока на юг
+    {
+        _odometry->setDir(Direction::S);
+        _odometry->setStartFastDir(Direction::S);
+    }
+    else
+    {
+        _odometry->setDir(Direction::E);
+        _odometry->setStartFastDir(Direction::E);
+    }
 
     const WallState forward_wall = _optocoupler->getRelativeCell().north_wall;
     const Direction cur_dir = _odometry->getDir();
@@ -85,7 +95,7 @@ void Robot::start_explorer(){
     _statusSelector->nextStatus();
 }
 
-void Robot::step_flood_fill(const Vec2 end_vec, const ExplorerStatus expl_status)
+void Robot::step_flood_fill(const Vec2 end_vec, const ExplorerStatus expl_status, const uint8_t FUNCTION_SELECTOR_DATA)
 {
     if(!_cycloWorker->nowIsClusterDot()) return;
 
@@ -95,7 +105,7 @@ void Robot::step_flood_fill(const Vec2 end_vec, const ExplorerStatus expl_status
 
     _odometry->updateMazeCoords(forward_vec);
 
-    if(try_end_to_finish(forward_vec, end_vec)) return;
+    if(try_end_to_finish(forward_vec, end_vec, FUNCTION_SELECTOR_DATA)) return;
 
     if(_maze->UndefWallInCell(forward_vec)){
         _maze->SetCell(forward_cell, forward_vec);
@@ -108,10 +118,11 @@ void Robot::step_flood_fill(const Vec2 end_vec, const ExplorerStatus expl_status
     _odometry->updateDir(next_robot_dir);
 }
 
-bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end){
+bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end, const uint8_t FUNCTION_SELECTOR_DATA){
     if(cur.x == end.x && cur.y == end.y){
         _actionsHandler->needFwdHalf();
-        _statusSelector->nextStatus();
+        _statusSelector->setStatus(ProgramStatus::NONE); // после проезда до финиша оно возвращается в старт и решает, ехать фастом или исследованием
+        _odometry->updateMazeCoords(START_ROBOT_COORDS);
         return true;
     }
 
@@ -119,8 +130,7 @@ bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end){
 }
 
 void Robot::fast(){
-    _odometry->updateDir(START_ROBOT_DIRECTION);
-
+    _odometry->updateDir(_odometry->getStartFastDir());
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
-    _actionsHandler->primitivesToFasts();
+    _actionsHandler->convertToSmart();//primitivesToFasts();
 }

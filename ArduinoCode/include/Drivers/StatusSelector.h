@@ -16,7 +16,7 @@ enum class ProgramStatus : uint8_t{
     // DELAY_BEFORE_GO_START,
     // PRE_ENTRY_GO_START,
     // GO_START,
-    PRE_ENTRY_FAST,
+    DELAY_BEFORE_FAST,
     FAST,
     
     SIZE
@@ -34,19 +34,19 @@ public:
     StatusSelector(StatusSelectorConnectionParams* sscp):
                         StatusSelectorConnectionParams(*sscp){}
 
-    void           init()                       noexcept;
-    void           tick()                       noexcept;
+    void   init()                                              noexcept;
+    void   tick(const uint8_t FUNCTION_SELECTOR_DATA)          noexcept; 
 
-    ProgramStatus  getStatus()                  const noexcept;
-    void           setStatus(ProgramStatus s)   noexcept;
-    void           nextStatus()                 noexcept;
-    void           setNoneStatus()              noexcept;
+    ProgramStatus  getStatus()                           const noexcept;
+    void           setStatus(ProgramStatus s)                  noexcept;
+    void           nextStatus()                                noexcept;
+    void           setNoneStatus()                             noexcept;
 
-    void           passMillis(const uint32_t t) noexcept;
+    void           passMillis(const uint32_t t)                noexcept;
 
 private:
-    void           sense()                      noexcept;
-    void           plan()                       noexcept;
+    void           sense()                                     noexcept;
+    void           plan(const uint8_t FUNCTION_SELECTOR_DATA)  noexcept;
 
 private:
     static constexpr uint32_t NEED_TIME_TO_DOWN = 1000; // ms

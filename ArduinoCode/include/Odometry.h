@@ -46,7 +46,8 @@ private:
     float vL = 0, vR = 0, vX = 0, vY = 0, v = 0;
 
     mutable Vec2 mazeCoord = START_ROBOT_COORDS;
-    Direction dir = START_ROBOT_DIRECTION;
+    Direction dir;
+    Direction startFastDir;
 
 public:
     float getX() const;
@@ -65,6 +66,9 @@ public:
 
     Vec2 getMazeCoords() const noexcept;
     Direction getDir() const noexcept;
+    Direction getStartFastDir() const noexcept;
+    void setDir(Direction dir_) noexcept;
+    void setStartFastDir(Direction dir_) noexcept;
 
     void printDir() const noexcept;
 

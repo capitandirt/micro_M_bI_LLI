@@ -7,6 +7,7 @@
 #include "Drivers/StatusSelector.h"
 #include "Drivers/SlideCatcher.h"
 #include "MazeObserver.h"
+#include "FunctionalCelector.h"
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -169,5 +170,6 @@ RobotConnectionParams rcp{
 };
 Robot robot(&rcp);
 
+FunctionalCelector functionalCelector;
 
 #endif // !_DEVICES_H_

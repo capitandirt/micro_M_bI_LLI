@@ -6,8 +6,8 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-    DEVICES::TEST::PRIM_TO_FAST();
-    while(true);
+    // DEVICES::TEST::PRIM_TO_FAST();
+    // while(true);
 }
 
 void loop(){
@@ -18,7 +18,8 @@ void loop(){
 
     DEVICES::TICK(last_time / 1000);
 
+    
     cycloWorker.doCyclogram();
-    robot.statusHandler();
+    robot.statusHandler(functionalCelector.function);
     cycloWorker.tryComplete();
 }

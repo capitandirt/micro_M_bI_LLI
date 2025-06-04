@@ -4,12 +4,13 @@ void StatusSelector::sense(){
     _adc_reading = analogRead(FUNCTION_PIN);
 }
 
-void StatusSelector::plan(){
+void StatusSelector::plan(const uint8_t FUNCTION_SELECTOR_DATA){
     const bool _but_state = _adc_reading >= ADC_THRESHOLD;
     const bool _forward_but_front = _prev_but_state == 0 && _but_state == 1;
 
-    if(_slideCatcher->isSlide() && _counter == static_cast<uint8_t>(ProgramStatus::NEED_START_COMMAND)){
-        nextStatus();
+    if(_slideCatcher->isSlide() && (_counter == static_cast<uint8_t>(ProgramStatus::NEED_START_COMMAND))){
+        if(FUNCTION_SELECTOR_DATA >= 8) setStatus(ProgramStatus::DELAY_BEFORE_FAST);
+        else setStatus(ProgramStatus::DELAY_BEFORE_GO_FINISH);
     }
 
     if(_forward_but_front){
@@ -23,9 +24,9 @@ void StatusSelector::init(){
     pinMode(_INPUT_PIN, INPUT);
 }
 
-void StatusSelector::tick(){
+void StatusSelector::tick(const uint8_t FUNCTION_SELECTOR_DATA){
     sense();
-    plan();
+    plan(FUNCTION_SELECTOR_DATA);
 
     if(_cur_millis - _timer < TIME_IN_BLINK) _indicator->blink(4);
     else _indicator->blink(0);

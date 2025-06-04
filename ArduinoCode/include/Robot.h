@@ -25,7 +25,7 @@ public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
     void init();
-    void statusHandler();
+    void statusHandler(const uint8_t FUNCTION_SELECTOR_DATA);
 
 private:
     enum ExplorerStatus{
@@ -33,10 +33,10 @@ private:
         TO_FINISH
     };
 
-    void start_explorer();
-    void step_flood_fill(const Vec2 end_cell, const ExplorerStatus expl_status);
+    void start_explorer(uint8_t FUNC_SELECTOR_DATA);
+    void step_flood_fill(const Vec2 end_cell, const ExplorerStatus expl_status, const uint8_t FUNCTION_SELECTOR_DATA);
 
-    bool try_end_to_finish(const Vec2& cur, const Vec2& end);
+    bool try_end_to_finish(const Vec2& cur, const Vec2& end, const uint8_t FUNCTION_SELECTOR_DATA);
     bool try_end_to_start(const Vec2& cur, const Vec2& end);
 
     void fast();
