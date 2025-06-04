@@ -6,7 +6,7 @@ void Motor::init(){
 }
 
 void Motor::drive(float u){
-    int16_t pwm = constrain(MAX_PMW * u / _battery->getVoltage(), -MAX_PMW, MAX_PMW);
+    int16_t pwm = constrain(MAX_PMW * u / 9, -MAX_PMW, MAX_PMW);
 
     if (pwm >= 0){
         digitalWrite(DIR, M_POLARITY);
