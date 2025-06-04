@@ -14,7 +14,8 @@ void StatusSelector::plan(const uint8_t FUNCTION_SELECTOR_DATA){
     }
 
     if(_forward_but_front){
-        nextStatus();
+        if(_counter == static_cast<uint8_t>(ProgramStatus::FAST)) setStatus(ProgramStatus::NONE);
+        else nextStatus();
     } 
     
     _prev_but_state = _but_state;

@@ -39,6 +39,7 @@ private:
     bool try_end_to_finish(const Vec2& cur, const Vec2& end, const uint8_t FUNCTION_SELECTOR_DATA);
     bool try_end_to_start(const Vec2& cur, const Vec2& end);
 
+    void statusConvertToSmart();
     void fast();
 };
 

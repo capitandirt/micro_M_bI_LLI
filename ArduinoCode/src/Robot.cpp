@@ -41,6 +41,10 @@ void Robot::statusHandler(const uint8_t FUNCTION_SELECTOR_DATA){
         _statusSelector->nextStatus();
         break;
 
+    case ProgramStatus::CONVERT_TO_SMART:
+        statusConvertToSmart();
+        _statusSelector->nextStatus();
+        break;
     case ProgramStatus::FAST:
         fast();
         break;
@@ -129,8 +133,15 @@ bool Robot::try_end_to_finish(const Vec2& cur, const Vec2& end, const uint8_t FU
     return false;
 }
 
-void Robot::fast(){
+void Robot::statusConvertToSmart()
+{
+    Serial.println("start fast");   
     _odometry->updateDir(_odometry->getStartFastDir());
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
     _actionsHandler->convertToSmart();//primitivesToFasts();
+}
+
+
+void Robot::fast(){
+    
 }

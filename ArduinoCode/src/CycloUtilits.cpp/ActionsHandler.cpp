@@ -703,7 +703,10 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
 
 void ActionsHandler::convertToSmart()
 {
+    _cycloStore->addPrimitive(PrimitiveCycloAction_t::FORWARD);
     dirs_to_primitives();
+
+    _cycloStore->printPrimitives();
 
     PrimitiveCycloAction_t curPrim = PrimitiveCycloAction_t::BLANK;
     
@@ -738,7 +741,7 @@ void ActionsHandler::convertToSmart()
         } while (exitState != RobotState_t::STOP);
         
     }
-    //_cycloStore->printSmarts();
+    _cycloStore->printSmarts();
 }
 
 

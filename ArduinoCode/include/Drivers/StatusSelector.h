@@ -17,6 +17,7 @@ enum class ProgramStatus : uint8_t{
     // PRE_ENTRY_GO_START,
     // GO_START,
     DELAY_BEFORE_FAST,
+    CONVERT_TO_SMART,
     FAST,
     
     SIZE
