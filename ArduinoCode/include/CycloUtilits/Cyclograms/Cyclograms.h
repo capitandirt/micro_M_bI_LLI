@@ -218,7 +218,7 @@ CYCLOGRAM(SS90SL)
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = SMART_FORWARD_SPEED / R;
 
-    constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
+    constexpr float forwDist = CELL_SIZE - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
 
     if(s->odometry->getRelativeDist() < forwDist)
@@ -246,7 +246,7 @@ CYCLOGRAM(SS90SR)
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
     constexpr float theta_i = SMART_FORWARD_SPEED / R;
 
-    constexpr float forwDist = CELL_SIZE * 1.5 / 2 - R;
+    constexpr float forwDist = CELL_SIZE - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
 
     if(s->odometry->getRelativeDist() < forwDist)
@@ -271,7 +271,7 @@ CYCLOGRAM(DD90SL)
 {
     ms->v_f0 = SMART_FORWARD_SPEED;
     constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
-    constexpr float forwDist = CELL_SIZE / M_SQRT2 - R + 0.005;
+    constexpr float forwDist = CELL_SIZE / M_SQRT2 - R;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = SMART_FORWARD_SPEED / R;
 
