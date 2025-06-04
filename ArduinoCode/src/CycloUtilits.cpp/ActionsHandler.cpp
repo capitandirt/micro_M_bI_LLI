@@ -1,6 +1,6 @@
 #include "CycloUtilits/ActionsHandler.h"
 
-#define OUTPUT_DEBUG 1
+#define OUTPUT_DEBUG 0
 
 #if OUTPUT_DEBUG
     #define SERIAL_PRINT(x) Serial.print((x))
@@ -85,7 +85,7 @@ void ActionsHandler::primitivesToFasts()
 {
     dirs_to_primitives();
 
-    _cycloStore->virtualPopFrontPrimitive();
+    _cycloStore->popFrontPrimitive(); //первый примитив всегда FWD, его опускаем
     while(_cycloStore->virtualPopFrontPrimitive() != PrimitiveCycloAction_t::STOP){
         _cycloStore->virtualGoBack();
         if(TO_SD45S_DS45S());

@@ -6,7 +6,9 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-    while(true);
+    // DEVICES::TEST::PRIM_TO_FAST();
+    cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 1);
+    // while(true);
 }
 
 void loop(){
@@ -18,6 +20,6 @@ void loop(){
     DEVICES::TICK(last_time / 1000);
 
     cycloWorker.doCyclogram();
-    robot.statusHandler();
+    //robot.statusHandler();
     cycloWorker.tryComplete();
 }
