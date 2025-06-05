@@ -8,6 +8,7 @@ void setup()
     DEVICES::INIT();
     // DEVICES::TEST::CONVERT_TO_SMART();
     // while(true);
+    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 6);
 }
 
 void loop(){
@@ -20,6 +21,6 @@ void loop(){
 
     
     cycloWorker.doCyclogram();
-    robot.statusHandler(functionalCelector.function);
+    //robot.statusHandler(functionalCelector.function);
     cycloWorker.tryComplete();
 }

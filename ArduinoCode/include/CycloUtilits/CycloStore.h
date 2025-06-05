@@ -31,6 +31,7 @@ public:
 
     void printSmarts() const;
     void printPrimitives() const;
+    
 private:
     void load_cyclograms();
 

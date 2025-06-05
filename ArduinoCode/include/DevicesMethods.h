@@ -304,6 +304,21 @@ namespace DEVICES{
             cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
         }
+        void addTestMaze5()
+        {
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
+        }
         void CONVERT_TO_SMART()
         {
             //======TEST MAZE 1======
@@ -312,10 +327,10 @@ namespace DEVICES{
 
             
 
-            addTestMaze3();
+            addTestMaze5();
             
             cycloStore.printPrimitives();
-            actionsHandler.convertToSmart();
+            actionsHandler.loadFasts();
             cycloStore.printSmarts();
         }
 

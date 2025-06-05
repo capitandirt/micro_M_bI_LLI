@@ -4,7 +4,6 @@
 
 inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
-    ms->v_f0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     //ms->theta_i0 = 0;
     float theta_err = THETA_0 - s->odometry->getTheta();
     ms->theta_i0 = 0;//theta_err * ANGLE_REG_KP;

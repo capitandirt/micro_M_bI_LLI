@@ -19,7 +19,7 @@ PrimitiveCycloAction_t ActionsHandler::calc_primitive_cyclo_action(const uint8_t
     return static_cast<PrimitiveCycloAction_t>((dir_now - dir_next + DIRECTION_SIZE) % DIRECTION_SIZE);
 }
 
-void ActionsHandler::dirsToPrimitives(){
+void ActionsHandler::dirs_to_primitives(){
     _cycloStore->addPrimitive(PrimitiveCycloAction_t::FORWARD);
     for(uint8_t i = 0; i < _maze->GetPathSize(); i++){
         _cycloStore->addPrimitive(calc_primitive_cyclo_action(i));
@@ -84,7 +84,7 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
 /*useless code*/
 void ActionsHandler::primitivesToFasts()
 {
-    dirsToPrimitives();
+    dirs_to_primitives();
     bool isStart = true;
     _cycloStore->popFrontPrimitive();
     while(_cycloStore->virtualPopFrontPrimitive() != PrimitiveCycloAction_t::STOP){
@@ -199,18 +199,23 @@ bool ActionsHandler::TO_FWD_X_TEMPLATE()
 
 bool ActionsHandler::TO_FWD_X() //тут может быть ошибка см FWD_TEMPLATE
 {
+    #if OUTPUT_DEBUG
+    _cycloStore->printPrimitives();
+    #endif
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){ 
         uint8_t X = 1;
-        for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++)
-        {
-            _cycloStore->virtualPrimitiveRelease();
-        }
+        for(; _cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD; X++);
+
         _cycloStore->virtualGoBack();
+        for(uint8_t i = 0; i < X - 1; i++) _cycloStore->virtualPopFrontPrimitive();
+        _cycloStore->virtualPrimitiveRelease();
         
         _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
         SERIAL_PRINTLN("X= " + String(X));
-        
-        _cycloStore->virtualPrimitiveRelease();
+
+        #if OUTPUT_DEBUG
+        _cycloStore->printPrimitives();
+        #endif
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -379,6 +384,9 @@ PrimitiveCycloAction_t ActionsHandler::fromState(const RobotState_t rs)
 
 ActionsHandler::RobotState_t ActionsHandler::entryHandler()
 {
+    #if OUTPUT_DEBUG
+    _cycloStore->printPrimitives();
+    #endif
     static int entryCounter = 0;
     entryCounter++;
     //=====================================================================================================================
@@ -714,7 +722,7 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
     }
 }
 
-void ActionsHandler::convertToSmart()
+void ActionsHandler::convert_to_fasts()
 {
     _cycloStore->printPrimitives();
 
@@ -753,6 +761,14 @@ void ActionsHandler::convertToSmart()
         
     }
     _cycloStore->printSmarts();
+}
+void ActionsHandler::loadFasts(){
+    _cycloStore->reloadSmarts();
+    
+    _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
+    dirs_to_primitives();
+    convert_to_fasts();
 }
 
 

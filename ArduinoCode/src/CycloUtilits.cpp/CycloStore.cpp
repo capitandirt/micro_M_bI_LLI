@@ -34,7 +34,8 @@ SmartSubmission CycloStore::popFrontSmartSubmission(){
     
     SmartSubmission smart_submis = {_cyclo_program[_smart_cyc_act_counter++].smart, X_t::NONE};
     
-    if(smart_submis.smart == SmartCycloAction_t::FWD_X){
+    const SmartCycloAction_t smart = smart_submis.smart;
+    if(smart == SmartCycloAction_t::FWD_X || smart == SmartCycloAction_t::DIAG_X){ 
         smart_submis.x = toX_t(_cyclo_program[_smart_cyc_act_counter++].smart);
     }
 
