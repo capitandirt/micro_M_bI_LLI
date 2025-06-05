@@ -6,8 +6,8 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-    DEVICES::TEST::CONVERT_TO_SMART();
-    while(true);
+    // DEVICES::TEST::CONVERT_TO_SMART();
+    // while(true);
 }
 
 void loop(){

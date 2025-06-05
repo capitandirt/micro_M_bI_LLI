@@ -30,10 +30,10 @@ public:
     Direction needTurn(Direction dir);
     Direction needDirection(const Direction cur,  const Direction need);
     
-    void convertToSmart(); //экспериментальное
+    void convertToSmart();
+    void dirsToPrimitives();
 private:
-    PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind);
-    void dirs_to_primitives();
+    PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind); 
 
     bool TO_IDLE();
     bool TO_STOP();

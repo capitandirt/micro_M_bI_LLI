@@ -138,6 +138,7 @@ void Robot::statusConvertToSmart()
     Serial.println("start fast");   
     _odometry->updateDir(_odometry->getStartFastDir());
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
+    _actionsHandler->dirsToPrimitives();
     _actionsHandler->convertToSmart();//primitivesToFasts();
 }
 
