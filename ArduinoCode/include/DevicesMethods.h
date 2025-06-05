@@ -1,7 +1,7 @@
 #include "Robot.h"
 #include "Drivers/Led.h"
 #include "Drivers/SlideCatcher.h"
-#include "Drivers/StatusSelector.h"
+#include "Drivers/ProgramStatusHandler.h"
 #include "TIM2_HANDLER.h"
 
 extern Encoder leftEncoder;
@@ -25,11 +25,13 @@ extern Odometry odometry;
 extern OptocouplerSensors optocoupler;
 extern Led indicator;
 extern SlideCatcher slideCatcher;
-extern StatusSelector statusSelector;
+extern ProgramStatusHandler programStatusSelector;
+extern FunctionalSelector functionalSelector;
 extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
+    functionalSelector.tick();
     indicator.tick();
     optocoupler.tick();
 }
@@ -43,7 +45,7 @@ namespace DEVICES{
         rightMotor.init();
         
         indicator.init();
-        statusSelector.init();
+        programStatusSelector.init();
         optocoupler.init();
 
         robot.init();
@@ -63,14 +65,13 @@ namespace DEVICES{
         
         optocoupler.calc();
 
-        functionalCelector.tick();
-
-        statusSelector.passMillis(now_millis);
+        programStatusSelector.passMillis(now_millis);
         indicator.passMillis(now_millis);
 
-        statusSelector.tick(functionalCelector.function);
+        programStatusSelector.tick();
+        functionalSelector.decodeAdcReading();
 
-        if(statusSelector.getStatus() == ProgramStatus::NEED_START_COMMAND){
+        if(programStatusSelector.getStatus() == ProgramStatus::NEED_START_COMMAND){
             slideCatcher.tick();
         }
 

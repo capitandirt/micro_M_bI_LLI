@@ -6,6 +6,8 @@
 #include "Led.h"
 #include "SlideCatcher.h"
 
+
+
 enum class ProgramStatus : uint8_t{
     NONE = 0, 
 
@@ -13,41 +15,43 @@ enum class ProgramStatus : uint8_t{
     DELAY_BEFORE_GO_FINISH,
     PRE_ENTRY_GO_FINISH,
     GO_FINISH,
-    // DELAY_BEFORE_GO_START,
-    // PRE_ENTRY_GO_START,
-    // GO_START,
+    DELAY_BEFORE_GO_START,
+    PRE_ENTRY_GO_START,
+    GO_START,
+    
     DELAY_BEFORE_FAST,
-    CONVERT_TO_SMART,
+    PRE_ENTRY_FAST,
     FAST,
     
     SIZE
 };
 
-struct StatusSelectorConnectionParams{
+struct ProgramStatusHandlerConnectionParams{
     const uint8_t _INPUT_PIN;
     Led* _indicator;
+
     SlideCatcher* _slideCatcher;
 };
 
-class StatusSelector : public StatusSelectorConnectionParams
+class ProgramStatusHandler : public ProgramStatusHandlerConnectionParams
 {
 public:
-    StatusSelector(StatusSelectorConnectionParams* sscp):
-                        StatusSelectorConnectionParams(*sscp){}
+    ProgramStatusHandler(ProgramStatusHandlerConnectionParams* sscp):
+                        ProgramStatusHandlerConnectionParams(*sscp){}
 
-    void   init()                                              noexcept;
-    void   tick(const uint8_t FUNCTION_SELECTOR_DATA)          noexcept; 
+    void           init()                                noexcept;
+    void           tick()                                noexcept; 
 
     ProgramStatus  getStatus()                           const noexcept;
-    void           setStatus(ProgramStatus s)                  noexcept;
-    void           nextStatus()                                noexcept;
-    void           setNoneStatus()                             noexcept;
+    void           setStatus(ProgramStatus s)            noexcept;
+    void           nextStatus()                          noexcept;
+    void           setNoneStatus()                       noexcept;
 
-    void           passMillis(const uint32_t t)                noexcept;
+    void           passMillis(const uint32_t t)          noexcept;
 
 private:
-    void           sense()                                     noexcept;
-    void           plan(const uint8_t FUNCTION_SELECTOR_DATA)  noexcept;
+    void           sense()                               noexcept;
+    void           plan()                                noexcept;
 
 private:
     static constexpr uint32_t NEED_TIME_TO_DOWN = 1000; // ms

@@ -68,12 +68,10 @@ public:
     Direction getDir() const noexcept;
     Direction getStartFastDir() const noexcept;
     void setDir(Direction dir_) noexcept;
-    void setStartFastDir(Direction dir_) noexcept;
 
     void printDir() const noexcept;
 
     void tick(float omegaL, float omegaR) noexcept;
-    void updateDir(Direction dir_) noexcept;
     void updateMazeCoords(Direction dir);
     void updateMazeCoords(Vec2 new_v);
 };

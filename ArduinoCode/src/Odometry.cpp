@@ -52,10 +52,6 @@ void Odometry::setDir(Direction dir_) noexcept{
     dir = dir_;
 }
 
-void Odometry::setStartFastDir(Direction dir_) noexcept{
-    startFastDir = dir_;
-}
-
 void Odometry::printDir() const{
     switch (dir)
     {
@@ -89,11 +85,6 @@ void Odometry::tick(float omegaL, float omegaR)
     Distance.tick(v);
     X.tick(vX);
     Y.tick(vY);
-}
-
-void Odometry:: updateDir(Direction dir_)
-{
-    dir = dir_;
 }
 
 void Odometry::updateMazeCoords(Direction dir){
