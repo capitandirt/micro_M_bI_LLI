@@ -64,21 +64,22 @@ CYCLOGRAM(FWD_X)
 {
     constexpr float acceleration = FWD_ACCELERATION; 
     constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
-    float v;
+    static Integrator v = v0;
     
-    float t = (-v0 + sqrt(v0 * v0 + 2 * acceleration * s->odometry->getRelativeDist())) / acceleration;
-    float half_way_t = -v0 + sqrt(v0 * v0 + 2 * acceleration * HALF(CELL_SIZE * x));
+    //float t = (-v0 + sqrt(v0 * v0 + 2 * acceleration * s->odometry->getRelativeDist())) / acceleration;
+    //float half_way_t = -v0 + sqrt(v0 * v0 + 2 * acceleration * HALF(CELL_SIZE * x));
     
-    if(s->odometry->getRelativeDist() < CELL_SIZE * x / 2)
+    
+    if(s->odometry->getRelativeDist() < HALF(CELL_SIZE * x))
     {
-        v = min(FORWARD_SPEED + acceleration * t, MAX_FWD_SPEED_AFTER_ACC);
+        v.tick(acceleration);
     }
-    else
+    else if(v.getOut() > v0)
     {
-        v = min(max(MAX_FWD_SPEED_AFTER_ACC - acceleration * (t), v0), MAX_FWD_SPEED_AFTER_ACC);
+        v.tick(-acceleration);
     }
 
-    ms->v_f0 = v;
+    ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
     FWD_default(ms, s, ms->theta_0);
 
     if(s->odometry->getRelativeDist() > CELL_SIZE * x)

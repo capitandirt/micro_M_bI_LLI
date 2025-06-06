@@ -9,7 +9,7 @@ void setup()
     DEVICES::INIT();
     // DEVICES::TEST::CONVERT_TO_SMART();
     // while(true);
-    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 6);
+    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 8);
 }
 
 void loop(){
@@ -21,6 +21,6 @@ void loop(){
     DEVICES::TICK(last_time / 1000);
 
     cycloWorker.doCyclogram();
-    robot.stateMachine();
+    //robot.stateMachine();
     cycloWorker.tryComplete();
 }
