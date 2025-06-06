@@ -7,22 +7,23 @@ void Robot::init(){
 void Robot::stateMachine(){
     switch (_programStatusSelector->getStatus())
     {
-    case ProgramStatus::NONE:
+    case ProgramStatus::NEED_START_PROGRAM_COMMAND:
         _actionsHandler->needIdle();
         break;
 
     case ProgramStatus::ESTIMATE_FAST_OR_EXPLORER:
-        if(_functionalSelector->isLever(3)){
-            _programStatusSelector->setStatus(ProgramStatus::NEED_FAST_COMMAND);
-        }
-        else _programStatusSelector->nextStatus();
+        if(_functionalSelector->isLever(3))
+            _programStatusSelector->setStatus(ProgramStatus::NEED_FAST_SLIDE);
+        else 
+            _programStatusSelector->setStatus(ProgramStatus::NEED_EXPLORER_SLIDE);
         break;
 
-    case ProgramStatus::NEED_EXPLORER_COMMAND:
-        _actionsHandler->needIdle();
+    case ProgramStatus::NEED_EXPLORER_SLIDE:
         break;
 
     case ProgramStatus::DELAY_BEFORE_GO_FINISH:
+        explorer_status = TO_FINISH;
+
         if(_functionalSelector->isLever(0)){
             _odometry->setDir(Direction::S);
         }
@@ -43,6 +44,8 @@ void Robot::stateMachine(){
         break;
 
     case ProgramStatus::DELAY_BEFORE_GO_START:
+        explorer_status = TO_START;
+
         _actionsHandler->needDelay05();
         _programStatusSelector->nextStatus();
         break;
@@ -55,8 +58,7 @@ void Robot::stateMachine(){
         step_flood_fill(START_ROBOT_COORDS);
         break;
 
-    case ProgramStatus::NEED_FAST_COMMAND:
-        _actionsHandler->needIdle();
+    case ProgramStatus::NEED_FAST_SLIDE:
         break;
 
     case ProgramStatus::DELAY_BEFORE_FAST:
@@ -86,17 +88,8 @@ void Robot::start_explorer(const ExplorerStatus expl_status){
     const Cell_u cur_cell{.raw = _maze->GetCell(cur_coords)};
     const WallState forward_wall = cur_cell.walls[toInt(cur_dir)];
 
-    _odometry->printMazeCoords();
-    _odometry->printDir();
-    Serial.println(toBool(forward_wall));
-
     if(toBool(forward_wall)){
         const Direction next_dir = _actionsHandler->needTurn(cur_dir);
-        
-        const Cell rel_cell = {forward_wall, WallState::LO, WallState::LO, WallState::LO};
-        const Cell abs_cell = inDir(rel_cell, cur_dir);
-
-        _maze->SetCell(abs_cell, cur_coords);
         _odometry->setDir(next_dir);
         return;
     }
@@ -141,10 +134,16 @@ bool Robot::try_end(const Vec2& cur, const Vec2& end){
     if(cur.x == end.x && cur.y == end.y){
         _actionsHandler->needFwdHalf();
         
-        if(_functionalSelector->isLever(2)){
-            _programStatusSelector->setStatus(ProgramStatus::ESTIMATE_FAST_OR_EXPLORER);
+        if(explorer_status == TO_FINISH){
+            if(_functionalSelector->isLever(2)){
+                _programStatusSelector->setStatus(ProgramStatus::NEED_START_PROGRAM_COMMAND);
+            }
+            else _programStatusSelector->nextStatus();
         }
-        else _programStatusSelector->nextStatus();
+        else{
+            _programStatusSelector->setStatus(ProgramStatus::NEED_START_PROGRAM_COMMAND);
+        }
+
         return true;
     }
     return false;
@@ -153,7 +152,6 @@ bool Robot::try_end(const Vec2& cur, const Vec2& end){
 void Robot::statusConvertToSmart()
 {
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
-
     _actionsHandler->loadFasts();
 }
 

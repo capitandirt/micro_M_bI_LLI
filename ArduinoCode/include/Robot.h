@@ -29,11 +29,11 @@ public:
     void init();
     void stateMachine();
 
-private:
+private: 
     enum ExplorerStatus{
         TO_START,
         TO_FINISH
-    };
+    } explorer_status = TO_START;
 
     void start_explorer(const ExplorerStatus expl_status);
     void step_flood_fill(const Vec2 end_cell);

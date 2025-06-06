@@ -72,10 +72,7 @@ namespace DEVICES{
 
         programStatusSelector.tick();
 
-        if(programStatusSelector.getStatus() == ProgramStatus::NEED_EXPLORER_COMMAND ||
-           programStatusSelector.getStatus() == ProgramStatus::NEED_FAST_COMMAND){
-            slideCatcher.tick();
-        }
+        slideCatcher.tick();
 
         odometry.tick(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
     }

@@ -750,8 +750,6 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
 
 void ActionsHandler::convert_to_fasts()
 {
-    _cycloStore->printPrimitives();
-
     PrimitiveCycloAction_t curPrim = PrimitiveCycloAction_t::BLANK;
     
     while(curPrim != PrimitiveCycloAction_t::STOP) // пока не стоит остановка
