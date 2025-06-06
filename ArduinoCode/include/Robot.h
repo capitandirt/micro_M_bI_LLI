@@ -5,9 +5,10 @@
 #include "Maze.h"
 #include "Solver.h"
 #include "Odometry.h"
-#include "Drivers/StatusSelector.h"
 #include "Drivers/SlideCatcher.h"
 #include "Drivers/OptocouplerSensors.h"
+#include "Drivers/ProgramStatusHandler.h"
+#include "Drivers/FunctionalSelector.h"
 
 struct RobotConnectionParams{
     CycloWorker* _cycloWorker;
@@ -16,7 +17,8 @@ struct RobotConnectionParams{
     Solver* _solver;
     OptocouplerSensors* _optocoupler;
     Odometry* _odometry;
-    StatusSelector* _statusSelector;
+    ProgramStatusHandler* _programStatusSelector;
+    FunctionalSelector* _functionalSelector;
 };
 
 
@@ -25,7 +27,7 @@ public:
     Robot(RobotConnectionParams* rcp): RobotConnectionParams(*rcp){}
 
     void init();
-    void statusHandler(const uint8_t FUNCTION_SELECTOR_DATA);
+    void stateMachine();
 
 private:
     enum ExplorerStatus{
@@ -33,11 +35,10 @@ private:
         TO_FINISH
     };
 
-    void start_explorer(uint8_t FUNC_SELECTOR_DATA);
-    void step_flood_fill(const Vec2 end_cell, const ExplorerStatus expl_status, const uint8_t FUNCTION_SELECTOR_DATA);
+    void start_explorer(const ExplorerStatus expl_status);
+    void step_flood_fill(const Vec2 end_cell);
 
-    bool try_end_to_finish(const Vec2& cur, const Vec2& end, const uint8_t FUNCTION_SELECTOR_DATA);
-    bool try_end_to_start(const Vec2& cur, const Vec2& end);
+    bool try_end(const Vec2& cur, const Vec2& end);
 
     void statusConvertToSmart();
     void fast();

@@ -106,6 +106,8 @@ void ActionsHandler::clear(){
 }
 
 void ActionsHandler::needStartCellAligning(){
+    _cycloStore->reloadSmarts();
+    
     _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
     _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
     _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
@@ -113,6 +115,8 @@ void ActionsHandler::needStartCellAligning(){
 }
 
 Direction ActionsHandler::needTurn(Direction dir){
+    _cycloStore->reloadSmarts();
+
     _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
     _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
 
@@ -124,9 +128,31 @@ Direction ActionsHandler::needTurn(Direction dir){
     return next_dir;
 }
 
-Direction needDirection(const Direction cur,  const Direction need){
+Direction ActionsHandler::needDirection(const Direction cur,  const Direction need){
+    _cycloStore->reloadSmarts();
+
     const PrimitiveCycloAction_t primitive = static_cast<PrimitiveCycloAction_t>(
         (toInt(need) - toInt(cur) + DIRECTION_SIZE) % DIRECTION_SIZE);
+
+    switch (primitive)
+    {
+    case PrimitiveCycloAction_t::LEFT:
+        _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+        break;
+    
+    case PrimitiveCycloAction_t::RIGHT:
+        _cycloStore->addSmart(SmartCycloAction_t::IP90R);
+        break;
+
+    case PrimitiveCycloAction_t::BACK:
+        _cycloStore->addSmart(SmartCycloAction_t::IP180);
+        break;
+
+    default:
+        break;
+    }
+
+    _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
 void ActionsHandler::needClusterDot(){
@@ -760,7 +786,14 @@ void ActionsHandler::convert_to_fasts()
         } while (exitState != RobotState_t::STOP);
         
     }
-    _cycloStore->printSmarts();
+}
+void ActionsHandler::loadFasts(){
+    _cycloStore->reloadSmarts();
+    
+    _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
+    dirs_to_primitives();
+    convert_to_fasts();
 }
 void ActionsHandler::loadFasts(){
     _cycloStore->reloadSmarts();

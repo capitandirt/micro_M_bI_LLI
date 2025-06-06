@@ -4,10 +4,10 @@
 #include "Robot.h"
 #include "CycloWorker.h"
 #include "Drivers/Led.h"
-#include "Drivers/StatusSelector.h"
+#include "Drivers/ProgramStatusHandler.h"
 #include "Drivers/SlideCatcher.h"
 #include "MazeObserver.h"
-#include "FunctionalCelector.h"
+#include "Drivers/FunctionalSelector.h"
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -151,13 +151,15 @@ Led indicator(INDICATOR_LED_PIN);
 
 SlideCatcher slideCatcher(&optocoupler);
 
-StatusSelectorConnectionParams sscp{
+ProgramStatusHandlerConnectionParams sscp{
     ._INPUT_PIN = FUNCTION_PIN,
     ._indicator = &indicator,
     ._slideCatcher = &slideCatcher,
 };
 
-StatusSelector statusSelector(&sscp);
+ProgramStatusHandler programStatusSelector(&sscp);
+
+FunctionalSelector functionalSelector(FUNCTION_PIN);
 
 RobotConnectionParams rcp{
     ._cycloWorker = &cycloWorker,
@@ -166,10 +168,9 @@ RobotConnectionParams rcp{
     ._solver = &solver,
     ._optocoupler = &optocoupler,
     ._odometry = &odometry,
-    ._statusSelector = &statusSelector,
+    ._programStatusSelector = &programStatusSelector,
+    ._functionalSelector = &functionalSelector
 };
 Robot robot(&rcp);
-
-FunctionalCelector functionalCelector;
 
 #endif // !_DEVICES_H_

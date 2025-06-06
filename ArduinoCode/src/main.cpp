@@ -4,6 +4,7 @@
 
 void setup()
 {
+    DEVICES::INIT();
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
     // DEVICES::TEST::CONVERT_TO_SMART();
@@ -19,8 +20,7 @@ void loop(){
 
     DEVICES::TICK(last_time / 1000);
 
-    
     cycloWorker.doCyclogram();
-    //robot.statusHandler(functionalCelector.function);
+    robot.stateMachine();
     cycloWorker.tryComplete();
 }

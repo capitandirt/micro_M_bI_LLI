@@ -37,7 +37,7 @@ float Odometry::getRelativeDist() const{
 }
 
 Vec2 Odometry::getMazeCoords() const{
-    return mazeCoord;
+    return mazeCoords;
 }
 
 Direction Odometry::getDir() const{
@@ -52,8 +52,10 @@ void Odometry::setDir(Direction dir_) noexcept{
     dir = dir_;
 }
 
-void Odometry::setStartFastDir(Direction dir_) noexcept{
-    startFastDir = dir_;
+void Odometry::printMazeCoords() const{
+    Serial.print(mazeCoords.x);
+    Serial.print(" ");
+    Serial.println(mazeCoords.y);
 }
 
 void Odometry::printDir() const{
@@ -91,17 +93,12 @@ void Odometry::tick(float omegaL, float omegaR)
     Y.tick(vY);
 }
 
-void Odometry:: updateDir(Direction dir_)
-{
-    dir = dir_;
-}
-
 void Odometry::updateMazeCoords(Direction dir){
-    mazeCoord.plusOrtVector(dir);
+    mazeCoords.plusOrtVector(dir);
 }
 
 void Odometry::updateMazeCoords(Vec2 new_v){
-    mazeCoord = new_v;
+    mazeCoords = new_v;
 }
 
 void Odometry::reset()
@@ -111,7 +108,7 @@ void Odometry::reset()
     vX = 0;
     vY = 0;
     v = 0;
-    mazeCoord = {0, 0};
+    mazeCoords = {0, 0};
     dir = Direction::N;
     X.reset();
     Y.reset();
