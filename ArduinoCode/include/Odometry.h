@@ -7,6 +7,8 @@
 class Integrator
 {
 public:
+    Integrator(float val = 0) : _out(val) {} 
+
     float getOut() const noexcept {
         return _out;
     }  
@@ -26,6 +28,10 @@ public:
     }
 
     void operator=(const float val){
+        _out = val;
+    }
+
+    void operator=(const double val){
         _out = val;
     }
 

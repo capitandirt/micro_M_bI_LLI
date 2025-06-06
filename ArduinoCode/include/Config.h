@@ -22,7 +22,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 10000 // 0 < Ts_us <= 10000
+#define Ts_us 5000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 
@@ -37,7 +37,7 @@
 /*==ENCODER CONNECTION PINS END==*/
 
 /*==ROBOT PARAMS BEGIN==*/
-#define ROBOT_WIDTH 0.076f
+#define ROBOT_WIDTH 0.075f
 #define WHEEL_RADIUS 0.01725f
 /*==ROBOT PARAMS END*/
 
@@ -57,12 +57,6 @@
 #define RIGHT_MOTOR_POLARITY 0
 /*==MOTOR PINS END==*/
 
-/*==POWER BEGIN==*/
-#define V_BATT 9.f
-#define MAX_U V_BATT
-#define NEG_MAX_U -V_BATT
-/*==POWER END==*/
-
 /*==FUNCTIONAL SELECTOR BEGIN==*/
 #define INDICATOR_LED_PIN (6)
 #define FUNCTION_PIN A6
@@ -74,7 +68,7 @@
 #define W_T_u (2 * Ts_s)
 
 #define W_KP (0.4f) // Kp = K
-#define W_KI (W_KP / 0.05f) // Ki = K / T
+#define W_KI (W_KP / 0.2f) // Ki = K / T
 /*==W MOTOT PIREG END==*/
 
 /*==MAZE BEGIN==*/

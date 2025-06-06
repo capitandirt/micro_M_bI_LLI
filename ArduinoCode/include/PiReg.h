@@ -4,10 +4,12 @@
 #include "Config.h"
 #include "Drivers/VelocityEstimator.h"
 #include "Arduino.h"
+#include "Drivers/Battery.h"
 
 struct PiRegConnectionParams{
     float Kp;
     float Ki;
+    Battery* battery;
 };
 
 class PiReg : public PiRegConnectionParams{

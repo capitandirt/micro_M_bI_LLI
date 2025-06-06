@@ -64,8 +64,20 @@ CYCLOGRAM(FWD_X)
 {
     constexpr float acceleration = FWD_ACCELERATION; 
     constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
-    ms->v_f0 = v0;
+    static Integrator v = v0;
     
+    
+    
+    if(s->odometry->getRelativeDist() < HALF(CELL_SIZE * x))
+    {
+        v.tick(acceleration);
+    }
+    else if(v.getOut() > v0)
+    {
+        v.tick(-acceleration);
+    }
+
+    ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
     FWD_default(ms, s, ms->theta_0);
 
     if(s->odometry->getRelativeDist() > CELL_SIZE * x)
@@ -97,8 +109,8 @@ CYCLOGRAM(FWDE)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->getLeftTreshold();
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->getRightTreshold();
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
@@ -151,7 +163,7 @@ CYCLOGRAM(FWDE)
 
 CYCLOGRAM(DIAG_X)
 {
-    ms->v_f0 = SMART_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
+    ms->v_f0 = FAST_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     ms->theta_i0 = 0;
 
     if(s->odometry->getRelativeDist() > CELL_SIZE / M_SQRT2 * x)
@@ -219,9 +231,9 @@ CYCLOGRAM(SS90ER)
 
 CYCLOGRAM(SS90SL)
 {
-    ms->v_f0 = SMART_FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = SMART_FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
@@ -247,9 +259,9 @@ CYCLOGRAM(SS90SL)
 
 CYCLOGRAM(SS90SR)
 {
-    ms->v_f0 = SMART_FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = SS90S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = SMART_FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
 
     constexpr float forwDist = CELL_SIZE - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
@@ -274,11 +286,11 @@ CYCLOGRAM(SS90SR)
 }
 CYCLOGRAM(DD90SL)
 {
-    ms->v_f0 = SMART_FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
     constexpr float forwDist = CELL_SIZE / M_SQRT2 - R;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
-    float theta_i = SMART_FORWARD_SPEED / R;
+    float theta_i = FAST_FORWARD_SPEED / R;
 
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     else ms->theta_i0 = 0;
@@ -291,11 +303,11 @@ CYCLOGRAM(DD90SL)
 }
 CYCLOGRAM(DD90SR)
 {
-    ms->v_f0 = SMART_FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = DD90S_TURN_RADIUS; //радиус поворота
     constexpr float forwDist = CELL_SIZE / M_SQRT2 - R;
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
-    float theta_i = SMART_FORWARD_SPEED / R;
+    float theta_i = FAST_FORWARD_SPEED / R;
 
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     else ms->theta_i0 = 0;
@@ -310,9 +322,9 @@ CYCLOGRAM(DD90SR)
 
 CYCLOGRAM(SS180SL)
 {
-    ms->v_f0 = SMART_FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
-    constexpr float theta_i = SMART_FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
@@ -335,9 +347,9 @@ CYCLOGRAM(SS180SL)
 }
 CYCLOGRAM(SS180SR)
 {
-    ms->v_f0 = SMART_FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
-    constexpr float theta_i = SMART_FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 

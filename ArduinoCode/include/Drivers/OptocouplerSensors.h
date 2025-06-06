@@ -43,6 +43,7 @@ public:
 
     static constexpr uint8_t getSenseSize(){ return SENSORS_NUMBER; }
     
+    
     Sense_t get() const { return _from; }
     uint16_t& operator[](const From index){ return _sense[static_cast<uint8_t>(index)]; }
 
@@ -54,7 +55,7 @@ private:
     };
 };
 
-class OptocouplerSensors : public OprocouplerConnectionParams{ 
+class OptocouplerSensors : private OprocouplerConnectionParams{ 
 public:
     OptocouplerSensors(OprocouplerConnectionParams* ocp) : OprocouplerConnectionParams(*ocp){}
 
@@ -69,22 +70,30 @@ public:
     void    printAbsCell()              const;
     void    printMask()                 const;
     void    printSense()                const;
-    Sense_t dark_sense;
+    
+    void setStaticError(uint16_t errLeft, uint16_t errRight) noexcept;
 
-private:
+    uint16_t getLeftTreshold()          const;
+    uint16_t getRightTreshold()         const;
+
+    
+    private:
     void    calc_sense_mask();
     void    calc_relative_cell();
-
-private:
+    
+    private:
     static constexpr float K_F = 0.99;
-
+    
     Cell _relative_cell;
+    Sense_t dark_sense;
 
     volatile bool CAN_GET_SENSE = 0;
 
     Sense_mask_t _sense_mask;
     
-    OptocouplerSense _sense;    
+    OptocouplerSense _sense;   
+    
+    uint16_t staticErrLeft = 0, staticErrRight = 0;
 };
 
 #endif // !_OPTOCOUPLER_H_
