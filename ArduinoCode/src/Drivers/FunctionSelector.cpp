@@ -30,11 +30,17 @@ void FunctionalSelector::decodeAdcReading(){
         return;
     }
     
-    for (uint16_t i = 0; i < ADC_VALUES_SIZE; i++) 
+    for (int i = 0; i < ADC_VALUES_SIZE; i++) 
     {
-        if (_adc_reading > (adc_values[i] + adc_values[i + 1]) / 2) 
+        // Serial.print(String(i) + " ");
+        if(i == ADC_VALUES_SIZE - 1)
         {
             _selected = i;
+        } 
+        else if (_adc_reading > (adc_values[i] + adc_values[i + 1]) / 2) 
+        {
+            _selected = i;
+            // Serial.println(String(_selected));
             return;
         }
     }
