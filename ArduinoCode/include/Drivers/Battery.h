@@ -6,13 +6,16 @@
 class Battery{
 public:
     Battery(const uint8_t PIN) : _PIN(PIN) {}
-    float volts();
+    float getVoltage();
     void tick();
 
 private:
-    static constexpr float MAX_VOLTAGE = 9.2;
+    static constexpr float PIN_VOLTAGE = 4.07;
+    static constexpr float BATTERY_VOLTAGE = 9.18;
+    static constexpr float MAX_VOLTAGE = 5;
     static constexpr float MAX_ADC = 660;
-    static constexpr float DIVIDER_RATION = MAX_VOLTAGE/MAX_ADC;
+    static constexpr float DIVIDER_RATION = BATTERY_VOLTAGE / PIN_VOLTAGE * MAX_VOLTAGE/MAX_ADC;
+    static constexpr float LPF_K = 0.95;
 
     const uint8_t _PIN;
     float _voltage = 0;

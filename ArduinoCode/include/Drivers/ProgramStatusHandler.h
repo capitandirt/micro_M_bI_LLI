@@ -11,6 +11,8 @@
 enum class ProgramStatus : uint8_t{
     NONE = 0, 
 
+    ESTIMATE_FAST_OR_EXPLORER,
+
     NEED_EXPLORER_COMMAND,
     DELAY_BEFORE_GO_FINISH,
     PRE_ENTRY_GO_FINISH,
@@ -21,6 +23,7 @@ enum class ProgramStatus : uint8_t{
     
     NEED_FAST_COMMAND,
     DELAY_BEFORE_FAST,
+    PRE_ENTRY_FAST,
     FAST,
     
     SIZE
