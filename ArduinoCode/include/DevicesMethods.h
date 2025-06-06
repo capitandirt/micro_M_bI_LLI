@@ -31,7 +31,6 @@ extern Robot robot;
 
 
 ISR(TIMER2_COMPA_vect){
-    functionalSelector.tick();
     indicator.tick();
     optocoupler.tick();
 }
@@ -64,14 +63,15 @@ namespace DEVICES{
         rightServo.tick();
         
         optocoupler.calc();
+        functionalSelector.tick();
+        functionalSelector.decodeAdcReading();
 
         programStatusSelector.passMillis(now_millis);
         indicator.passMillis(now_millis);
 
         programStatusSelector.tick();
-        functionalSelector.decodeAdcReading();
 
-        if(programStatusSelector.getStatus() == ProgramStatus::NEED_START_COMMAND){
+        if(programStatusSelector.getStatus() == ProgramStatus::NEED_EXPLORER_COMMAND){
             slideCatcher.tick();
         }
 

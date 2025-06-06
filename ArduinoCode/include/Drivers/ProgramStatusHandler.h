@@ -11,7 +11,7 @@
 enum class ProgramStatus : uint8_t{
     NONE = 0, 
 
-    NEED_START_COMMAND,
+    NEED_EXPLORER_COMMAND,
     DELAY_BEFORE_GO_FINISH,
     PRE_ENTRY_GO_FINISH,
     GO_FINISH,
@@ -19,8 +19,8 @@ enum class ProgramStatus : uint8_t{
     PRE_ENTRY_GO_START,
     GO_START,
     
+    NEED_FAST_COMMAND,
     DELAY_BEFORE_FAST,
-    PRE_ENTRY_FAST,
     FAST,
     
     SIZE

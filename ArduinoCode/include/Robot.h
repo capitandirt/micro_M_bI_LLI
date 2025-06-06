@@ -36,10 +36,9 @@ private:
     };
 
     void start_explorer(const ExplorerStatus expl_status);
-    void step_flood_fill(const Vec2 end_cell, const ExplorerStatus expl_status);
+    void step_flood_fill(const Vec2 end_cell);
 
-    bool try_end_to_finish(const Vec2& cur, const Vec2& end);
-    bool try_end_to_start(const Vec2& cur, const Vec2& end);
+    bool try_end(const Vec2& cur, const Vec2& end);
 
     void statusConvertToSmart();
     void fast();
