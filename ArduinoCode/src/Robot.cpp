@@ -8,6 +8,16 @@ void Robot::stateMachine(){
     switch (_programStatusSelector->getStatus())
     {
     case ProgramStatus::NONE:
+        _actionsHandler->needIdle();
+        break;
+
+    case ProgramStatus::ESTIMATE_FAST_OR_EXPLORER:
+        if(_functionalSelector->isLever(3)){
+            _programStatusSelector->setStatus(ProgramStatus::NEED_FAST_COMMAND);
+        }
+        else _programStatusSelector->nextStatus();
+        break;
+
     case ProgramStatus::NEED_EXPLORER_COMMAND:
         _actionsHandler->needIdle();
         break;
@@ -17,6 +27,8 @@ void Robot::stateMachine(){
             _odometry->setDir(Direction::S);
         }
         else _odometry->setDir(Direction::E);
+
+        _odometry->updateMazeCoords(START_ROBOT_COORDS);
         
         _actionsHandler->needDelay05();
         _programStatusSelector->nextStatus();
@@ -52,9 +64,12 @@ void Robot::stateMachine(){
         _programStatusSelector->nextStatus();
         break;
 
-    case ProgramStatus::FAST:
+    case ProgramStatus::PRE_ENTRY_FAST:
         statusConvertToSmart();
         _programStatusSelector->nextStatus();
+        break;    
+
+    case ProgramStatus::FAST:
         break;
 
     default:
@@ -126,11 +141,10 @@ bool Robot::try_end(const Vec2& cur, const Vec2& end){
     if(cur.x == end.x && cur.y == end.y){
         _actionsHandler->needFwdHalf();
         
-        if(_functionalSelector->isLever(3)){
-            _programStatusSelector->setStatus(ProgramStatus::NEED_FAST_COMMAND);
+        if(_functionalSelector->isLever(2)){
+            _programStatusSelector->setStatus(ProgramStatus::ESTIMATE_FAST_OR_EXPLORER);
         }
         else _programStatusSelector->nextStatus();
-
         return true;
     }
     return false;
@@ -140,7 +154,7 @@ void Robot::statusConvertToSmart()
 {
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
 
-    _actionsHandler->loadFasts();//primitivesToFasts();
+    _actionsHandler->loadFasts();
 }
 
 

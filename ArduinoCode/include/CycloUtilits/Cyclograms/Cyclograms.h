@@ -64,21 +64,8 @@ CYCLOGRAM(FWD_X)
 {
     constexpr float acceleration = FWD_ACCELERATION; 
     constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
-    float v;
+    ms->v_f0 = v0;
     
-    float t = (-v0 + sqrt(v0 * v0 + 2 * acceleration * s->odometry->getRelativeDist())) / acceleration;
-    float half_way_t = -v0 + sqrt(v0 * v0 + 2 * acceleration * HALF(CELL_SIZE * x));
-    
-    if(s->odometry->getRelativeDist() < CELL_SIZE * x / 2)
-    {
-        v = min(FORWARD_SPEED + acceleration * t, MAX_FWD_SPEED_AFTER_ACC);
-    }
-    else
-    {
-        v = min(max(MAX_FWD_SPEED_AFTER_ACC - acceleration * (t), v0), MAX_FWD_SPEED_AFTER_ACC);
-    }
-
-    ms->v_f0 = v;
     FWD_default(ms, s, ms->theta_0);
 
     if(s->odometry->getRelativeDist() > CELL_SIZE * x)

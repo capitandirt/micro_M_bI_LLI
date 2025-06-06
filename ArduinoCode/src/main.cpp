@@ -4,12 +4,8 @@
 
 void setup()
 {
-    DEVICES::INIT();
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-    // DEVICES::TEST::CONVERT_TO_SMART();
-    // while(true);
-    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 6);
 }
 
 void loop(){
