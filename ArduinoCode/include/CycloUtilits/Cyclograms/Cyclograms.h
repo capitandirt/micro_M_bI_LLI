@@ -66,8 +66,6 @@ CYCLOGRAM(FWD_X)
     constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     static Integrator v = v0;
     
-    //float t = (-v0 + sqrt(v0 * v0 + 2 * acceleration * s->odometry->getRelativeDist())) / acceleration;
-    //float half_way_t = -v0 + sqrt(v0 * v0 + 2 * acceleration * HALF(CELL_SIZE * x));
     
     
     if(s->odometry->getRelativeDist() < HALF(CELL_SIZE * x))
@@ -111,8 +109,8 @@ CYCLOGRAM(FWDE)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->getLeftTreshold();
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->getRightTreshold();
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену

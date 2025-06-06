@@ -73,13 +73,15 @@ Motor rightMotor(&right_mcp);
 
 PiRegConnectionParams left_w_prcp{
     .Kp = W_KP,
-    .Ki = W_KI
+    .Ki = W_KI,
+    .battery = &battery
 };
 PiReg left_w_PiReg(&left_w_prcp);
 
 PiRegConnectionParams right_w_prcp{
     .Kp = W_KP,
-    .Ki = W_KI
+    .Ki = W_KI,
+    .battery = &battery
 };
 PiReg right_w_PiReg(&right_w_prcp);
 

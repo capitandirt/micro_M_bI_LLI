@@ -15,8 +15,8 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_LEFT;
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->SENSE_THRESHOLD_RIGHT;
+    const int16_t LEFT_TRASHHOLD = s->optocoupler->getLeftTreshold();
+    const int16_t RIGHT_TRASHHOLD = s->optocoupler->getRightTreshold();
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
