@@ -6,14 +6,15 @@ void ProgramStatusHandler::sense(){
 
 void ProgramStatusHandler::plan(){
     const bool _but_state = _adc_reading >= ADC_THRESHOLD;
-    const bool _back_but_front = _prev_but_state == 1 && _but_state == 0;
+    const bool _forward_but_front = _prev_but_state == 0 && _but_state == 1;
 
-    if(_slideCatcher->isSlide() && (_counter == static_cast<uint8_t>(ProgramStatus::NEED_EXPLORER_COMMAND))){
+    if(_slideCatcher->isSlide() && (_counter == static_cast<uint8_t>(ProgramStatus::NEED_START_COMMAND))){
         setStatus(ProgramStatus::DELAY_BEFORE_GO_FINISH);
     }
 
-    if(_back_but_front){
-        nextStatus();
+    if(_forward_but_front){
+        if(_counter == static_cast<uint8_t>(ProgramStatus::FAST)) setStatus(ProgramStatus::NONE);
+        else nextStatus();
     } 
     
     _prev_but_state = _but_state;

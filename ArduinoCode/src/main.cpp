@@ -5,7 +5,6 @@
 void setup()
 {
     DEVICES::INIT();
-    DEVICES::TEST::SET_SERIAL();
 }
 
 void loop(){
@@ -15,7 +14,7 @@ void loop(){
     last_time = micros();
 
     DEVICES::TICK(last_time / 1000);
-
+    
     cycloWorker.doCyclogram();
     robot.stateMachine();
     cycloWorker.tryComplete();

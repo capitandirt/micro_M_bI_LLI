@@ -11,18 +11,18 @@ MazeCommand MazeObserver::getCommand(const PrimitiveCycloAction_t primitive){
 
     const bool is_fwd_wall = toBool(cur_abs_cell.walls[toInt(cur_dir)]);
     
-    // if(primitive == PrimitiveCycloAction_t::FORWARD && is_side_walls){
-    //     _no_align_counter -= ALIGN_STEP;
+    if(primitive == PrimitiveCycloAction_t::FORWARD && is_side_walls){
+        _no_align_counter -= ALIGN_STEP;
 
-    //     if(_no_align_counter < 0)
-    //         _no_align_counter = 0;
-    // }
-    // else{
+        if(_no_align_counter < 0)
+            _no_align_counter = 0;
+    }
+    else{
         _no_align_counter = (_no_align_counter + ALIGN_STEP);
         
         if(_no_align_counter > MAX_NO_ALIGN_COUNTER)
             _no_align_counter = MAX_NO_ALIGN_COUNTER;
-    // }
+    }
 
     if(_no_align_counter < MAX_NO_ALIGN_COUNTER) return MazeCommand::NONE;
     

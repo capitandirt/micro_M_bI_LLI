@@ -29,7 +29,7 @@ private:
 
 private:
     static constexpr uint8_t ALIGN_STEP = 2;
-    static constexpr int8_t MAX_NO_ALIGN_COUNTER = 2 * ALIGN_STEP;
+    static constexpr int8_t MAX_NO_ALIGN_COUNTER = 4 * ALIGN_STEP;
 
     int16_t _no_align_counter = 0;
 
