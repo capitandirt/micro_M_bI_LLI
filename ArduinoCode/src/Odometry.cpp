@@ -52,6 +52,10 @@ void Odometry::setDir(Direction dir_) noexcept{
     dir = dir_;
 }
 
+void Odometry::setRelativeDist(float val){
+    Distance_r = val;
+}
+
 void Odometry::printMazeCoords() const{
     Serial.print(mazeCoords.x);
     Serial.print(" ");

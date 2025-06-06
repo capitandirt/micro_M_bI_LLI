@@ -74,6 +74,7 @@ public:
     Direction getDir() const noexcept;
     Direction getStartFastDir() const noexcept;
     void setDir(Direction dir_) noexcept;
+    void setRelativeDist(float val) noexcept;
 
     void printMazeCoords() const noexcept;
     void printDir() const noexcept;
