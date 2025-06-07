@@ -19,6 +19,7 @@ struct RobotConnectionParams{
     Odometry* _odometry;
     ProgramStatusHandler* _programStatusSelector;
     FunctionalSelector* _functionalSelector;
+    SlideCatcher* _slideCatcher;
 };
 
 
@@ -33,14 +34,21 @@ private:
     enum ExplorerStatus{
         TO_START,
         TO_FINISH
-    } explorer_status = TO_START;
+    };
+
+    enum Lever_type{
+        LEVER_FIRST_DIRECTION = 0, 
+        LEVER_EXPLORER_WITH_HIGH_SPEED = 1,
+        LEVER_NOT_GO_START = 2,
+        LEVER_RACE_TYPE = 3
+    };
 
     void start_explorer(const ExplorerStatus expl_status);
-    void step_flood_fill(const Vec2 end_cell);
+    void step_flood_fill(const Vec2 end_cell, ExplorerStatus explorer_status);
 
-    bool try_end(const Vec2& cur, const Vec2& end);
+    bool try_end(const Vec2& cur, const Vec2& end, ExplorerStatus explorer_status);
 
-    void statusConvertToSmart();
+    void convert_to_fast();
     void fast();
 };
 

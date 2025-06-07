@@ -160,7 +160,6 @@ SlideCatcher slideCatcher(&optocoupler);
 ProgramStatusHandlerConnectionParams sscp{
     ._INPUT_PIN = FUNCTION_PIN,
     ._indicator = &indicator,
-    ._slideCatcher = &slideCatcher,
 };
 
 ProgramStatusHandler programStatusSelector(&sscp);
@@ -175,7 +174,8 @@ RobotConnectionParams rcp{
     ._optocoupler = &optocoupler,
     ._odometry = &odometry,
     ._programStatusSelector = &programStatusSelector,
-    ._functionalSelector = &functionalSelector
+    ._functionalSelector = &functionalSelector,
+    ._slideCatcher = &slideCatcher
 };
 Robot robot(&rcp);
 

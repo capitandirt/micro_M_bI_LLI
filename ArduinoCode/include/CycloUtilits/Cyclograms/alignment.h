@@ -23,7 +23,7 @@ CYCLOGRAM(FROM_BACK_ALIGN_TO_CENTER)
     ms->v_f0 = FORWARD_SPEED;
     ms->theta_i0 = 0;
 
-    if(s->odometry->getRelativeDist() > FROM_BACK_ALIGNMENT_TO_CENTER)
+if(s->odometry->getRelativeDist() > FROM_BACK_ALIGNMENT_TO_CENTER)
     {
         ms->isComplete = true;
     }

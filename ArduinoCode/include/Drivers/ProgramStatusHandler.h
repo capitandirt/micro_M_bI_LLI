@@ -6,13 +6,11 @@
 #include "Led.h"
 #include "SlideCatcher.h"
 
-
-
 enum class ProgramStatus : uint8_t{
     NEED_START_PROGRAM_COMMAND = 0,
-    ESTIMATE_FAST_OR_EXPLORER,
+    NEED_SLIDE,
+    ESTIMATE_RACE_TYPE,
 
-    NEED_EXPLORER_SLIDE,
     DELAY_BEFORE_GO_FINISH,
     PRE_ENTRY_GO_FINISH,
     GO_FINISH,
@@ -20,10 +18,12 @@ enum class ProgramStatus : uint8_t{
     PRE_ENTRY_GO_START,
     GO_START,
     
-    NEED_FAST_SLIDE,
     DELAY_BEFORE_FAST,
-    PRE_ENTRY_FAST,
     FAST,
+
+    DELAY_BEFORE_HIGH_SPEED_EXPLORER,
+    PRE_ENTRY_HIGH_SPEED_EXPLORER,
+    HIGH_SPEED_EXPLORER_EXPLORER,
     
     SIZE
 };
@@ -31,8 +31,6 @@ enum class ProgramStatus : uint8_t{
 struct ProgramStatusHandlerConnectionParams{
     const uint8_t _INPUT_PIN;
     Led* _indicator;
-
-    SlideCatcher* _slideCatcher;
 };
 
 class ProgramStatusHandler : public ProgramStatusHandlerConnectionParams

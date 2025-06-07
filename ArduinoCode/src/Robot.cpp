@@ -11,20 +11,17 @@ void Robot::stateMachine(){
         _actionsHandler->needIdle();
         break;
 
-    case ProgramStatus::ESTIMATE_FAST_OR_EXPLORER:
-        if(_functionalSelector->isLever(3))
-            _programStatusSelector->setStatus(ProgramStatus::NEED_FAST_SLIDE);
-        else 
-            _programStatusSelector->setStatus(ProgramStatus::NEED_EXPLORER_SLIDE);
-        break;
-
-    case ProgramStatus::NEED_EXPLORER_SLIDE:
+    case ProgramStatus::NEED_SLIDE:
+        if(_slideCatcher->isSlide()){
+            if(_functionalSelector->isLever(LEVER_RACE_TYPE))
+                _programStatusSelector->setStatus(ProgramStatus::DELAY_BEFORE_FAST);
+            else 
+                _programStatusSelector->setStatus(ProgramStatus::DELAY_BEFORE_GO_FINISH);
+        }
         break;
 
     case ProgramStatus::DELAY_BEFORE_GO_FINISH:
-        explorer_status = TO_FINISH;
-
-        if(_functionalSelector->isLever(0)){
+        if(_functionalSelector->isLever(LEVER_FIRST_DIRECTION)){
             _odometry->setDir(Direction::S);
         }
         else _odometry->setDir(Direction::E);
@@ -40,12 +37,10 @@ void Robot::stateMachine(){
         break;
     
     case ProgramStatus::GO_FINISH:
-        step_flood_fill(FINISH_ROBOT_COORDS);
+        step_flood_fill(FINISH_ROBOT_COORDS, TO_FINISH);
         break;
 
     case ProgramStatus::DELAY_BEFORE_GO_START:
-        explorer_status = TO_START;
-
         _actionsHandler->needDelay05();
         _programStatusSelector->nextStatus();
         break;
@@ -55,10 +50,7 @@ void Robot::stateMachine(){
         break;
 
     case ProgramStatus::GO_START:
-        step_flood_fill(START_ROBOT_COORDS);
-        break;
-
-    case ProgramStatus::NEED_FAST_SLIDE:
+        step_flood_fill(START_ROBOT_COORDS, TO_START);
         break;
 
     case ProgramStatus::DELAY_BEFORE_FAST:
@@ -66,12 +58,8 @@ void Robot::stateMachine(){
         _programStatusSelector->nextStatus();
         break;
 
-    case ProgramStatus::PRE_ENTRY_FAST:
-        statusConvertToSmart();
-        _programStatusSelector->nextStatus();
-        break;    
-
     case ProgramStatus::FAST:
+        convert_to_fast();
         break;
 
     default:
@@ -107,7 +95,7 @@ void Robot::start_explorer(const ExplorerStatus expl_status){
     _programStatusSelector->nextStatus();
 }
 
-void Robot::step_flood_fill(const Vec2 end_vec)
+void Robot::step_flood_fill(const Vec2 end_vec, ExplorerStatus explorer_status)
 {
     if(!_cycloWorker->nowIsClusterDot()) return;
 
@@ -121,7 +109,7 @@ void Robot::step_flood_fill(const Vec2 end_vec)
         _maze->SetCell(forward_cell, forward_vec);
     }
 
-    if(try_end(forward_vec, end_vec)) return;
+    if(try_end(forward_vec, end_vec, explorer_status)) return;
 
     _solver->ExplorerSolveBfsMaze(forward_vec, end_vec);
     _actionsHandler->loadExplorer(cur_dir);    
@@ -130,12 +118,12 @@ void Robot::step_flood_fill(const Vec2 end_vec)
     _odometry->setDir(next_robot_dir);
 }
 
-bool Robot::try_end(const Vec2& cur, const Vec2& end){
+bool Robot::try_end(const Vec2& cur, const Vec2& end, ExplorerStatus explorer_status){
     if(cur.x == end.x && cur.y == end.y){
         _actionsHandler->needFwdHalf();
         
         if(explorer_status == TO_FINISH){
-            if(_functionalSelector->isLever(2)){
+            if(_functionalSelector->isLever(LEVER_NOT_GO_START)){
                 _programStatusSelector->setStatus(ProgramStatus::NEED_START_PROGRAM_COMMAND);
             }
             else _programStatusSelector->nextStatus();
@@ -143,19 +131,14 @@ bool Robot::try_end(const Vec2& cur, const Vec2& end){
         else{
             _programStatusSelector->setStatus(ProgramStatus::NEED_START_PROGRAM_COMMAND);
         }
-
         return true;
     }
     return false;
 }
 
-void Robot::statusConvertToSmart()
+void Robot::convert_to_fast()
 {
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
-    _actionsHandler->loadFasts();
-}
-
-
-void Robot::fast(){
-    
+    _actionsHandler->loadExplorerCluster();
+    // _programStatusSelector->setStatus(ProgramStatus::NEED_START_PROGRAM_COMMAND);
 }

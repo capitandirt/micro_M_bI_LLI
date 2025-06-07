@@ -24,6 +24,8 @@ public:
     void tick(); 
 
 private:
+    static constexpr float VOLTAGE_ERROR = 0.2;
+
     float _integrator = 0;
     
     float _set = 0;

@@ -21,7 +21,7 @@ void PiReg::tick(){
 
     _u = _P + _I;
 
-    const float MAX_U = battery->getVoltage();
+    const float MAX_U = battery->getVoltage() - VOLTAGE_ERROR;
     _constrained_u = constrain(_u, -MAX_U, MAX_U);
 
     if(_u == _constrained_u){

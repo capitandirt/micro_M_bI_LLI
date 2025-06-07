@@ -17,6 +17,7 @@ public:
     float getW() const;
 
 private:
+    
     float _w = 0;
 };
 

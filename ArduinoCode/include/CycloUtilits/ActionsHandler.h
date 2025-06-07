@@ -17,6 +17,7 @@ public:
     ActionsHandler(ActionsHandlerConnectionParams* ahcp) : ActionsHandlerConnectionParams(*ahcp){}
     
     void loadExplorer(Direction robot_dir);
+    void loadExplorerCluster();
     void primitivesToFasts();
     
     void clear();
