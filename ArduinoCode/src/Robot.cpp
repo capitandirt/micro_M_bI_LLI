@@ -140,5 +140,4 @@ void Robot::convert_to_fast()
 {
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
     _actionsHandler->loadExplorerCluster();
-    // _programStatusSelector->setStatus(ProgramStatus::NEED_START_PROGRAM_COMMAND);
 }

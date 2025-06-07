@@ -39,6 +39,8 @@ SmartSubmission CycloStore::popFrontSmartSubmission(){
         smart_submis.x = toX_t(_cyclo_program[_smart_cyc_act_counter++].smart);
     }
 
+    // Serial.print(smart)
+
     return smart_submis;
 }
 
