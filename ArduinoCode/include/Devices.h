@@ -8,6 +8,7 @@
 #include "Drivers/SlideCatcher.h"
 #include "MazeObserver.h"
 #include "Drivers/FunctionalSelector.h"
+#include "Drivers/Gyro.h"
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -180,3 +181,5 @@ RobotConnectionParams rcp{
 Robot robot(&rcp);
 
 #endif // !_DEVICES_H_
+
+Gyro gyro;

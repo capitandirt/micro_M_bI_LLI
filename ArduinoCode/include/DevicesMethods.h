@@ -51,6 +51,13 @@ namespace DEVICES{
         robot.init();
 
         TIM2::INIT();
+        gyro.init();
+
+        while(millis() < 20000)
+        {
+            gyro.tick();
+        }
+        gyro.setYPR0();
     }
 
     void TICK(uint32_t now_millis){
@@ -75,6 +82,9 @@ namespace DEVICES{
         slideCatcher.tick();
 
         odometry.tick(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
+
+        gyro.tick();
+        odometry.setTheta(gyro.getYawAngle());
     }
 
     namespace TEST{

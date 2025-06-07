@@ -162,7 +162,7 @@ struct CycloContext{
     void reload(){
         ms.isComplete = 0;
         s.odometry->updateRelative();
-
+        
     }
 };
 

@@ -26,9 +26,6 @@ private:
 
     void calc_forward_movement();
     void calc_angular_movement();
-    
-    void set_theta(float& _theta);
-    void set_forward_velocity(float& _forward_velocity);
 };
 
 #endif // !_MIXER_H_

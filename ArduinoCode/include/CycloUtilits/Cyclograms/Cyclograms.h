@@ -7,6 +7,7 @@
 #include "FWD_helpFunction.h"
 #include "smart45.h"
 #include "smart135.h"
+#include "smart90.h"
 #include "alignment.h"
 /* РАСШИФРОВКА НАЗВАНИЙ ПОВОРОТОВ
 SS90EL

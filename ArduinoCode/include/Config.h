@@ -22,7 +22,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 5000 // 0 < Ts_us <= 10000
+#define Ts_us 10000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 
@@ -37,8 +37,8 @@
 /*==ENCODER CONNECTION PINS END==*/
 
 /*==ROBOT PARAMS BEGIN==*/
-#define ROBOT_WIDTH 0.075f
-#define WHEEL_RADIUS 0.01725f
+#define ROBOT_WIDTH 0.074f
+#define WHEEL_RADIUS 0.0165f
 /*==ROBOT PARAMS END*/
 
 /*==WHEELS PARAMS BEGIN==*/
@@ -68,7 +68,7 @@
 #define W_T_u (2 * Ts_s)
 
 #define W_KP (0.4f) // Kp = K
-#define W_KI (W_KP / 0.2f) // Ki = K / T
+#define W_KI (W_KP / 0.05f) // Ki = K / T
 /*==W MOTOT PIREG END==*/
 
 /*==MAZE BEGIN==*/

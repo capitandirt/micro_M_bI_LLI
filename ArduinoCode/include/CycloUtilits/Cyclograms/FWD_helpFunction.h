@@ -25,5 +25,5 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
         ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 
-    ms->theta_i0 = regulatorArray[regulatorState];
+    ms->theta_i0 = 0;
 }

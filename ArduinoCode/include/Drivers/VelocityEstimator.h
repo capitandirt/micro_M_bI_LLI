@@ -17,6 +17,7 @@ public:
     float getW() const;
 
 private:
+    static constexpr float LPF_K = 0.45;
     float _w = 0;
 };
 

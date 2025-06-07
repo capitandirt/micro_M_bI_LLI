@@ -8,18 +8,6 @@ void Mixer::calc_angular_movement(){
     _rad_theta = (ROBOT_WIDTH / WHEEL_RADIUS) * _theta;
 }
 
-void Mixer::set_theta(float& theta){
-    _theta = theta;
-
-    calc_angular_movement();
-}
-
-void Mixer::set_forward_velocity(float& forward_velocity){
-    _forward_velocity = forward_velocity;
-
-    calc_forward_movement();
-}
-
 void Mixer::impactVelocity(float theta, float forward_velocity)
 {   
     _theta = theta;

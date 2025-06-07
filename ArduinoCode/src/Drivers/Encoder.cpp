@@ -47,7 +47,7 @@ void Encoder::isrCallback()
     _enc_old = enc;
 }
 
-float Encoder::getPhi() const{
+float Encoder:: getPhi() const{
     return _phi;
 }
 
