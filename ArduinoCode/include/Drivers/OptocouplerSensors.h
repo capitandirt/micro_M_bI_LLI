@@ -11,10 +11,10 @@ struct OprocouplerConnectionParams{
     const uint16_t REC_LEFT;
     const uint16_t REC_FWD_LEFT;
     const uint16_t REC_FWD_RIGHT;
-    const uint16_t SENSE_THRESHOLD_FWD_L;
-    const uint16_t SENSE_THRESHOLD_FWD_R;
-    const uint16_t SENSE_THRESHOLD_RIGHT;
-    const uint16_t SENSE_THRESHOLD_LEFT;
+    const int16_t SENSE_THRESHOLD_FWD_L;
+    const int16_t SENSE_THRESHOLD_FWD_R;
+    const int16_t SENSE_THRESHOLD_RIGHT;
+    const int16_t SENSE_THRESHOLD_LEFT;
 };
 
 struct Sense_t{
@@ -71,10 +71,11 @@ public:
     void    printMask()                 const;
     void    printSense()                const;
     
-    void setStaticError(uint16_t errLeft, uint16_t errRight) noexcept;
+    void setStaticError()            noexcept; 
+    int16_t getStaticError()           const;
 
-    uint16_t getLeftTreshold()          const;
-    uint16_t getRightTreshold()         const;
+    int16_t getLeftTreshold()          const;
+    int16_t getRightTreshold()         const;
 
     
     private:
@@ -93,7 +94,7 @@ public:
     
     OptocouplerSense _sense;   
     
-    uint16_t staticErrLeft = 0, staticErrRight = 0;
+    int16_t _static_err = 0;
 };
 
 #endif // !_OPTOCOUPLER_H_

@@ -37,7 +37,7 @@ CYCLOGRAM(IDLE)
 }
 
 CYCLOGRAM(DELAY_025S){
-    constexpr uint16_t DELAY_TIME = 250; // ms 
+    constexpr uint16_t DELAY_TIME = 250; // ms
 
     ms->v_f0 = 0;
     ms->theta_i0 = 0;
@@ -62,50 +62,74 @@ CYCLOGRAM(FWD_HALF)
 
 CYCLOGRAM(FWD_X)
 {
-    constexpr float acceleration = FWD_ACCELERATION; 
+    constexpr float acceleration = FWD_ACCELERATION;
     constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     static Integrator v = v0;
-    
-    static float last_cell_dist = 0; 
+
+    enum ALIGN_STATES{
+        NONE = 0,
+        WAS_ZERO_DIST,
+        CHECK_ALIGN_POSSIBILITY,
+        CAN_TRY_ALIGN,
+        NEED_ALIGN,
+
+        NOT_A_ALIGN
+    };
+
+    static float last_cell_dist = 0;
     static bool FIRST_ENTRANCE = 1;
-    static bool CAN_TRY_ALIGN = 0;
+    static ALIGN_STATES align_state = NONE;
 
     static bool prev_left_wall = 0;
     static bool prev_right_wall = 0;
-    
+
     const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
     const float cur_dist = s->odometry->getRelativeDist();
 
     if(FIRST_ENTRANCE){
-        last_cell_dist = 0;
+        last_cell_dist = HALF(CELL_SIZE);
 
         prev_left_wall = 0;
         prev_right_wall = 0;
 
-        CAN_TRY_ALIGN = 0;
-
+        align_state = NONE;
         FIRST_ENTRANCE = 0;
     }
 
-    // bool NEED_CALC_CAN_TRY_ALIGN = 0;
-    if(cur_dist - last_cell_dist > HALF(CELL_SIZE)){
-        CAN_TRY_ALIGN = 1;
+    if(cur_dist - last_cell_dist > CELL_SIZE){
+        last_cell_dist = cur_dist;
+        align_state = NONE;
     }
+
+    const uint8_t cell_counter = cur_dist / CELL_SIZE;
 
     const bool left_wall = toBool(cell_from_sensors.west_wall);
     const bool right_wall = toBool(cell_from_sensors.east_wall);
-    const uint8_t passed_cells = cur_dist / CELL_SIZE;
 
-    const bool left_wall_forward_front = prev_left_wall == 0 && left_wall == 1;
-    const bool right_wall_forward_front = prev_right_wall == 0 && right_wall == 1;
+    const bool left_wall_forward_front = prev_left_wall == 1 && left_wall == 0;
+    const bool right_wall_forward_front = prev_right_wall == 1 && right_wall == 0;
 
-    if(left_wall_forward_front || right_wall_forward_front){
-        const float upd_dist = passed_cells * CELL_SIZE + (HALF(CELL_SIZE) + CELL_SIZE - FROM_HI_WALL_TO_SIDE);
-        s->odometry->setRelativeDist(upd_dist);
+    prev_left_wall = left_wall;
+    prev_right_wall = right_wall;
+
+    if(align_state == NONE && cur_dist - last_cell_dist > 0){
+        align_state = WAS_ZERO_DIST;
     }
 
-    if(CAN_TRY_ALIGN){
-        
+    if(align_state == WAS_ZERO_DIST){
+        if(left_wall || right_wall){
+            align_state = CAN_TRY_ALIGN;
+        }
+        else align_state = NOT_A_ALIGN;
+    }
+
+    if(align_state == CAN_TRY_ALIGN){
+        if(left_wall_forward_front || right_wall_forward_front){
+            const float upd_dist = HALF(CELL_SIZE) + cell_counter * CELL_SIZE + (CELL_SIZE - FROM_HI_WALL_TO_SIDE);
+            s->odometry->setRelativeDist(upd_dist);
+
+            align_state = NOT_A_ALIGN;
+        }
     }
 
     if(cur_dist < HALF(CELL_SIZE * x))
@@ -120,9 +144,9 @@ CYCLOGRAM(FWD_X)
     ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
     FWD_default(ms, s, ms->theta_0);
 
-    if(cur_dist > CELL_SIZE * x)
+    if(s->odometry->getRelativeDist() > CELL_SIZE * x)
     {
-        s->odometry->setTheta(ms->theta_0);
+        // s->odometry->setTheta(ms->theta_0);
         FIRST_ENTRANCE = 1;
         ms->isComplete = true;
     }
@@ -153,9 +177,9 @@ CYCLOGRAM(FWDE)
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - (RIGHT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR)),//стену видит только правый
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * ((LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR) - left_sense),//стену видит только левый
+        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense - s->optocoupler->getStaticError()),//оба датчика
     };
 
     if(FIRST_ENTRANCE){
@@ -221,7 +245,7 @@ CYCLOGRAM(SS90EL)
 
     constexpr float forwDist = CELL_SIZE / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4;
-    
+
     if(s->odometry->getRelativeDist() < forwDist)
     {
         FWD_default(ms, s, ms->theta_0);
@@ -248,7 +272,7 @@ CYCLOGRAM(SS90ER)
 
     constexpr float forwDist = CELL_SIZE / 2 - R;
     constexpr float circleDist = (2 * PI * R) / 4;
-    
+
     if(s->odometry->getRelativeDist() < forwDist)
     {
         FWD_default(ms, s, ms->theta_0);
@@ -432,8 +456,8 @@ CYCLOGRAM(IP90L)
 
     // constexpr float t_0 = alpha / theta;
     // constexpr float saturation = 0.1; // [0 > saturation < 1]
-    // constexpr float k_a = HALF(saturation); 
-    
+    // constexpr float k_a = HALF(saturation);
+
     // constexpr float T = t_0 / (1 - k_a);
     // constexpr float a = k_a * T;
 

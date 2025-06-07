@@ -27,6 +27,10 @@ public:
         return _out - other._out;
     }
 
+    void operator=(const int val){
+        _out = val;
+    }
+
     void operator=(const float val){
         _out = val;
     }

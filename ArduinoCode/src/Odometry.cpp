@@ -21,19 +21,19 @@ float Odometry::getDist() const{
 }
 
 float Odometry::getRelativeX() const{
-    return X - X_r;
+    return X_r.getOut();
 }
 
 float Odometry::getRelativeY() const{
-    return Y - Y_r;
+    return Y_r.getOut();
 }
 
 float Odometry::getRelativeTheta() const{
-    return Theta - Theta_r;
+    return Theta_r.getOut();
 }
 
 float Odometry::getRelativeDist() const{
-    return Distance - Distance_r;
+    return Distance_r.getOut();
 }
 
 Vec2 Odometry::getMazeCoords() const{
@@ -52,7 +52,7 @@ void Odometry::setDir(Direction dir_) noexcept{
     dir = dir_;
 }
 
-void Odometry::setRelativeDist(float val){
+void Odometry:: setRelativeDist(float val){
     Distance_r = val;
 }
 
@@ -93,8 +93,13 @@ void Odometry::tick(float omegaL, float omegaR)
     vY = v * sin(Theta.getOut());
 
     Distance.tick(v);
-    X.tick(vX);
+    X.tick(vX);    
     Y.tick(vY);
+
+    Theta_r.tick(theta_i);
+    Distance_r.tick(v);
+    X_r.tick(vX);
+    X_r.tick(vY);
 }
 
 void Odometry::updateMazeCoords(Direction dir){
@@ -122,8 +127,8 @@ void Odometry::reset()
 
 void Odometry::updateRelative()
 {
-    X_r = X;
-    Y_r = Y;
-    Theta_r = Theta;
-    Distance_r = Distance;
+    X_r = 0;
+    Y_r = 0;
+    Theta_r = 0;
+    Distance_r = 0;
 }

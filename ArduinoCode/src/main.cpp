@@ -8,10 +8,10 @@ void setup()
     DEVICES::INIT();
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
-    optocoupler.setStaticError(optocoupler.getSense().left, optocoupler.getSense().right);
+    optocoupler.setStaticError();
 
     cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
-    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 6);
+    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 9);
 }
 
 void loop(){
