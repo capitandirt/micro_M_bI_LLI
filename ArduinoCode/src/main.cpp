@@ -7,8 +7,7 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
-    cycloStore.addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
-    cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
+
     cycloStore.addSmart(SmartCycloAction_t::SS90SL);
 
     // cycloStore.addSmart(SmartCycloAction_t::SD135SL);
@@ -29,11 +28,11 @@ void loop(){
     last_time = micros();
     
     DEVICES::TICK(last_time / 1000);
-    
+
     // gyro.printYaw();
     
     cycloWorker.doCyclogram();
-    // robot.stateMachine();
+    // // robot.stateMachine();
     cycloWorker.tryComplete();
 
     // Serial.println(micros() - last_time);

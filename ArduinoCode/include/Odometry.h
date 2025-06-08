@@ -36,6 +36,10 @@ public:
         _out = val;
     }
 
+    void operator=(const int val){
+        _out = val;
+    }
+
     void operator=(const Integrator& other){
         _out = other._out;
     }
@@ -49,7 +53,7 @@ class Odometry
 private:
     Integrator X, Y, Distance;
     Integrator X_r, Y_r, Distance_r;
-    float Theta_r;
+    Integrator Theta, Theta_r;
 
     float vL = 0, vR = 0, vX = 0, vY = 0, v = 0;
 
@@ -57,11 +61,10 @@ private:
     Direction dir;
     Direction startFastDir;
 
-    #if USE_GYRO
+    // #if USE_GYRO
     Gyro* gyro;
-    #else
-    Integrator ThetaIntegrator;
-    #endif
+    // #else
+    // #endif
 public:
     #if USE_GYRO
     Odometry(Gyro* gyro_);

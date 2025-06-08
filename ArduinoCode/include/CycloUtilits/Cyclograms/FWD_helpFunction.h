@@ -17,6 +17,8 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
     ms->theta_i0 = 0;
     #endif
 
+    ms->theta_i0 = 0;
+
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;
     const Cell cell_from_sensors = s->optocoupler->getRelativeCell();

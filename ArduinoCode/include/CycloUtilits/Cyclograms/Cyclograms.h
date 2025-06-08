@@ -260,7 +260,7 @@ CYCLOGRAM(SS90SL)
     constexpr float forwDist = CELL_SIZE - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
 
-    enum SS90SL_S{
+    static enum SS90SL_S{
         FWD1,
         TURN,
         FWD2,
@@ -268,9 +268,10 @@ CYCLOGRAM(SS90SL)
     } ss90sl_state = FWD1;
 
     if(ss90sl_state == FWD1){
-        FWD_default(ms, s, ms->theta_0);
+        // FWD_default(ms, s, ms->theta_0);
+        ms->v_f0 = FAST_FORWARD_SPEED;
 
-         if(s->odometry->getRelativeDist() > forwDist){
+        if(s->odometry->getRelativeDist() > forwDist){
             ss90sl_state = TURN;
         }
     }
@@ -278,6 +279,7 @@ CYCLOGRAM(SS90SL)
     if (ss90sl_state == TURN){
         ms->theta_i0 = theta_i;
 
+        
         if(s->odometry->getRelativeTheta() > HALF_PI){
             ss90sl_state = FWD2;
         }
@@ -296,6 +298,9 @@ CYCLOGRAM(SS90SL)
         ms->theta_0 += HALF_PI;
     }
 
+    Serial.print(ss90sl_state);
+    Serial.print('\t');
+    Serial.println(s->odometry->getRelativeTheta());
 
     // if(s->odometry->getRelativeDist() < forwDist)
     // {

@@ -54,7 +54,7 @@ namespace DEVICES{
         
         gyro.init();
 
-        while(millis() < 10000)
+        while(millis() < 14000)
         {
             gyro.tick();
         }
@@ -70,7 +70,9 @@ namespace DEVICES{
         
         leftServo.tick();
         rightServo.tick();
-        
+
+        gyro.tick();
+
         optocoupler.calc();
         functionalSelector.tick();
         functionalSelector.decodeAdcReading();
@@ -83,8 +85,6 @@ namespace DEVICES{
         slideCatcher.tick();
 
         odometry.tick(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
-
-        gyro.tick();
     }
 
     namespace TEST{

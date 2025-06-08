@@ -17,11 +17,13 @@ float Odometry::getY() const{
 }
 
 float Odometry::getTheta() const{
-    #if USE_GYRO
-    return gyro->getYawAngle();
-    #else
-    return ThetaIntegrator.getOut();
-    #endif
+    // #if USE_GYRO
+    // return gyro->getYawAngle();
+    // #else
+    // return ThetaIntegrator.getOut();
+    // #endif
+
+    return Theta.getOut();
 }
 
 void Odometry::setTheta(float theta_) noexcept{
@@ -46,7 +48,7 @@ float Odometry::getRelativeY() const{
 
 float Odometry::getRelativeTheta() const{
     #if USE_GYRO
-    return gyro->getYawAngle() - Theta_r;
+    return Theta - Theta_r;
     #else
     return ThetaIntegrator - Theta_r;
     #endif
@@ -101,19 +103,25 @@ void Odometry::tick(float omegaL, float omegaR)
     vL = omegaL * WHEEL_RADIUS;
     vR = omegaR * WHEEL_RADIUS;
 
-    float theta_i = (vR - vL) / ROBOT_WIDTH; //в этом вычислении опускается тангенс угла, тк tg(x) ~= x на малых углах
-    
+    const float theta_i = (vR - vL) / ROBOT_WIDTH; //в этом вычислении опускается тангенс угла, тк tg(x) ~= x на малых углах
+
     v = (vR + vL) / 2;
 
-    #if USE_GYRO
-    vX = v * cos(gyro->getYawAngle());
-    vY = v * sin(gyro->getYawAngle());
-    #else
-    ThetaIntegrator.tick(theta_i);
-    vX = v * cos(ThetaIntegrator.getOut());
-    vY = v * sin(ThetaIntegrator.getOut());
-    #endif
+    // #if USE_GYRO
+    vX = v * cos(Theta.getOut());
+    vY = v * sin(Theta.getOut());
+    // #else
 
+    // vX = v * cos(ThetaIntegrator.getOut());
+    // vY = v * sin(ThetaIntegrator.getOut());
+    // #endif
+
+    if(gyro->isNewYaw()){
+        Theta = gyro->getYawAngle();
+    }
+    else{
+        Theta.tick(theta_i);
+    }
 
     Distance.tick(v);
     X.tick(vX);
@@ -140,11 +148,8 @@ void Odometry::reset()
     X.reset();
     Y.reset();
 
-    #if USE_GYRO
     gyro->setYawOffset(gyro->getYawAngle());
-    #else
-    ThetaIntegrator.reset();
-    #endif
+    Theta = 0;
 
     Distance.reset();
 }
@@ -154,11 +159,10 @@ void Odometry::updateRelative()
     X_r = X;
     Y_r = Y;
 
-    #if USE_GYRO
-    Theta_r = gyro->getYawAngle();
-    #else
-    Theta_r = ThetaIntegrator.getOut();
-    #endif
+    // #if USE_GYRO
+    Theta_r = Theta;
+    // #else
+    // #endif
 
     Distance_r = Distance;
 }

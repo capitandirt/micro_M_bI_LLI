@@ -16,6 +16,7 @@ private:
 
     static constexpr uint8_t PACKET_SIZE = sizeof(_pac);
     void (*_recieve_event)(int) = nullptr;
+    volatile bool _new_yaw = 0;
 
     // MPU6050 mpu
     float yaw, yaw0, yaw_offset;
@@ -26,6 +27,8 @@ public:
     void recieveEvent(int bytes)
     {
         if(bytes != PACKET_SIZE) return;
+
+        _new_yaw = 1;
 
         for(uint8_t i = 0; i < PACKET_SIZE; i++){
             _pac.val_raw[i] = Wire.read();
@@ -39,8 +42,6 @@ public:
     }
     void tick() 
     {
-        // Serial.print("recieved ");
-        // Serial.println(_pac.val);
         yaw = _pac.val / RAD_TO_DEG;
         // Serial.println(_recieve_event_byte*2);
         static float yaw_old = 0;
@@ -58,7 +59,12 @@ public:
     }
     float getYawAngle()
     {
+        _new_yaw = 0;
         return yaw - yaw0 + yaw_offset;
+    }
+
+    bool isNewYaw(){
+        return _new_yaw;
     }
 
     void printYaw()
