@@ -52,7 +52,15 @@ VelocityEstimatorConnectionParams right_vecp {
 
 VelocityEstimator rightVelocityEstimator(&right_vecp);
 
-Gyro gyro;
+void receiveGyroEvent(int bytes);
+
+Gyro gyro(receiveGyroEvent);
+
+void receiveGyroEvent(int bytes)
+{
+    gyro.recieveEvent(bytes);
+}
+
 #if USE_GYRO
 Odometry odometry(&gyro);
 #else

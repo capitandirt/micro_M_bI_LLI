@@ -29,7 +29,7 @@ CYCLOGRAM(SD135SL)
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 += (HALF_PI + HALF(HALF_PI));
+        ms->theta_0 += (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }
@@ -57,7 +57,7 @@ CYCLOGRAM(SD135SR)
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 -= (HALF_PI + HALF(HALF_PI));
+        ms->theta_0 -= (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }
@@ -88,7 +88,7 @@ CYCLOGRAM(DS135SL)
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 += (HALF_PI + HALF(HALF_PI));
+        ms->theta_0 += (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }
@@ -119,7 +119,7 @@ CYCLOGRAM(DS135SR)
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 -= (HALF_PI + HALF(HALF_PI));
+        ms->theta_0 -= (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }

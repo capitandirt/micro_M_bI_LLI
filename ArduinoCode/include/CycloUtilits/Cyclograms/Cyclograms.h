@@ -169,8 +169,9 @@ CYCLOGRAM(DIAG_X)
     ms->v_f0 = FAST_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
 
     
+    // Serial.println(s->odometry->getRelativeTheta() * RAD_TO_DEG);
     #if USE_ANGLE_REGULATOR
-        ms->theta_i0 = getThetaIfromAngleReg(s, ms->theta_0);
+        ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     #else
         ms->theta_i0 = 0;
     #endif
@@ -211,7 +212,7 @@ CYCLOGRAM(SS90EL)
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
-        ms->theta_i0 += HALF_PI;
+        ms->theta_0 += HALF_PI;
     }
     else ms->isComplete = false;
 }
@@ -244,7 +245,7 @@ CYCLOGRAM(SS90ER)
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
-        ms->theta_i0 -= HALF_PI;
+        ms->theta_0 -= HALF_PI;
     }
     else ms->isComplete = false;
 
@@ -259,29 +260,66 @@ CYCLOGRAM(SS90SL)
     constexpr float forwDist = CELL_SIZE - R;
     constexpr float circleDist = (TWO_PI * R) / 4;
 
-    if(s->odometry->getRelativeDist() < forwDist)
-    {
+    enum SS90SL_S{
+        FWD1,
+        TURN,
+        FWD2,
+        FINISH
+    } ss90sl_state = FWD1;
+
+    if(ss90sl_state == FWD1){
         FWD_default(ms, s, ms->theta_0);
-    }
-    #if USE_ANGLE
-    else if(s->odometry->getRelativeTheta() < HALF_PI)
-    #else
-    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
-    #endif
-    {
-        ms->theta_i0 = theta_i;
-    }
-    else
-    {
-        FWD_default(ms, s, ms->theta_0 + HALF_PI);
+
+         if(s->odometry->getRelativeDist() > forwDist){
+            ss90sl_state = TURN;
+        }
     }
 
-    if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
-    {
-        ms->isComplete = true;
-        ms->theta_i0 += HALF_PI;
+    if (ss90sl_state == TURN){
+        ms->theta_i0 = theta_i;
+
+        if(s->odometry->getRelativeTheta() > HALF_PI){
+            ss90sl_state = FWD2;
+        }
     }
-    else ms->isComplete = false;
+
+    if(ss90sl_state == FWD2){
+        FWD_default(ms, s, ms->theta_0 + HALF_PI);
+
+         if(s->odometry->getRelativeDist() > 2*forwDist + circleDist){
+            ss90sl_state = FINISH;
+        }
+    }
+
+    if(ss90sl_state == FINISH){
+        ms->isComplete = true;
+        ms->theta_0 += HALF_PI;
+    }
+
+
+    // if(s->odometry->getRelativeDist() < forwDist)
+    // {
+    //     FWD_default(ms, s, ms->theta_0);
+    // }
+    // #if USE_ANGLE
+    // else if(s->odometry->getRelativeTheta() < HALF_PI)
+    // #else
+    // else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
+    // #endif
+    // {
+    //     ms->theta_i0 = theta_i;
+    // }
+    // else
+    // {
+    //     FWD_default(ms, s, ms->theta_0 + HALF_PI);
+    // }
+    // Serial.println(s->odometry->getRelativeTheta());
+    // if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
+    // {
+    //     ms->isComplete = true;
+    //     ms->theta_0 += HALF_PI;
+    // }
+    // else ms->isComplete = false;
 }
 
 CYCLOGRAM(SS90SR)
@@ -313,7 +351,7 @@ CYCLOGRAM(SS90SR)
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
-        ms->theta_i0 -= HALF_PI;
+        ms->theta_0 -= HALF_PI;
     }
     else ms->isComplete = false;
 }
@@ -325,8 +363,9 @@ CYCLOGRAM(DD90SL)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FAST_FORWARD_SPEED / R;
 
+    if(s->odometry->getRelativeDist() < forwDist) ms->theta_i0 = 0;
     #if USE_ANGLE
-    if(s->odometry->getRelativeTheta() < HALF_PI) ms->theta_i0 = theta_i;
+    else if(s->odometry->getRelativeTheta() < HALF_PI) ms->theta_i0 = theta_i;
     #else
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     #endif
@@ -335,7 +374,7 @@ CYCLOGRAM(DD90SL)
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist)
     {
         ms->isComplete = true;
-        ms->theta_i0 += HALF_PI;
+        ms->theta_0 += HALF_PI;
     }
     else ms->isComplete = false;
 }
@@ -347,8 +386,9 @@ CYCLOGRAM(DD90SR)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FAST_FORWARD_SPEED / R;
 
+    if(s->odometry->getRelativeDist() < forwDist) ms->theta_i0 = 0;
     #if USE_ANGLE
-    if(s->odometry->getRelativeTheta() > -HALF_PI) ms->theta_i0 = -theta_i;
+    else if(s->odometry->getRelativeTheta() > -HALF_PI) ms->theta_i0 = -theta_i;
     #else
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     #endif
@@ -357,7 +397,7 @@ CYCLOGRAM(DD90SR)
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist)
     {
         ms->isComplete = true;
-        ms->theta_i0 -= HALF_PI;
+        ms->theta_0 -= HALF_PI;
     }
     else ms->isComplete = false;
 }
@@ -390,7 +430,7 @@ CYCLOGRAM(SS180SL)
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
-        ms->theta_i0 += PI;
+        ms->theta_0 += PI;
     }
     else ms->isComplete = false;
 }
@@ -421,7 +461,7 @@ CYCLOGRAM(SS180SR)
     if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
     {
         ms->isComplete = true;
-        ms->theta_i0 -= PI;
+        ms->theta_0 -= PI;
     }
     else ms->isComplete = false;
 }
@@ -429,7 +469,7 @@ CYCLOGRAM(SS180SR)
 CYCLOGRAM(IP180)
 {
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 10 * PI / 180;
+    constexpr float THETA_ERROR = 0 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
@@ -437,7 +477,7 @@ CYCLOGRAM(IP180)
     if(s->odometry->getRelativeTheta() >= PI - THETA_ERROR)
     {
         ms->isComplete = true;
-        ms->theta_i0 += PI;
+        ms->theta_0 += PI;
     }
     else ms->isComplete = false;
 }
@@ -485,7 +525,7 @@ CYCLOGRAM(IP90L)
     // else ms->isComplete = 0;
 
     constexpr float theta_i = FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 6 * PI / 180;
+    constexpr float THETA_ERROR = 0 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
@@ -494,7 +534,7 @@ CYCLOGRAM(IP90L)
     {
         ms->theta_i0 = 0;
         ms->isComplete = true;
-        ms->theta_i0 += HALF_PI;
+        ms->theta_0 += HALF_PI;
     }
     else ms->isComplete = false;
 }
@@ -502,7 +542,7 @@ CYCLOGRAM(IP90L)
 CYCLOGRAM(IP90R)
 {
     constexpr float theta_i = -FORWARD_SPEED / (ROBOT_WIDTH / 2);
-    constexpr float THETA_ERROR = 6 * PI / 180;
+    constexpr float THETA_ERROR = 0 * PI / 180;
 
     ms->v_f0 = 0;
     ms->theta_i0 = theta_i;
@@ -511,7 +551,7 @@ CYCLOGRAM(IP90R)
     {
         ms->theta_i0 = 0;
         ms->isComplete = true;
-        ms->theta_i0 -= HALF_PI;
+        ms->theta_0 -= HALF_PI;
     }
     else ms->isComplete = false;
 }

@@ -1,53 +1,89 @@
-#include <Wire.h>
+/************************************************************
+  MPU9250_DMP_Quaternion
+  Quaternion example for MPU-9250 DMP Arduino Library
+  Jim Lindblom @ SparkFun Electronics
+  original creation date: November 23, 2016
+  https://github.com/sparkfun/SparkFun_MPU9250_DMP_Arduino_Library
 
-#include "I2Cdev.h"
-#include "MPU6050_6Axis_MotionApps20.h"
-MPU6050 mpu;
+  The MPU-9250's digital motion processor (DMP) can calculate
+  four unit quaternions, which can be used to represent the
+  rotation of an object.
 
-uint8_t fifoBuffer[45];         // буфер
+  This exmaple demonstrates how to configure the DMP to
+  calculate quaternions, and prints them out to the serial
+  monitor. It also calculates pitch, roll, and yaw from those
+  values.
 
-void setup() {
-  Serial.begin(115200);
+  Development environment specifics:
+  Arduino IDE 1.6.12
+  SparkFun 9DoF Razor IMU M0
+
+  Supported Platforms:
+  - ATSAMD21 (Arduino Zero, SparkFun SAMD21 Breakouts)
+*************************************************************/
+#include <SparkFunMPU9250-DMP.h>
+// #include <Wire.h>
+
+#define SerialPort SerialUSB
+
+MPU9250_DMP imu;
+
+
+void setup()
+{
+  SerialPort.begin(115200);
   Wire.begin();
-  Wire.setClock(400000);
-  //Wire.setClock(1000000UL);   // разгоняем шину на максимум
 
-  // инициализация DMP
-  mpu.initialize();
-  mpu.dmpInitialize();
-  mpu.setDMPEnabled(true);
+  // Call imu.begin() to verify communication and initialize
+  if (imu.begin() != INV_SUCCESS)
+  {
+    while (1)
+    {
+      SerialPort.println("Unable to communicate with MPU-9250");
+      SerialPort.println("Check connections, and try again.");
+      SerialPort.println();
+      delay(5000);
+    }
+  }
+
+  imu.dmpBegin(DMP_FEATURE_SEND_RAW_ACCEL | // Send accelerometer data
+               DMP_FEATURE_GYRO_CAL       | // Calibrate the gyro data
+               DMP_FEATURE_SEND_CAL_GYRO  | // Send calibrated gyro data
+               DMP_FEATURE_6X_LP_QUAT     , // Calculate quat's with accel/gyro
+               10);
+
+
+               // Include the required Wire library for I2C<br>#include 
 }
 
-void loop() {
-  static uint32_t tmr;
-  if (millis() - tmr >= 11) {  // таймер на 11 мс (на всякий случай)
-    if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) {
-      // переменные для расчёта (ypr можно вынести в глобал)
-      Quaternion q;
-      VectorFloat gravity;
-      float ypr[3];
-      float euler[3];
 
-      // расчёты
-      mpu.dmpGetQuaternion(&q, fifoBuffer);
-      mpu.dmpGetGravity(&gravity, &q);
-      mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-      // выводим результат
-      Serial.print(ypr[0] * 180 / M_PI); // вокруг оси Z
-      Serial.print(',');
-      Serial.print(ypr[1] * 180 / M_PI); // вокруг оси Y
-      Serial.print(',');
-      Serial.print(ypr[2] * 180 / M_PI); // вокруг оси X
-      Serial.println();
-      // mpu.dmpGetEuler(euler, &q);
-      // Serial.print("euler\t");
-      // Serial.print(euler[0] * 180 / M_PI);
-      // Serial.print("\t");
-      // Serial.print(euler[1] * 180 / M_PI);
-      // Serial.print("\t");
-      // Serial.println(euler[2] * 180 / M_PI);
+union Packet{
+  uint16_t val;
+  uint8_t val_raw[sizeof(val)];
+};
 
-      tmr = millis();  // сброс таймера
+constexpr uint8_t PACKET_SIZE = sizeof(Packet);
+
+
+void loop()
+{
+  if (imu.fifoAvailable())
+  {
+    // Use dmpUpdateFifo to update the ax, gx, mx, etc. values
+    if (imu.dmpUpdateFifo() == INV_SUCCESS)
+    {
+      // computeEulerAngles can be used -- after updating the
+      // quaternion values -- to estimate roll, pitch, and yaw
+      imu.computeEulerAngles();
+      float yaw = imu.yaw;
+
+      Packet pac = {.val = static_cast<uint16_t>(yaw)};
+
+      Wire.beginTransmission(9);
+      Wire.write(pac.val_raw, PACKET_SIZE);
+      Wire.endTransmission();
+      // SerialPort.println(yaw);
+      //SerialPort.println(yaww*2);
     }
   }
 }

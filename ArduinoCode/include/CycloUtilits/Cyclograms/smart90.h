@@ -29,7 +29,7 @@ CYCLOGRAM(SS90AL)
     {
         ms->isComplete = true;
         Serial.println(X.getOut());
-        ms->theta_i0 += HALF_PI;
+        ms->theta_0 += HALF_PI;
     }
     else ms->isComplete = false;
 }

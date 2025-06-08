@@ -46,7 +46,7 @@ float Odometry::getRelativeY() const{
 
 float Odometry::getRelativeTheta() const{
     #if USE_GYRO
-    return gyro->getYawAngle() - gyro->getYawAngle();
+    return gyro->getYawAngle() - Theta_r;
     #else
     return ThetaIntegrator - Theta_r;
     #endif
@@ -159,6 +159,6 @@ void Odometry::updateRelative()
     #else
     Theta_r = ThetaIntegrator.getOut();
     #endif
-    
+
     Distance_r = Distance;
 }

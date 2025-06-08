@@ -14,10 +14,11 @@ CYCLOGRAM(SD45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FAST_FORWARD_SPEED / R;
 
+    // Serial.println(s->odometry->getRelativeTheta() * RAD_TO_DEG);
     if(s->odometry->getRelativeDist() < forwDist)
     {
         FWD_default(ms, s, ms->theta_0);
-    }
+    }    
     #if USE_ANGLE
     else if(s->odometry->getRelativeTheta() < HALF(HALF_PI)) ms->theta_i0 = theta_i;
     #else
@@ -28,7 +29,7 @@ CYCLOGRAM(SD45SL)
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 += HALF(HALF_PI);
+        ms->theta_0 += HALF(HALF_PI);
     }
     else ms->isComplete = false;
 }
@@ -57,7 +58,7 @@ CYCLOGRAM(SD45SR)
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 -= HALF(HALF_PI);
+        ms->theta_0 -= HALF(HALF_PI);
     }
     else ms->isComplete = false;
 }
@@ -72,6 +73,8 @@ CYCLOGRAM(DS45SL)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FAST_FORWARD_SPEED / R;
 
+
+    // Serial.println(s->odometry->getRelativeTheta() * RAD_TO_DEG);
     if(s->odometry->getRelativeDist() < forwDist)
     {
         ms->theta_i0 = 0;
@@ -89,7 +92,7 @@ CYCLOGRAM(DS45SL)
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 += HALF(HALF_PI);
+        ms->theta_0 += HALF(HALF_PI);
     }
     else ms->isComplete = false;
 }
@@ -121,7 +124,7 @@ CYCLOGRAM(DS45SR)
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
         ms->isComplete = true;
-        ms->theta_i0 -= HALF(HALF_PI);
+        ms->theta_0 -= HALF(HALF_PI);
     }
     else ms->isComplete = false;
 }

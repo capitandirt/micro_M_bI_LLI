@@ -2,87 +2,77 @@
 #define GYRO_H
 
 #include <Arduino.h>
-#include <I2Cdev.h>
-#include <MPU6050_6Axis_MotionApps20.h>
+// #include <I2Cdev.h>
+// #include <MPU6050_6Axis_MotionApps20.h>
+#include "Wire.h"
 
 class Gyro
 {
-    private:
-    MPU6050 mpu;
-    uint8_t fifoBuffer[45];         // буфер
-    float ypr[3];
-    float ypr0[3];
-    float ypr_offset[3];
-    public:
-    float correct(float angle)
+private:
+    union Packet{
+        uint16_t val;
+        uint8_t val_raw[sizeof(val)];
+    } _pac;
+
+    static constexpr uint8_t PACKET_SIZE = sizeof(_pac);
+    void (*_recieve_event)(int) = nullptr;
+
+    // MPU6050 mpu
+    float yaw, yaw0, yaw_offset;
+
+public:
+    Gyro(void (*recieve_event)(int)) : _recieve_event(recieve_event){}
+
+    void recieveEvent(int bytes)
     {
-        if(angle < -PI) angle += 2*PI;
-        if(angle > PI) angle -= 2*PI;
-        return angle;
-    }
-    void init() 
-    {
-        Wire.begin();
-        Wire.setClock(400000);
-        //Wire.setClock(1000000UL);   // разгоняем шину на максимум
+        if(bytes != PACKET_SIZE) return;
 
-        // инициализация DMP
-        mpu.initialize();
-        mpu.dmpInitialize();
-        mpu.setDMPEnabled(true);
-    }
-
-    void tick() 
-    {
-        if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) {
-            // переменные для расчёта (ypr можно вынести в глобал)
-            Quaternion q;
-            VectorFloat gravity;
-            static float ypr_old[3] = {0, 0, 0};
-
-            // расчёты
-            mpu.dmpGetQuaternion(&q, fifoBuffer);
-            mpu.dmpGetGravity(&gravity, &q);
-            mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-            //mpu.dmpGetAccel(acc);
-            // выводим результат
-
-            if(ypr[0] - ypr_old[0] > PI) ypr_offset[0] -= 2*PI;
-            if(ypr[0] - ypr_old[0] < -PI) ypr_offset[0] += 2*PI;
-            
-            ypr_old[0] = ypr[0];
-            ypr_old[1] = ypr[1];
-            ypr_old[2] = ypr[2];
+        for(uint8_t i = 0; i < PACKET_SIZE; i++){
+            _pac.val_raw[i] = Wire.read();
         }
     }
-    float setYPR0()
+
+    void init() 
+    {
+        Wire.begin(9);
+        Wire.onReceive(_recieve_event);
+    }
+    void tick() 
+    {
+        // Serial.print("recieved ");
+        // Serial.println(_pac.val);
+        yaw = _pac.val / RAD_TO_DEG;
+        // Serial.println(_recieve_event_byte*2);
+        static float yaw_old = 0;
+        if(yaw - yaw_old > PI) yaw_offset -= 2*PI;
+        if(yaw - yaw_old < -PI) yaw_offset += 2*PI;
+            
+
+        yaw_old = yaw;
+       
+    }
+    float setYaw0()
     {
         tick();
-        ypr0[0] = ypr[0];
-        ypr0[1] = ypr[1];
-        ypr0[2] = ypr[2];
+        yaw0 = yaw;
     }
     float getYawAngle()
     {
-        return ypr[0] - ypr0[0] + ypr_offset[0];
+        return yaw - yaw0 + yaw_offset;
     }
 
-    void printYPR()
+    void printYaw()
     {
-        Serial.print((ypr[0] - ypr0[0]) * 180 / M_PI); // вокруг оси Z 
-        Serial.print(', ');
-        Serial.print((ypr[1] - ypr0[1]) * 180 / M_PI); // вокруг оси Y
-        Serial.print(', ');
-        Serial.println((ypr[2] - ypr0[2]) * 180 / M_PI); // вокруг оси X
+        Serial.print((yaw - yaw0 + yaw_offset) * 180 / M_PI); // вокруг оси Z
     }
 
     void setYawOffset(float offset)
     {
-        ypr_offset[0] = offset;
+        yaw_offset = offset;
     }
     void modifyYawOffset(float offset)
     {
-        ypr_offset[0] += offset;
+        yaw_offset += offset;
     }
 };
 

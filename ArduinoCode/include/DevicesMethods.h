@@ -51,13 +51,14 @@ namespace DEVICES{
         robot.init();
 
         TIM2::INIT();
+        
         gyro.init();
 
-        while(millis() < 20000)
+        while(millis() < 10000)
         {
             gyro.tick();
         }
-        gyro.setYPR0();
+        gyro.setYaw0();
     }
 
     void TICK(uint32_t now_millis){

@@ -1,9 +1,10 @@
 #include "../CycloTypes.h"
 #include "Cyclogram.config.h"
 
-inline float getThetaIfromAngleReg(const Sensors* s, const float THETA_0)
+inline float getThetaIFromAngleReg(const Sensors* s, const float THETA_0)
 {
     float theta_err = THETA_0 - s->odometry->getTheta();
+    // Serial.println("e: " + String(theta_err) + " theta0: " + String(THETA_0) + " theta: " + String(s->odometry->getTheta())); 
     return theta_err * ANGLE_REG_KP;
 }
 
@@ -11,7 +12,7 @@ inline float getThetaIfromAngleReg(const Sensors* s, const float THETA_0)
 inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
     #if USE_ANGLE_REGULATOR
-    ms->theta_i0 = getThetaIfromAngleReg(s, THETA_0);
+    ms->theta_i0 = getThetaIFromAngleReg(s, THETA_0);
     #else
     ms->theta_i0 = 0;
     #endif
@@ -33,5 +34,5 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
         ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
     };
 
-    ms->theta_i0 = 0;
+    ms->theta_i0 += 0;//regulatorArray[regulatorState];
 }

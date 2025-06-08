@@ -11,6 +11,7 @@ void CycloWorker::doCyclogram(){
 
     cycloStore->executeSmart(_cur_smart_submis, &_cyclo_context);
     
+    // Serial.println(_cyclo_context.ms.theta_0 * RAD_TO_DEG); 
     mixer->impactVelocity(_cyclo_context.ms.theta_i0, _cyclo_context.ms.v_f0);
 }
 
