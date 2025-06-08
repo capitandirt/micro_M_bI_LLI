@@ -1,14 +1,17 @@
 #include "../CycloTypes.h"
 #include "Cyclogram.config.h"
 
+inline float getThetaIfromAngleReg(const Sensors* s, const float THETA_0)
+{
+    float theta_err = THETA_0 - s->odometry->getTheta();
+    return theta_err * ANGLE_REG_KP;
+}
+
 
 inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
-    //ms->theta_i0 = 0;
-    float theta_err = THETA_0 - s->odometry->getTheta();
-
     #if USE_ANGLE_REGULATOR
-    ms->theta_i0 = theta_err * ANGLE_REG_KP;
+    ms->theta_i0 = getThetaIfromAngleReg(s, THETA_0);
     #else
     ms->theta_i0 = 0;
     #endif

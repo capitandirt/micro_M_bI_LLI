@@ -5,16 +5,11 @@
 #include <I2Cdev.h>
 #include <MPU6050_6Axis_MotionApps20.h>
 
-MPU6050 mpu;
-
-
-uint8_t fifoBuffer[45];         // буфер
-
-
-
 class Gyro
 {
     private:
+    MPU6050 mpu;
+    uint8_t fifoBuffer[45];         // буфер
     float ypr[3];
     float ypr0[3];
     float ypr_offset[3];

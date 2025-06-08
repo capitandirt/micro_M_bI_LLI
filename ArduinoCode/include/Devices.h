@@ -52,7 +52,12 @@ VelocityEstimatorConnectionParams right_vecp {
 
 VelocityEstimator rightVelocityEstimator(&right_vecp);
 
+Gyro gyro;
+#if USE_GYRO
+Odometry odometry(&gyro);
+#else
 Odometry odometry;
+#endif
 
 Battery battery(BATTERY_PIN);
 
@@ -182,4 +187,3 @@ Robot robot(&rcp);
 
 #endif // !_DEVICES_H_
 
-Gyro gyro;

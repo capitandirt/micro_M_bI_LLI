@@ -20,11 +20,16 @@ CYCLOGRAM(SD135SL)
     {
         FWD_default(ms, s, ms->theta_0);
     }
+    #if USE_ANGLE
+    else if(s->odometry->getRelativeTheta() < (HALF_PI + HALF(HALF_PI))) ms->theta_i0 = theta_i;
+    #else
     else if(s->odometry->getRelativeDist() > forwDist1 && s->odometry->getRelativeDist() < forwDist1 + circleDist) ms->theta_i0 = theta_i;
+    #endif
     else ms->theta_i0 = 0;
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
+        ms->theta_i0 += (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }
@@ -43,11 +48,16 @@ CYCLOGRAM(SD135SR)
     {
         FWD_default(ms, s, ms->theta_0);
     }
+    #if USE_ANGLE
+    else if(s->odometry->getRelativeTheta() > -(HALF_PI + HALF(HALF_PI))) ms->theta_i0 = -theta_i;
+    #else
     else if(s->odometry->getRelativeDist() > forwDist1 && s->odometry->getRelativeDist() < forwDist1 + circleDist) ms->theta_i0 = -theta_i;
+    #endif
     else ms->theta_i0 = 0;
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
+        ms->theta_i0 -= (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }
@@ -66,7 +76,11 @@ CYCLOGRAM(DS135SL)
     {
         ms->theta_i0 = 0;
     }
+    #if USE_ANGLE
+    else if(s->odometry->getRelativeTheta() < (HALF_PI + HALF(HALF_PI))) ms->theta_i0 = theta_i;
+    #else
     else if(s->odometry->getRelativeDist() > forwDist2 && s->odometry->getRelativeDist() < forwDist2 + circleDist) ms->theta_i0 = theta_i;
+    #endif
     else
     {
         FWD_default(ms, s, ms->theta_0 + (HALF_PI + HALF(HALF_PI)));
@@ -74,6 +88,7 @@ CYCLOGRAM(DS135SL)
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
+        ms->theta_i0 += (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }
@@ -92,7 +107,11 @@ CYCLOGRAM(DS135SR)
     {
         ms->theta_i0 = 0;
     }
+    #if USE_ANGLE
+    else if(s->odometry->getRelativeTheta() > -(HALF_PI + HALF(HALF_PI))) ms->theta_i0 = -theta_i;
+    #else
     else if(s->odometry->getRelativeDist() > forwDist2 && s->odometry->getRelativeDist() < forwDist2 + circleDist) ms->theta_i0 = -theta_i;
+    #endif
     else
     {
         FWD_default(ms, s, ms->theta_0 - (HALF_PI + HALF(HALF_PI)));
@@ -100,6 +119,7 @@ CYCLOGRAM(DS135SR)
     if(s->odometry->getRelativeDist() > forwDist1 + circleDist + forwDist2)
     { 
         ms->isComplete = true;
+        ms->theta_i0 -= (HALF_PI + HALF(HALF_PI));
     }
     else ms->isComplete = false;
 }
