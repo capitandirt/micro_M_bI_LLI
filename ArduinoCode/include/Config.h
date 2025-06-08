@@ -152,4 +152,8 @@
 #define BATTERY_PIN (A7)
 /*==BATTERY END==*/
 
+/*==GYRO BEGIN==*/
+#define USE_GYRO true // выбор ехать по жнкодерам или гироскопу
+/*==GYRO END==*/
+
 #endif // !_CONFIG_H_

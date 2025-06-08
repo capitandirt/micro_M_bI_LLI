@@ -6,7 +6,12 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
     //ms->theta_i0 = 0;
     float theta_err = THETA_0 - s->odometry->getTheta();
-    ms->theta_i0 = 0;//theta_err * ANGLE_REG_KP;
+
+    #if USE_ANGLE_REGULATOR
+    ms->theta_i0 = theta_err * ANGLE_REG_KP;
+    #else
+    ms->theta_i0 = 0;
+    #endif
 
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;

@@ -12,6 +12,9 @@
 #define MAX_FWD_SPEED_AFTER_ACC 0.6
 
 #define CELL_SIZE 0.18
+
+#define USE_ANGLE false
+#define USE_ANGLE_REGULATOR false
 /*==GENERAL CYCLOGRAM CONSTS END==*/
 
 /*==SEARCH CONSTS BEGIN==*/
@@ -44,8 +47,9 @@
 #define FORWARD_ALIGNMENT_TIME (HALF(CELL_SIZE)/FORWARD_SPEED * 1000 + 300) // ms
 /*==ALIGNMENT CONSTS END==*/
 
-/*==ANGLE REGULATOR==*/
+/*==ANGLE REGULATOR BEGIN==*/
 #define ANGLE_REG_KP 20
-/*===================*/
+/*==ANGLE REGULATOR END==*/
+
 
 #endif // !_CYCLOGRAM_CONFIG_H_

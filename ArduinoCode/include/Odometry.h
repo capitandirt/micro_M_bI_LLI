@@ -3,6 +3,7 @@
 
 #include "Drivers/Encoder.h"
 #include "CellsTypes.h"
+#include "Drivers/Gyro.h"
 
 class Integrator
 {
@@ -46,8 +47,9 @@ private:
 class Odometry
 {
 private:
-    Integrator X, Y, Theta, Distance;
-    Integrator X_r, Y_r, Theta_r, Distance_r;
+    Integrator X, Y, Distance;
+    Integrator X_r, Y_r, Distance_r;
+    float Theta_r;
 
     float vL = 0, vR = 0, vX = 0, vY = 0, v = 0;
 
@@ -55,11 +57,19 @@ private:
     Direction dir;
     Direction startFastDir;
 
+    #if USE_GYRO
+    Gyro* gyro;
+    #else
+    Integrator ThetaIntegrator;
+    #endif
 public:
+    #if USE_GYRO
+    Odometry(Gyro* gyro_);
+    #endif
     float getX() const;
     float getY() const;
     float getTheta() const;
-    float setTheta(float theta_) noexcept;
+    void setTheta(float theta_) noexcept;
     float getDist() const;
 
     float getRelativeTheta() const;

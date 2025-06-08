@@ -84,7 +84,6 @@ namespace DEVICES{
         odometry.tick(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
 
         gyro.tick();
-        odometry.setTheta(gyro.getYawAngle());
     }
 
     namespace TEST{

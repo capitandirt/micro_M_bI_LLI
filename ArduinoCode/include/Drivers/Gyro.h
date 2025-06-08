@@ -17,7 +17,14 @@ class Gyro
     private:
     float ypr[3];
     float ypr0[3];
+    float ypr_offset[3];
     public:
+    float correct(float angle)
+    {
+        if(angle < -PI) angle += 2*PI;
+        if(angle > PI) angle -= 2*PI;
+        return angle;
+    }
     void init() 
     {
         Wire.begin();
@@ -36,6 +43,7 @@ class Gyro
             // переменные для расчёта (ypr можно вынести в глобал)
             Quaternion q;
             VectorFloat gravity;
+            static float ypr_old[3] = {0, 0, 0};
 
             // расчёты
             mpu.dmpGetQuaternion(&q, fifoBuffer);
@@ -44,14 +52,12 @@ class Gyro
             //mpu.dmpGetAccel(acc);
             // выводим результат
 
-
-            // mpu.dmpGetEuler(euler, &q);
-            // Serial.print("euler\t");
-            // Serial.print(euler[0] * 180 / M_PI);
-            // Serial.print("\t");
-            // Serial.print(euler[1] * 180 / M_PI);
-            // Serial.print("\t");
-            // Serial.println(euler[2] * 180 / M_PI);
+            if(ypr[0] - ypr_old[0] > PI) ypr_offset[0] -= 2*PI;
+            if(ypr[0] - ypr_old[0] < -PI) ypr_offset[0] += 2*PI;
+            
+            ypr_old[0] = ypr[0];
+            ypr_old[1] = ypr[1];
+            ypr_old[2] = ypr[2];
         }
     }
     float setYPR0()
@@ -63,16 +69,25 @@ class Gyro
     }
     float getYawAngle()
     {
-        return ypr[2] - ypr[0];
+        return ypr[0] - ypr0[0] + ypr_offset[0];
     }
 
     void printYPR()
     {
-        Serial.print(ypr[0] * 180 / M_PI); // вокруг оси Z
+        Serial.print((ypr[0] - ypr0[0]) * 180 / M_PI); // вокруг оси Z 
         Serial.print(', ');
-        Serial.print(ypr[1] * 180 / M_PI); // вокруг оси Y
+        Serial.print((ypr[1] - ypr0[1]) * 180 / M_PI); // вокруг оси Y
         Serial.print(', ');
-        Serial.println(ypr[2] * 180 / M_PI); // вокруг оси X
+        Serial.println((ypr[2] - ypr0[2]) * 180 / M_PI); // вокруг оси X
+    }
+
+    void setYawOffset(float offset)
+    {
+        ypr_offset[0] = offset;
+    }
+    void modifyYawOffset(float offset)
+    {
+        ypr_offset[0] += offset;
     }
 };
 
