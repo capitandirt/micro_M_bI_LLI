@@ -48,7 +48,7 @@ float Odometry::getRelativeY() const{
 
 float Odometry::getRelativeTheta() const{
     #if USE_GYRO
-    return circle_mod(Theta - Theta_r);
+    return circle_mod(Theta - Theta_r);  
     #else
     return ThetaIntegrator - Theta_r;
     #endif

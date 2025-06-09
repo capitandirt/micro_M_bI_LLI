@@ -7,6 +7,8 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
+    // DEVICES::TEST::CONVERT_TO_SMART();
+    // while(true);
 
     // cycloStore.addSmart(SmartCycloAction_t::SS90EL);
     // cycloStore.addSmart(SmartCycloAction_t::SS90ER);
@@ -17,16 +19,13 @@ void setup()
 
     // cycloStore.addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
     // cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
-    // cycloStore.addSmart(SmartCycloAction_t::SD135SL);
-    // cycloStore.addSmart(SmartCycloAction_t::DD90SR);
-    // cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 3);
-    // cycloStore.addSmart(SmartCycloAction_t::DS135SR);
-    // cycloStore.addSmart(SmartCycloAction_t::SS180SL);
-    // cycloStore.addSmart(SmartCycloAction_t::SS180SR);
-    // cycloStore.addSmart(SmartCycloAction_t::FWD_X);
-    // cycloStore.addSmart(SmartCycloAction_t::DIAG_X);
     // cycloStore.addSmart(SmartCycloAction_t::FWD_X, 2);
-    // cycloStore.addSmart(SmartCycloAction_t::STOP);
+    // cycloStore.addSmart(SmartCycloAction_t::SS90SL);
+    // cycloStore.addSmart(SmartCycloAction_t::SD45SR);
+    // cycloStore.addSmart(SmartCycloAction_t::DS45SL);
+    cycloStore.addSmart(SmartCycloAction_t::SS180SR);
+    cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+    cycloStore.addSmart(SmartCycloAction_t::STOP);
 
     // cycloStore.addSmart(SmartCycloAction_t::IP90R);
     // cycloStore.addSmart(SmartCycloAction_t::IP90L);
@@ -54,7 +53,7 @@ void loop(){
     // optocoupler.printMask();
 
     cycloWorker.doCyclogram();
-    robot.stateMachine();
+    // robot.stateMachine();
     cycloWorker.tryComplete();
 
     // Serial.println(micros() - last_time);

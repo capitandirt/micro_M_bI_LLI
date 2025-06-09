@@ -64,7 +64,7 @@ CYCLOGRAM(FWD_HALF)
 CYCLOGRAM(FWD_X)
 {
     constexpr float acceleration = FWD_ACCELERATION; 
-    constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
+    constexpr float v0 = FAST_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     static Integrator v = v0;
     
     
@@ -79,7 +79,8 @@ CYCLOGRAM(FWD_X)
     }
 
     ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
-    FWD_default(ms, s, ms->theta_0);
+    FWD_default(ms, s, 
+    );
 
     if(s->odometry->getRelativeDist() > CELL_SIZE * x)
     {
@@ -113,11 +114,19 @@ CYCLOGRAM(FWDE)
     const int16_t LEFT_TRASHHOLD = s->optocoupler->getLeftTreshold();
     const int16_t RIGHT_TRASHHOLD = s->optocoupler->getRightTreshold();
 
+    const float regulatorErr[4] = 
+    {
+        0,
+        (right_sense - s->optocoupler->getRightSense0()),
+        (s->optocoupler->getLeftSense0() - left_sense),
+        (right_sense - left_sense - s->optocoupler->getStaticError())
+    };
+
     const float regulatorArray[4] = {
         0,//ни один не видит стену
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - s->optocoupler->getRightSense0()),//- RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (s->optocoupler->getLeftSense0() - left_sense),//стену видит только левый
-        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense - s->optocoupler->getStaticError()),//оба датчика
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * regulatorErr[1],//стену видит только правый
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * regulatorErr[2],//стену видит только левый
+        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * regulatorErr[3],//оба датчика
     };
 
     if(FIRST_ENTRANCE){
@@ -128,7 +137,18 @@ CYCLOGRAM(FWDE)
         FIRST_ENTRANCE = 0;
     }
 
-    ms->theta_i0 = regulatorArray[regulatorState]; // getThetaIFromAngleReg(s, ms->theta_0);//regulatorArray[regulatorState];
+    const float err = regulatorErr[regulatorState];
+    if(regulatorState == 0 || abs(err) < 35) 
+    {
+        #if USE_ANGLE_REGULATOR
+        ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
+        #else
+        ms->theta_i0 = 0;
+        #endif
+    }
+
+    
+    ms->theta_i0 += regulatorArray[regulatorState];
 
     if(CAN_TRY_ALIGN && ((
         prev_left_wall_state == 1 && toBool(cell_from_sensors.west_wall) == 0) || (
@@ -536,32 +556,70 @@ CYCLOGRAM(SS180SR)
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->odometry->getRelativeDist() < forwDist)
+    static enum SS180SL_S{
+        FWD1,
+        TURN,
+        FWD2,
+        FINISH
+    } ss180sl_state = FWD1;
+
+    static float start_theta = s->odometry->getRelativeTheta();
+
+
+    switch (ss180sl_state)
     {
+    case FWD1:
         FWD_default(ms, s, ms->theta_0);
-    }
-    #if USE_ANGLE
-    else if(s->odometry->getRelativeTheta() > -PI)
-    #else
-    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
-    #endif
-    {
+        start_theta = s->odometry->getRelativeTheta();
+        if(s->odometry->getRelativeDist() > forwDist) ss180sl_state = TURN;
+        break;
+    case TURN:
         ms->theta_i0 = -theta_i;
-    }
-    else
-    {
+        if(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI))) < 0.04) ss180sl_state = FWD2;
+        break;
+    case FWD2:
         FWD_default(ms, s, ms->theta_0 - PI);
-    }
-    if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
-    {
+        if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist) ss180sl_state = FINISH;
+        break;
+    case FINISH:
         ms->isComplete = true;
         ms->theta_0 -= PI;
+        ss180sl_state = FWD1;
+        break;
+    default:
+        break;
     }
-    else ms->isComplete = false;
+
+    
+    // if(s->odometry->getRelativeDist() < forwDist)
+    // {
+    //     FWD_default(ms, s, ms->theta_0);
+    //     start_theta = s->odometry->getRelativeTheta();
+    // }
+    // #if USE_ANGLE
+    // else if(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI))) > 0.04) 
+    // #else
+    // else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
+    // #endif
+    // {
+    //     ms->theta_i0 = -theta_i;
+    // }
+    // else
+    // {
+    //     FWD_default(ms, s, ms->theta_0 - PI);
+    // }
+    // if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
+    // {
+    //     ms->isComplete = true;
+    //     ms->theta_0 -= PI;
+    // }
+    // else ms->isComplete = false;
+    //Serial.println("ss180sr: rel_ang: " + String(s->odometry->getRelativeTheta() *  RAD_TO_DEG) + " if: " + String(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI)))) + " bool: " + String(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI))) > 0.04));   
 }
 
 CYCLOGRAM(IP180)
 {
+    ms->v_f0 = 0;
     constexpr float theta_end = PI;
 
     const float err = circle_mod(theta_end - s->odometry->getRelativeTheta());
@@ -577,7 +635,7 @@ CYCLOGRAM(IP180)
         time0 = s->time;
     } 
     if((s->time - time0) / 1000 > IP_CALIB_TIME) need_rotate = false; 
-
+    // Serial.println("ip180l: " + String(ms->theta_i0) + " err: " + String(err));
     if(!need_rotate)
     {
         ms->isComplete = true;
@@ -588,6 +646,7 @@ CYCLOGRAM(IP180)
 
 CYCLOGRAM(IP90L)
 {
+    ms->v_f0 = 0;
     constexpr float theta_end = HALF_PI;
 
     const float err = circle_mod(theta_end - s->odometry->getRelativeTheta());
@@ -614,6 +673,7 @@ CYCLOGRAM(IP90L)
 
 CYCLOGRAM(IP90R)
 {
+    ms->v_f0 = 0;
     constexpr float theta_end = -HALF_PI;
 
     const float err = circle_mod(theta_end - s->odometry->getRelativeTheta());
