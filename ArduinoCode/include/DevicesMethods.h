@@ -59,6 +59,8 @@ namespace DEVICES{
             gyro.tick();
         }
         gyro.setYaw0();
+
+        odometry.reset();
     }
 
     void TICK(uint32_t now_millis){
@@ -83,7 +85,6 @@ namespace DEVICES{
         programStatusSelector.tick();
 
         slideCatcher.tick();
-
         odometry.tick(leftVelocityEstimator.getW(), rightVelocityEstimator.getW());
     }
 

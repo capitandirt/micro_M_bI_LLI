@@ -77,7 +77,7 @@ CYCLOGRAM(DS45SL)
     // Serial.println(s->odometry->getRelativeTheta() * RAD_TO_DEG);
     if(s->odometry->getRelativeDist() < forwDist)
     {
-        ms->theta_i0 = 0;
+        ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     }
     #if USE_ANGLE
     else if(s->odometry->getRelativeTheta() < HALF(HALF_PI)) ms->theta_i0 = theta_i;

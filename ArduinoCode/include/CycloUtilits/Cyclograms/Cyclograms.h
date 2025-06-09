@@ -168,8 +168,6 @@ CYCLOGRAM(DIAG_X)
 {
     ms->v_f0 = FAST_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
 
-    
-    // Serial.println(s->odometry->getRelativeTheta() * RAD_TO_DEG);
     #if USE_ANGLE_REGULATOR
         ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     #else
@@ -268,8 +266,7 @@ CYCLOGRAM(SS90SL)
     } ss90sl_state = FWD1;
 
     if(ss90sl_state == FWD1){
-        // FWD_default(ms, s, ms->theta_0);
-        ms->v_f0 = FAST_FORWARD_SPEED;
+        FWD_default(ms, s, ms->theta_0);
 
         if(s->odometry->getRelativeDist() > forwDist){
             ss90sl_state = TURN;
@@ -298,9 +295,9 @@ CYCLOGRAM(SS90SL)
         ms->theta_0 += HALF_PI;
     }
 
-    Serial.print(ss90sl_state);
-    Serial.print('\t');
-    Serial.println(s->odometry->getRelativeTheta());
+    // Serial.print(ss90sl_state);
+    // Serial.print('\t');
+    // Serial.println(s->odometry->getRelativeTheta());
 
     // if(s->odometry->getRelativeDist() < forwDist)
     // {

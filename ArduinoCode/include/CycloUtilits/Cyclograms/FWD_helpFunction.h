@@ -3,8 +3,10 @@
 
 inline float getThetaIFromAngleReg(const Sensors* s, const float THETA_0)
 {
-    float theta_err = THETA_0 - s->odometry->getTheta();
-    // Serial.println("e: " + String(theta_err) + " theta0: " + String(THETA_0) + " theta: " + String(s->odometry->getTheta())); 
+    const float cur_theta = s->odometry->getTheta();
+    
+    float theta_err = THETA_0 - cur_theta;
+    Serial.println("e: " + String(theta_err) + " theta0: " + String(THETA_0) + " theta: " + String(cur_theta)); 
     return theta_err * ANGLE_REG_KP;
 }
 
@@ -16,8 +18,6 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
     #else
     ms->theta_i0 = 0;
     #endif
-
-    ms->theta_i0 = 0;
 
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;

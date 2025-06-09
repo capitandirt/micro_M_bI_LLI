@@ -9,11 +9,11 @@ void setup()
     DEVICES::INIT();
 
     cycloStore.addSmart(SmartCycloAction_t::SS90SL);
-
-    // cycloStore.addSmart(SmartCycloAction_t::SD135SL);
-    // cycloStore.addSmart(SmartCycloAction_t::SD45SL);
-    // cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 3);
-    // cycloStore.addSmart(SmartCycloAction_t::DS45SL);
+    cycloStore.addSmart(SmartCycloAction_t::SD135SL);
+    cycloStore.addSmart(SmartCycloAction_t::DIAG_X);
+    cycloStore.addSmart(SmartCycloAction_t::DS45SL);
+    cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+    cycloStore.addSmart(SmartCycloAction_t::SS90SR);
     // cycloStore.addSmart(SmartCycloAction_t::FWD_X, 6);
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
@@ -29,7 +29,7 @@ void loop(){
     
     DEVICES::TICK(last_time / 1000);
 
-    // gyro.printYaw();
+    Serial.println(odometry.getTheta());
     
     cycloWorker.doCyclogram();
     // // robot.stateMachine();

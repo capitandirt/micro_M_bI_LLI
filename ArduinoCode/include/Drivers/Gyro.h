@@ -35,22 +35,24 @@ public:
         }
     }
 
-    void init() 
+    void init()
     {
         Wire.begin(9);
         Wire.onReceive(_recieve_event);
     }
-    void tick() 
+    void tick()
     {
         yaw = _pac.val / RAD_TO_DEG;
-        // Serial.println(_recieve_event_byte*2);
-        static float yaw_old = 0;
-        if(yaw - yaw_old > PI) yaw_offset -= 2*PI;
-        if(yaw - yaw_old < -PI) yaw_offset += 2*PI;
-            
 
+        static float yaw_old = yaw;
+        if(yaw - yaw_old >= PI){ 
+            yaw_offset -= 2*PI;
+        }
+        if(yaw - yaw_old <= -PI) {   
+            yaw_offset += 2*PI;
+        }
         yaw_old = yaw;
-       
+
     }
     float setYaw0()
     {
@@ -60,6 +62,7 @@ public:
     float getYawAngle()
     {
         _new_yaw = 0;
+
         return yaw - yaw0 + yaw_offset;
     }
 

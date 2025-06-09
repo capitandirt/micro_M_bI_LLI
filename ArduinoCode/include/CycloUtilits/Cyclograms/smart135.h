@@ -6,9 +6,9 @@
 
 CYCLOGRAM(SD135SL)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
 
     constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
     constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
@@ -36,9 +36,9 @@ CYCLOGRAM(SD135SL)
 
 CYCLOGRAM(SD135SR)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
 
     constexpr float forwDist1 = CELL_SIZE / 2 + (CELL_SIZE - R * (1 + M_SQRT2));
     constexpr float forwDist2 = CELL_SIZE * M_SQRT2 - R * (1 + M_SQRT2);
@@ -64,9 +64,9 @@ CYCLOGRAM(SD135SR)
 
 CYCLOGRAM(DS135SL)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
 
     constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
     constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
@@ -95,9 +95,9 @@ CYCLOGRAM(DS135SL)
 
 CYCLOGRAM(DS135SR)
 {
-    ms->v_f0 = FORWARD_SPEED;
+    ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = SD135S_TURN_RADIUS; //радиус поворота
-    constexpr float theta_i = FORWARD_SPEED / R;
+    constexpr float theta_i = FAST_FORWARD_SPEED / R;
 
     constexpr float forwDist1 = 1.5 * CELL_SIZE - R * (1 + M_SQRT2);
     constexpr float forwDist2 = R + M_SQRT2 * CELL_SIZE - R * (M_SQRT2 + 2);
