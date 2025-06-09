@@ -128,6 +128,8 @@ void OptocouplerSensors::setStaticError()
     _static_err = right_sense - left_sense;
     _left_sense0 = left_sense;
     _right_sense0 = right_sense;
+    SENSE_THRESHOLD_LEFT = left_sense * 0.9;
+    SENSE_THRESHOLD_RIGHT = right_sense * 0.9;
 }
 int16_t OptocouplerSensors::getStaticError() const
 {
