@@ -54,7 +54,7 @@ namespace DEVICES{
         
         gyro.init();
 
-        while(millis() < 14000)
+        while(millis() < 30000)
         {
             gyro.tick();
         }

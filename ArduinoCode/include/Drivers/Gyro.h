@@ -19,8 +19,8 @@ private:
     volatile bool _new_yaw = 0;
 
     // MPU6050 mpu
-    float yaw, yaw0, yaw_offset;
-
+    float yaw_raw, yaw0 = 0, yaw_offset = 0;
+    bool yaw0_set = false;
 public:
     Gyro(void (*recieve_event)(int)) : _recieve_event(recieve_event){}
 
@@ -42,28 +42,32 @@ public:
     }
     void tick()
     {
-        yaw = _pac.val / RAD_TO_DEG;
+        yaw_raw = _pac.val / RAD_TO_DEG;
+        static float yaw_raw_old = yaw_raw;
 
-        static float yaw_old = yaw;
-        if(yaw - yaw_old >= PI){ 
-            yaw_offset -= 2*PI;
+        if(yaw0_set)
+        {
+            if(yaw_raw - yaw_raw_old >= PI){ 
+                yaw_offset -= 2*PI;
+            }
+            if(yaw_raw - yaw_raw_old <= -PI) {   
+                yaw_offset += 2*PI;
+            }
         }
-        if(yaw - yaw_old <= -PI) {   
-            yaw_offset += 2*PI;
-        }
-        yaw_old = yaw;
+        yaw_raw_old = yaw_raw;
 
     }
-    float setYaw0()
+    void setYaw0()
     {
         tick();
-        yaw0 = yaw;
+        yaw0 = yaw_raw + yaw_offset;
+        yaw0_set = true;
     }
     float getYawAngle()
     {
         _new_yaw = 0;
-
-        return yaw - yaw0 + yaw_offset;
+        // Serial.println("getYawAngle: " + String(yaw_raw) + " " + String(yaw0) + " " + String(yaw_offset) + " " + String(yaw_raw - yaw0 + yaw_offset));
+        return yaw_raw - yaw0 + yaw_offset;
     }
 
     bool isNewYaw(){
@@ -72,7 +76,7 @@ public:
 
     void printYaw()
     {
-        Serial.print((yaw - yaw0 + yaw_offset) * 180 / M_PI); // вокруг оси Z
+        Serial.print((yaw_raw - yaw0 + yaw_offset) * 180 / M_PI); // вокруг оси Z
     }
 
     void setYawOffset(float offset)

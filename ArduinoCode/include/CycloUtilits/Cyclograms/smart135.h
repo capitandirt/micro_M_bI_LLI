@@ -16,12 +16,16 @@ CYCLOGRAM(SD135SL)
 
     constexpr float circleDist = (2 * PI * R) * (135.0 / 360); //доля длины окружности в 135 градусах
 
+    // Serial.println("sd135sl: " + String(s->odometry->getRelativeTheta()) + " " + String(s->odometry->getTheta()));
     if(s->odometry->getRelativeDist() < forwDist1)
     {
         FWD_default(ms, s, ms->theta_0);
     }
     #if USE_ANGLE
-    else if(s->odometry->getRelativeTheta() < (HALF_PI + HALF(HALF_PI))) ms->theta_i0 = theta_i;
+    // else if(s->odometry->getRelativeDist() > forwDist1 && s->odometry->getRelativeDist() < forwDist1 + circleDist){
+    else if(s->odometry->getRelativeTheta() < (HALF_PI + HALF(HALF_PI))){
+        ms->theta_i0 = theta_i;
+    } 
     #else
     else if(s->odometry->getRelativeDist() > forwDist1 && s->odometry->getRelativeDist() < forwDist1 + circleDist) ms->theta_i0 = theta_i;
     #endif

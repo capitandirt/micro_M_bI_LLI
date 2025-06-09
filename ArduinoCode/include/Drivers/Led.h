@@ -13,6 +13,9 @@ public:
     void tick();
 
     void blink(const uint8_t n);
+    void toggle();
+    void on();
+    void off();
 
     void passMillis(const uint32_t t);
 

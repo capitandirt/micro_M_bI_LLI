@@ -6,18 +6,18 @@ inline float getThetaIFromAngleReg(const Sensors* s, const float THETA_0)
     const float cur_theta = s->odometry->getTheta();
     
     float theta_err = THETA_0 - cur_theta;
-    Serial.println("e: " + String(theta_err) + " theta0: " + String(THETA_0) + " theta: " + String(cur_theta)); 
+    //Serial.println("e: " + String(theta_err) + " theta0: " + String(THETA_0) + " theta: " + String(cur_theta)); 
     return theta_err * ANGLE_REG_KP;
 }
 
 
 inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
-    #if USE_ANGLE_REGULATOR
-    ms->theta_i0 = getThetaIFromAngleReg(s, THETA_0);
-    #else
-    ms->theta_i0 = 0;
-    #endif
+    // #if USE_ANGLE_REGULATOR
+    // ms->theta_i0 = getThetaIFromAngleReg(s, THETA_0);
+    // #else
+    // ms->theta_i0 = 0;
+    // #endif
 
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;
@@ -31,10 +31,10 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 
     const float regulatorArray[4] = {
         0,//ни один не видит стену
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - RIGHT_TRASHHOLD - OPTOCOUPLER_SENSE_ERROR),//стену видит только правый
-        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (LEFT_TRASHHOLD + OPTOCOUPLER_SENSE_ERROR - left_sense),//стену видит только левый
-        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense),//оба датчика
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - s->optocoupler->getRightSense0()),//стену видит только правый
+        ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (s->optocoupler->getLeftSense0() - left_sense),//стену видит только левый
+        ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense - s->optocoupler->getStaticError()),//оба датчика
     };
-
-    ms->theta_i0 += 0;//regulatorArray[regulatorState];
+    // Serial.println("fwdhelp: " + String(regulatorArray[1]) + " " + String(regulatorArray[2]));
+    ms->theta_i0 = regulatorArray[regulatorState];
 }

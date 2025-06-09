@@ -149,7 +149,7 @@ void Odometry::reset()
     Y.reset();
 
     gyro->setYawOffset(gyro->getYawAngle());
-    Theta = gyro->getYawAngle();
+    Theta = gyro->getYawAngle();    
 
     Distance.reset();
 }

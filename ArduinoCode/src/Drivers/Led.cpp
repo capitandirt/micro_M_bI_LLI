@@ -20,6 +20,20 @@ void Led::tick(){
     }
 }
 
+void Led::toggle(){
+    static bool state = 0;
+    state = !state;
+    digitalWrite(_PIN, state);
+}
+
+void Led::on(){
+    digitalWrite(_PIN, 1);
+}
+
+void Led::off(){
+    digitalWrite(_PIN, 0);
+}
+
 void Led::blink(const uint8_t n){
     _blink_value = n;
     if(_blink_value == 0) digitalWrite(_PIN, 0);

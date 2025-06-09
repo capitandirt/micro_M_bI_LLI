@@ -67,6 +67,7 @@ constexpr uint8_t PACKET_SIZE = sizeof(Packet);
 
 void loop()
 {
+  
   if (imu.fifoAvailable())
   {
     // Use dmpUpdateFifo to update the ax, gx, mx, etc. values
@@ -76,7 +77,7 @@ void loop()
       // quaternion values -- to estimate roll, pitch, and yaw
       imu.computeEulerAngles();
       float yaw = imu.yaw;
-
+      SerialPort.println(yaw);
       Packet pac = {.val = static_cast<uint16_t>(yaw)};
 
       Wire.beginTransmission(9);

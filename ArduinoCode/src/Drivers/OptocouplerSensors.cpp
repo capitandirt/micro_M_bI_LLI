@@ -46,8 +46,8 @@ void OptocouplerSensors::tick(){
     // _sense[OptocouplerSense::From::FORWARD_R] +=
     //     (analogRead(REC_FWD_RIGHT) - dark_sense.forward_r - _sense[OptocouplerSense::From::FORWARD_R]) * K_F;
 
-    _sense[OptocouplerSense::From::RIGHT] = analogRead(REC_RIGHT) - dark_sense.right - staticErrRight;
-    _sense[OptocouplerSense::From::LEFT]  = analogRead(REC_LEFT)  - dark_sense.left - staticErrLeft;
+    _sense[OptocouplerSense::From::RIGHT] = analogRead(REC_RIGHT) - dark_sense.right;
+    _sense[OptocouplerSense::From::LEFT]  = analogRead(REC_LEFT)  - dark_sense.left;
 
     _sense[OptocouplerSense::From::FORWARD_L] = analogRead(REC_FWD_LEFT)  - dark_sense.forward_l;
     _sense[OptocouplerSense::From::FORWARD_R] = analogRead(REC_FWD_RIGHT) - dark_sense.forward_r;
@@ -109,8 +109,8 @@ void OptocouplerSensors::printSense() const{
 void OptocouplerSensors::calc_sense_mask(){
     _sense_mask.forward_l = _sense[OptocouplerSense::From::FORWARD_L] > SENSE_THRESHOLD_FWD_L;
     _sense_mask.forward_r = _sense[OptocouplerSense::From::FORWARD_R] > SENSE_THRESHOLD_FWD_R;
-    _sense_mask.left      = _sense[OptocouplerSense::From::LEFT] > SENSE_THRESHOLD_LEFT - staticErrLeft;
-    _sense_mask.right     = _sense[OptocouplerSense::From::RIGHT] > SENSE_THRESHOLD_RIGHT - staticErrRight;
+    _sense_mask.left      = _sense[OptocouplerSense::From::LEFT] > SENSE_THRESHOLD_LEFT;
+    _sense_mask.right     = _sense[OptocouplerSense::From::RIGHT] > SENSE_THRESHOLD_RIGHT;
 }
 
 void OptocouplerSensors::calc_relative_cell(){
@@ -120,19 +120,34 @@ void OptocouplerSensors::calc_relative_cell(){
     _relative_cell.south_wall = toWallState(false);
 }
 
-void OptocouplerSensors::setStaticError(uint16_t errLeft, uint16_t errRight)
+void OptocouplerSensors::setStaticError()
 {
-    staticErrLeft = errLeft;
-    staticErrRight = errRight;
+    int16_t right_sense = _sense.get().right;
+    int16_t left_sense = _sense.get().left;
+
+    _static_err = right_sense - left_sense;
+    _left_sense0 = left_sense;
+    _right_sense0 = right_sense;
+}
+int16_t OptocouplerSensors::getStaticError() const
+{
+    return _static_err;
+}
+int16_t OptocouplerSensors::getRightSense0() const
+{
+    return _right_sense0;
+}
+int16_t OptocouplerSensors::getLeftSense0() const
+{
+    return _left_sense0;
 }
 
-
-uint16_t OptocouplerSensors::getLeftTreshold() const
+int16_t OptocouplerSensors::getLeftTreshold() const
 {
-    return SENSE_THRESHOLD_LEFT - staticErrLeft; 
+    return SENSE_THRESHOLD_LEFT; 
 }
 
-uint16_t OptocouplerSensors::getRightTreshold() const
+int16_t OptocouplerSensors::getRightTreshold() const
 {
-    return SENSE_THRESHOLD_RIGHT - staticErrRight; 
+    return SENSE_THRESHOLD_RIGHT; 
 }
