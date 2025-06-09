@@ -5,8 +5,8 @@
 #include "Wire.h"
 
 inline float circle_mod(float angle){
-    while(angle > PI) angle -= PI;
-    while(angle < -PI) angle += PI;
+    while(angle > PI) angle -= 2 * PI;
+    while(angle < -PI) angle += 2 * PI;
 
     return angle;
 }
@@ -72,7 +72,7 @@ public:
     {
         _new_yaw = 0;
         // Serial.println("getYawAngle: " + String(yaw_raw) + " " + String(yaw0) + " " + String(yaw_offset) + " " + String(yaw_raw - yaw0 + yaw_offset));
-        return yaw_raw - yaw0 + yaw_offset;
+        return circle_mod(yaw_raw - yaw0 + yaw_offset);
     }
 
     bool isNewYaw(){

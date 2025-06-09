@@ -92,7 +92,6 @@ namespace DEVICES{
         
         leftServo.tick();
         rightServo.tick();
-        
 
         optocoupler.calc();
         functionalSelector.tick();

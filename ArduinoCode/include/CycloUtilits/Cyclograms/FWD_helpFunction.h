@@ -5,7 +5,7 @@ inline float getThetaIFromAngleReg(const Sensors* s, const float THETA_0)
 {
     const float cur_theta = s->odometry->getTheta();
     
-    float theta_err = THETA_0 - cur_theta;
+    float theta_err = circle_mod(THETA_0 - cur_theta);
     //Serial.println("e: " + String(theta_err) + " theta0: " + String(THETA_0) + " theta: " + String(cur_theta)); 
     return theta_err * ANGLE_REG_KP;
 }
@@ -14,7 +14,7 @@ inline float getThetaIFromAngleReg(const Sensors* s, const float THETA_0)
 inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
     #if USE_ANGLE_REGULATOR
-    ms->theta_i0 = getThetaIFromAngleReg(s, THETA_0);
+    // ms->theta_i0 = getThetaIFromAngleReg(s, THETA_0);
     #else
     ms->theta_i0 = 0;
     #endif
@@ -26,9 +26,6 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
     // регулятор на положение по горизонтали при движении вперёд
     const uint8_t regulatorState = toBool(cell_from_sensors.west_wall) << 1 | toBool(cell_from_sensors.east_wall);
 
-    const int16_t LEFT_TRASHHOLD = s->optocoupler->getLeftTreshold();
-    const int16_t RIGHT_TRASHHOLD = s->optocoupler->getRightTreshold();
-
     const float regulatorArray[4] = {
         0,//ни один не видит стену
         ANGLE_SPEED_OPTOCOUPLER_ONESEN_REG_K * (right_sense - s->optocoupler->getRightSense0()),//стену видит только правый
@@ -36,5 +33,5 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
         ANGLE_SPEED_OPTOCOUPLER_TWOSEN_REG_K * (right_sense - left_sense - s->optocoupler->getStaticError()),//оба датчика
     };
     // Serial.println("fwdhelp: " + String(regulatorArray[1]) + " " + String(regulatorArray[2]));
-    // ms->theta_i0 = regulatorArray[regulatorState];
+    ms->theta_i0 = regulatorArray[regulatorState];
 }

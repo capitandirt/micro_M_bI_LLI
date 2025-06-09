@@ -22,7 +22,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 4000 // 0 < Ts_us <= 10000
+#define Ts_us 10000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 
@@ -38,7 +38,7 @@
 
 /*==ROBOT PARAMS BEGIN==*/
 #define ROBOT_WIDTH 0.077f
-#define WHEEL_RADIUS 0.01725f
+#define WHEEL_RADIUS 0.0173f
 /*==ROBOT PARAMS END*/
 
 /*==WHEELS PARAMS BEGIN==*/
