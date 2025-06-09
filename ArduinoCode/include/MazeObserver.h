@@ -5,6 +5,7 @@
 #include "Odometry.h"
 #include "Drivers/OptocouplerSensors.h"
 #include "CycloUtilits/CycloTypes.h"
+#include "CycloUtilits/Cyclograms/Cyclogram.config.h"
 
 enum class MazeCommand{
     NONE,
@@ -29,7 +30,7 @@ private:
 
 private:
     static constexpr uint8_t ALIGN_STEP = 2;
-    static constexpr int8_t MAX_NO_ALIGN_COUNTER = 2 * ALIGN_STEP;
+    static constexpr int8_t MAX_NO_ALIGN_COUNTER = MAX_NO_ALIGN_COUNTER_DEFINE * ALIGN_STEP;
 
     int16_t _no_align_counter = 0;
 

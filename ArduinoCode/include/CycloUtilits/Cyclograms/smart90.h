@@ -7,13 +7,14 @@
 
 CYCLOGRAM(SS90AL)
 {
-    ms->v_f0 = FAST_FORWARD_SPEED;
+    //ms->v_f0 = FAST_FORWARD_SPEED;
     static Integrator omega = 0;
     static Integrator X = 0;
 
 
-    constexpr float a = 1.7;
-    constexpr float T = 2;
+    
+    constexpr float T = HALF_PI / (FORWARD_SPEED / (ROBOT_WIDTH / 2));
+    constexpr float a = 1.4 * 2*PI / (T*T); // потому что чуток больше решения уравнения нуля дискриминанта t0
     constexpr float theta_end = HALF_PI;
     const float t0 = (a * (float)T - sqrt(a*a*(float)(T*T) - 4*theta_end*a)) / (2 * a);
           

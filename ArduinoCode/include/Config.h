@@ -22,7 +22,7 @@
 /*==UITILITY DEFINES END==*/
 
 /*==FREQUENCY DISCRETIZATION BEGIN==*/
-#define Ts_us 10000 // 0 < Ts_us <= 10000
+#define Ts_us 4000 // 0 < Ts_us <= 10000
 #define Ts_s (Ts_us / 1000000.0)
 /*==FREQUENCY DISCRETIZATION END==*/
 

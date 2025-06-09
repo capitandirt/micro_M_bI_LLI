@@ -54,10 +54,28 @@ namespace DEVICES{
         
         gyro.init();
 
-        while(millis() < 30000)
+        indicator.on();
+
+        bool need_calibration = true;
+        while(millis() < 25000) 
         {
+            // static uint16_t time0 = millis();
+            // uint16_t time = millis();
+            // static float theta_old = 0;
             gyro.tick();
+            // float theta = gyro.getYawAngle();
+            // Serial.println("init: " + String(theta));
+            // if(abs(theta - theta_old) > 0.02)
+            // {
+            //     time0 = time;
+            // }
+            // if(time - time0 > 10000)
+            // {
+            //     need_calibration = false;
+            // }
+            // theta_old = theta;
         }
+        indicator.off();
         gyro.setYaw0();
 
         odometry.reset();
@@ -70,10 +88,11 @@ namespace DEVICES{
         leftVelocityEstimator.tick();
         rightVelocityEstimator.tick();
         
+        gyro.tick();
+        
         leftServo.tick();
         rightServo.tick();
-
-        gyro.tick();
+        
 
         optocoupler.calc();
         functionalSelector.tick();
