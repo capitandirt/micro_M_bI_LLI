@@ -27,7 +27,7 @@ void setup()
     // cycloStore.addSmart(SmartCycloAction_t::SS90SL);
     // cycloStore.addSmart(SmartCycloAction_t::SD45SR);
     // cycloStore.addSmart(SmartCycloAction_t::DS45SL);
-    cycloStore.addSmart(SmartCycloAction_t::SS180SR);
+    // cycloStore.addSmart(SmartCycloAction_t::SS180SR);
     // cycloStore.addSmart(SmartCycloAction_t::FWD_X);
     // cycloStore.addSmart(SmartCycloAction_t::STOP);
 
@@ -57,7 +57,7 @@ void loop(){
     // optocoupler.printMask();
 
     cycloWorker.doCyclogram();
-    // robot.stateMachine();
+    robot.stateMachine();
     cycloWorker.tryComplete();
 
     // Serial.println(micros() - last_time);

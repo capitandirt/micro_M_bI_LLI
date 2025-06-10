@@ -565,28 +565,63 @@ CYCLOGRAM(SS180SL)
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    if(s->odometry->getRelativeDist() < forwDist)
+    static enum SS180SL_S{
+        FIRST_ENTRANCE = 0,
+        FWD1,
+        TURN90_1,
+        TURN90_2,
+        FWD2,
+        FINISH
+    } ss180sl_state = FWD1;
+
+    static float start_angle = 0;
+
+    if(ss180sl_state == FIRST_ENTRANCE){
+        start_angle = s->odometry->getRelativeTheta();
+        ss180sl_state = FWD1;
+    }
+
+    const float cur_angle = s->odometry->getRelativeTheta();
+    const float cur_dist = s->odometry->getRelativeDist();
+
+    switch (ss180sl_state)
     {
+    case FWD1:
         FWD_default(ms, s, ms->theta_0);
-    }
-    #if USE_ANGLE
-    else if(s->odometry->getRelativeTheta() < PI)
-    #else
-    else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
-    #endif
-    {
+        if(cur_dist >= forwDist) {
+            ss180sl_state = TURN90_1;
+        }   
+        else break;
+    case TURN90_1:
         ms->theta_i0 = theta_i;
-    }
-    else
-    {
-        FWD_default(ms, s, ms->theta_0 + PI);
-    }
-    if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
-    {
+        if(abs(cur_angle) >= HALF_PI){
+            s->odometry->updateRelative();
+            ss180sl_state = TURN90_2;
+        }
+        break;
+
+    case TURN90_2:
+        ms->theta_i0 = theta_i;
+        if(abs(cur_angle) >= HALF_PI){
+            s->odometry->updateRelative();
+            ss180sl_state = FWD2;
+        }
+        break;
+
+    case FWD2:
+        FWD_default(ms, s, ms->theta_0 - PI);
+        if(s->odometry->getRelativeDist() >= forwDist) ss180sl_state = FINISH;
+        break;
+
+    case FINISH:
         ms->isComplete = true;
         ms->theta_0 += PI;
+        ss180sl_state = FWD1;
+        break;
+
+    default:
+        break;
     }
-    else ms->isComplete = false;
 }
 CYCLOGRAM(SS180SR)
 {
@@ -654,9 +689,6 @@ CYCLOGRAM(SS180SR)
         break;
     }
 
-    Serial.print(ss180sr_state);
-    Serial.print(' ');
-    Serial.println(cur_angle  * RAD_TO_DEG);
     // if(s->odometry->getRelativeDist() < forwDist)
     // {
     //     FWD_default(ms, s, ms->theta_0);
