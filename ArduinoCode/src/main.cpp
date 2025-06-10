@@ -7,6 +7,10 @@ void setup()
 {
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
+
+    for(uint16_t i = 0; i < 1000; i++){
+        Serial.print(0);
+    }
     // DEVICES::TEST::CONVERT_TO_SMART();
     // while(true);
 
@@ -24,8 +28,8 @@ void setup()
     // cycloStore.addSmart(SmartCycloAction_t::SD45SR);
     // cycloStore.addSmart(SmartCycloAction_t::DS45SL);
     cycloStore.addSmart(SmartCycloAction_t::SS180SR);
-    cycloStore.addSmart(SmartCycloAction_t::FWD_X);
-    cycloStore.addSmart(SmartCycloAction_t::STOP);
+    // cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+    // cycloStore.addSmart(SmartCycloAction_t::STOP);
 
     // cycloStore.addSmart(SmartCycloAction_t::IP90R);
     // cycloStore.addSmart(SmartCycloAction_t::IP90L);

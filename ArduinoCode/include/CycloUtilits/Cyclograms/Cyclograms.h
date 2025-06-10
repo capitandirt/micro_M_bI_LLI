@@ -64,12 +64,52 @@ CYCLOGRAM(FWD_HALF)
 CYCLOGRAM(FWD_X)
 {
     constexpr float acceleration = FWD_ACCELERATION; 
-    constexpr float v0 = FAST_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
+    constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     static Integrator v = v0;
     
+    static float last_cell_dist = 0; 
+    static bool FIRST_ENTRANCE = 1;
+    static bool CAN_TRY_ALIGN = 0;
+
+    static bool prev_left_wall = 0;
+    static bool prev_right_wall = 0;
     
-    
-    if(s->odometry->getRelativeDist() < HALF(CELL_SIZE * x))
+    const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
+    const float cur_dist = s->odometry->getRelativeDist();
+
+    if(FIRST_ENTRANCE){
+        last_cell_dist = 0;
+
+        prev_left_wall = 0;
+        prev_right_wall = 0;
+
+        CAN_TRY_ALIGN = 0;
+
+        FIRST_ENTRANCE = 0;
+    }
+
+    // bool NEED_CALC_CAN_TRY_ALIGN = 0;
+    if(cur_dist - last_cell_dist > HALF(CELL_SIZE)){
+        CAN_TRY_ALIGN = 1;
+    }
+
+    const bool left_wall = toBool(cell_from_sensors.west_wall);
+    const bool right_wall = toBool(cell_from_sensors.east_wall);
+    const uint8_t passed_cells = cur_dist / CELL_SIZE;
+
+    const bool left_wall_forward_front = prev_left_wall == 0 && left_wall == 1;
+    const bool right_wall_forward_front = prev_right_wall == 0 && right_wall == 1;
+
+    if(left_wall_forward_front || right_wall_forward_front){
+        const float upd_dist = passed_cells * CELL_SIZE + (HALF(CELL_SIZE) + CELL_SIZE - FROM_HI_WALL_TO_SIDE);
+        s->odometry->setRelativeDist(upd_dist);
+    }
+
+    if(CAN_TRY_ALIGN){
+        
+    }
+
+    if(cur_dist < HALF(CELL_SIZE * x))
     {
         v.tick(acceleration);
     }
@@ -79,12 +119,12 @@ CYCLOGRAM(FWD_X)
     }
 
     ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
-    FWD_default(ms, s, 
-    );
+    FWD_default(ms, s, ms->theta_0);
 
-    if(s->odometry->getRelativeDist() > CELL_SIZE * x)
+    if(cur_dist > CELL_SIZE * x)
     {
-        //s->odometry->setTheta(ms->theta_0);
+        s->odometry->setTheta(ms->theta_0);
+        FIRST_ENTRANCE = 1;
         ms->isComplete = true;
     }
     else ms->isComplete = false;
@@ -163,7 +203,7 @@ CYCLOGRAM(FWDE)
 
     if(NEED_ALIGN)
     {
-        if(s->odometry->getRelativeDist() - dist_buf > FROM_ZERO_WALL_TO_SIDE){
+        if(s->odometry->getRelativeDist() - dist_buf > FROM_HI_WALL_TO_SIDE){
             ms->isComplete = true;
         }
     }
@@ -556,41 +596,67 @@ CYCLOGRAM(SS180SR)
     constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    static enum SS180SL_S{
+    static enum SS180SR_S{
+        FIRST_ENTRANCE = 0,
         FWD1,
-        TURN,
+        TURN90_1,
+        TURN90_2,
         FWD2,
         FINISH
-    } ss180sl_state = FWD1;
+    } ss180sr_state = FWD1;
 
-    static float start_theta = s->odometry->getRelativeTheta();
+    static float start_angle = 0;
 
+    if(ss180sr_state == FIRST_ENTRANCE){
+        start_angle = s->odometry->getRelativeTheta();
+        ss180sr_state = FWD1;
+    }
 
-    switch (ss180sl_state)
+    const float cur_angle = s->odometry->getRelativeTheta();
+    const float cur_dist = s->odometry->getRelativeDist();
+
+    switch (ss180sr_state)
     {
     case FWD1:
         FWD_default(ms, s, ms->theta_0);
-        start_theta = s->odometry->getRelativeTheta();
-        if(s->odometry->getRelativeDist() > forwDist) ss180sl_state = TURN;
-        break;
-    case TURN:
+        if(cur_dist >= forwDist) {
+            ss180sr_state = TURN90_1;
+        }   
+        else break;
+    case TURN90_1:
         ms->theta_i0 = -theta_i;
-        if(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI))) < 0.04) ss180sl_state = FWD2;
+        if(abs(cur_angle) >= HALF_PI){
+            s->odometry->updateRelative();
+            ss180sr_state = TURN90_2;
+        }
         break;
+
+    case TURN90_2:
+        ms->theta_i0 = -theta_i;
+        if(abs(cur_angle) >= HALF_PI){
+            s->odometry->updateRelative();
+            ss180sr_state = FWD2;
+        }
+        break;
+
     case FWD2:
         FWD_default(ms, s, ms->theta_0 - PI);
-        if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist) ss180sl_state = FINISH;
+        if(s->odometry->getRelativeDist() >= forwDist) ss180sr_state = FINISH;
         break;
+
     case FINISH:
         ms->isComplete = true;
         ms->theta_0 -= PI;
-        ss180sl_state = FWD1;
+        ss180sr_state = FWD1;
         break;
+
     default:
         break;
     }
 
-    
+    Serial.print(ss180sr_state);
+    Serial.print(' ');
+    Serial.println(cur_angle  * RAD_TO_DEG);
     // if(s->odometry->getRelativeDist() < forwDist)
     // {
     //     FWD_default(ms, s, ms->theta_0);

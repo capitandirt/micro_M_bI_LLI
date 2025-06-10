@@ -5,16 +5,13 @@ inline float getThetaIFromAngleReg(const Sensors* s, const float THETA_0)
 {
     const float cur_theta = s->odometry->getTheta();
     
-    float theta_err = circle_mod(circle_mod(THETA_0) - cur_theta);
-    Serial.println("e: " + String(theta_err) + " theta0: " + String(circle_mod(THETA_0)) + " theta: " + String(cur_theta)); 
+    float theta_err = circle_mod(THETA_0 - cur_theta);
     return theta_err * ANGLE_REG_KP;
 }
 
 
 inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
 {
-    
-
     const int16_t left_sense = s->optocoupler->getSense().left;
     const int16_t right_sense = s->optocoupler->getSense().right;
     const Cell cell_from_sensors = s->optocoupler->getRelativeCell();

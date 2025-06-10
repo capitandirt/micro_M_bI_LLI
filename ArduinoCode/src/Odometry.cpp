@@ -28,10 +28,15 @@ float Odometry::getTheta() const{
 
 void Odometry::setTheta(float theta_) noexcept{
     #if USE_GYRO
-    gyro->modifyYawOffset(theta_ - gyro->getYawAngle());
+    gyro->modifyYawOffset(circle_mod(theta_ - gyro->getYawAngle()));
+    Theta = circle_mod(theta_);
     #else
     ThetaIntegrator = theta_;
     #endif
+}
+
+void Odometry::setRelativeDist(float dist){
+    Distance_r = dist;
 }
 
 float Odometry::getDist() const{
@@ -55,7 +60,7 @@ float Odometry::getRelativeTheta() const{
 }
 
 float Odometry::getRelativeDist() const{
-    return Distance - Distance_r;
+    return Distance_r.getOut();
 }
 
 Vec2 Odometry::getMazeCoords() const{
@@ -124,6 +129,7 @@ void Odometry::tick(float omegaL, float omegaR)
     }
 
     Distance.tick(v);
+    Distance_r.tick(v);
     X.tick(vX);
     Y.tick(vY);
 }
@@ -164,5 +170,5 @@ void Odometry::updateRelative()
     // #else
     // #endif
 
-    Distance_r = Distance;
+    Distance_r = 0;
 }

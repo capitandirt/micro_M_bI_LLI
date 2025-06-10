@@ -72,8 +72,10 @@ public:
     float getX() const;
     float getY() const;
     float getTheta() const;
-    void setTheta(float theta_) noexcept;
     float getDist() const;
+
+    void setTheta(float theta_) noexcept;
+    void setRelativeDist(float dist) noexcept;
 
     float getRelativeTheta() const;
     float getRelativeDist() const;
