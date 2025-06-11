@@ -105,10 +105,6 @@ CYCLOGRAM(FWD_X)
         s->odometry->setRelativeDist(upd_dist);
     }
 
-    if(CAN_TRY_ALIGN){
-        
-    }
-
     if(cur_dist < HALF(CELL_SIZE * x))
     {
         v.tick(acceleration);
@@ -118,7 +114,12 @@ CYCLOGRAM(FWD_X)
         v.tick(-acceleration);
     }
 
+    #if NEED_FWD_ACC
     ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
+    #else
+    ms->v_f0 = v0;
+    #endif
+
     FWD_default(ms, s, ms->theta_0);
 
     if(cur_dist > CELL_SIZE * x)
@@ -133,7 +134,7 @@ CYCLOGRAM(FWD_X)
 CYCLOGRAM(FWDE)
 {
     ms->v_f0 = FORWARD_SPEED * FWDE_SPEED_MULTIPLIER;
-    ms->theta_i0 = 0;
+    ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
 
     static bool FIRST_ENTRANCE = 1;
     static bool start_left_wall_state = 0;
@@ -267,12 +268,17 @@ CYCLOGRAM(SS90EL)
     }
 
     if (ss90sl_state == TURN){
+        #if USE_GYRO
         const float err = circle_mod(HALF_PI - s->odometry->getRelativeTheta());
         
-        ms->theta_i0 = constrain(err * ANGLE_REG_EXPLORER_KP, -theta_i, theta_i);
         if(s->odometry->getRelativeTheta() > HALF_PI - 0.1){
             ss90sl_state = FWD2;
         }
+        ms->theta_i0 = constrain(err * ANGLE_REG_EXPLORER_KP, -theta_i, theta_i);
+        #else
+        ms->theta_i0 = theta_i;
+        if(s->odometry()->getRalativeDist() > forwDist + circleDist) ss90sl_state = FWD2;
+        #endif
     }
 
     if(ss90sl_state == FWD2){
@@ -288,39 +294,6 @@ CYCLOGRAM(SS90EL)
         ms->isComplete = true;
         ms->theta_0 += HALF_PI;
     }
-
-    // Serial.print(ss90sl_state);
-    // Serial.print('\t');
-    // Serial.print(ms->theta_i0);
-    // Serial.print('\t');
-    // Serial.println(s->odometry->getRelativeTheta() * RAD_TO_DEG);
-
-    // if(s->odometry->getRelativeDist() < forwDist)
-    // {
-    //     FWD_default(ms, s, ms->theta_0);
-    // }
-    // #if USE_ANGLE
-    // else if(s->odometry->getRelativeTheta() < HALF_PI)
-    // #else
-    // else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
-    // #endif
-    // {
-    //    ms->theta_i0 = theta_i;
-
-    //    Serial.println(s->odometry->getRelativeTheta());
-    // }
-    // else
-    // {
-    //     FWD_default(ms, s, ms->theta_0 + HALF_PI);
-    // }
-    // if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
-    // {
-    //     ms->isComplete = true;
-    //     ms->theta_0 += HALF_PI;
-    // }
-    // else ms->isComplete = false;
-
-    
 }
 
 CYCLOGRAM(SS90ER)
@@ -348,12 +321,17 @@ CYCLOGRAM(SS90ER)
     }
 
     if (ss90sl_state == TURN){
+        #if USE_GYRO
         const float err = circle_mod(-HALF_PI - s->odometry->getRelativeTheta());
         
         ms->theta_i0 = constrain(err * ANGLE_REG_EXPLORER_KP, -theta_i, theta_i);
         if(s->odometry->getRelativeTheta() < -HALF_PI + 0.1){
             ss90sl_state = FWD2;
         }
+        #else
+        ms->theta_i0 = theta_i;
+        if(s->odometry()->getRalativeDist() > forwDist + circleDist) ss90sl_state = FWD2;
+        #endif
     }
 
     if(ss90sl_state == FWD2){
@@ -369,36 +347,6 @@ CYCLOGRAM(SS90ER)
         ms->isComplete = true;
         ms->theta_0 -= HALF_PI;
     }
-    // ms->v_f0 = FORWARD_SPEED;
-    // constexpr float R = SEARCH_TURN_RADIUS; //радиус поворота
-    // constexpr float theta_i = FORWARD_SPEED / R;
-
-    // constexpr float forwDist = CELL_SIZE / 2 - R;
-    // constexpr float circleDist = (2 * PI * R) / 4;
-    
-    // if(s->odometry->getRelativeDist() < forwDist)
-    // {
-    //     FWD_default(ms, s, ms->theta_0);
-    // }
-    // #if USE_ANGLE
-    // else if(s->odometry->getRelativeTheta() > -HALF_PI)
-    // #else
-    // else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
-    // #endif
-    // {
-    //     ms->theta_i0 = -theta_i;
-    // }
-    // else
-    // {
-    //     FWD_default(ms, s, ms->theta_0 - HALF_PI);
-    // }
-    // if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
-    // {
-    //     ms->isComplete = true;
-    //     ms->theta_0 -= HALF_PI;
-    // }
-    // else ms->isComplete = false;
-
 }
 
 CYCLOGRAM(SS90SL)
@@ -428,10 +376,13 @@ CYCLOGRAM(SS90SL)
     if (ss90sl_state == TURN){
         ms->theta_i0 = theta_i;
 
-        
+        #if USE_GYRO
         if(s->odometry->getRelativeTheta() > HALF_PI){
             ss90sl_state = FWD2;
         }
+        #else
+        if(s->odometry->getRelativeDist() > forwDist + circleDist) ss90sl_state = FWD2;
+        #endif
     }
 
     if(ss90sl_state == FWD2){
@@ -446,34 +397,6 @@ CYCLOGRAM(SS90SL)
         ms->isComplete = true;
         ms->theta_0 += HALF_PI;
     }
-
-    // Serial.print(ss90sl_state);
-    // Serial.print('\t');
-    // Serial.println(s->odometry->getRelativeTheta());
-
-    // if(s->odometry->getRelativeDist() < forwDist)
-    // {
-    //     FWD_default(ms, s, ms->theta_0);
-    // }
-    // #if USE_ANGLE
-    // else if(s->odometry->getRelativeTheta() < HALF_PI)
-    // #else
-    // else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
-    // #endif
-    // {
-    //     ms->theta_i0 = theta_i;
-    // }
-    // else
-    // {
-    //     FWD_default(ms, s, ms->theta_0 + HALF_PI);
-    // }
-    // Serial.println(s->odometry->getRelativeTheta());
-    // if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
-    // {
-    //     ms->isComplete = true;
-    //     ms->theta_0 += HALF_PI;
-    // }
-    // else ms->isComplete = false;
 }
 
 CYCLOGRAM(SS90SR)
@@ -517,13 +440,13 @@ CYCLOGRAM(DD90SL)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FAST_FORWARD_SPEED / R;
 
-    if(s->odometry->getRelativeDist() < forwDist) ms->theta_i0 = 0;
+    if(s->odometry->getRelativeDist() < forwDist) ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     #if USE_ANGLE
     else if(s->odometry->getRelativeTheta() < HALF_PI) ms->theta_i0 = theta_i;
     #else
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     #endif
-    else ms->theta_i0 = 0;
+    else ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0 + HALF_PI);
 
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist)
     {
@@ -540,13 +463,13 @@ CYCLOGRAM(DD90SR)
     constexpr float circleDist = (2 * PI * R) / 4; // 90 = четверть окружности
     float theta_i = FAST_FORWARD_SPEED / R;
 
-    if(s->odometry->getRelativeDist() < forwDist) ms->theta_i0 = 0;
+    if(s->odometry->getRelativeDist() < forwDist) ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     #if USE_ANGLE
     else if(s->odometry->getRelativeTheta() > -HALF_PI) ms->theta_i0 = -theta_i;
     #else
     if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     #endif
-    else ms->theta_i0 = 0;
+    else ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0 - HALF_PI);
 
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist)
     {

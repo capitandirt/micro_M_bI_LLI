@@ -24,7 +24,7 @@ CYCLOGRAM(SD45SL)
     #else
     else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = theta_i;
     #endif
-    else ms->theta_i0 = 0;
+    else ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0 + HALF(HALF_PI));
 
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
@@ -53,7 +53,7 @@ CYCLOGRAM(SD45SR)
     #else
     else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist) ms->theta_i0 = -theta_i;
     #endif
-    else ms->theta_i0 = 0;
+    else ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0 - HALF(HALF_PI));
 
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
     { 
@@ -109,7 +109,7 @@ CYCLOGRAM(DS45SR)
 
     if(s->odometry->getRelativeDist() < forwDist)
     {
-        ms->theta_i0 = 0;
+        ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     }
     #if USE_ANGLE
     else if(s->odometry->getRelativeTheta() > -HALF(HALF_PI)) ms->theta_i0 = -theta_i;
