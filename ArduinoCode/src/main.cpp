@@ -8,20 +8,22 @@ void setup()
     DEVICES::TEST::SET_SERIAL();
     DEVICES::INIT();
 
-    
-
     // DEVICES::TEST::CONVERT_TO_SMART();
     // while(true);
-
-    // cycloStore.addSmart(SmartCycloAction_t::SD135SL);
-    // cycloStore.addSmart(SmartCycloAction_t::DS135SR);
-    // cycloStore.addSmart(SmartCycloAction_t::SD135SR);
-    // cycloStore.addSmart(SmartCycloAction_t::DS135SL);
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
     optocoupler.setStaticError();
 
-    cycloStore.addSmart(SmartCycloAction_t::SS90SR);
+    cycloStore.addSmart(SmartCycloAction_t::SD135SL);
+    cycloStore.addSmart(SmartCycloAction_t::DS135SR);
+    cycloStore.addSmart(SmartCycloAction_t::SD135SR);
+    cycloStore.addSmart(SmartCycloAction_t::DS135SL);
+    // cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+    // cycloStore.addSmart(SmartCycloAction_t::SS180SL);
+    // cycloStore.addSmart(SmartCycloAction_t::SS180SR);
+    // cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+
+
 }
 
 void loop(){

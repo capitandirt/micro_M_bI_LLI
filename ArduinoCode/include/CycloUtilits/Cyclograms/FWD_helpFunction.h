@@ -61,7 +61,9 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
     };
 
     const float err = regulatorErr[regulatorState];
-    if(regulatorState == 0 || abs(err) < 45) 
+    
+    ms->theta_i0 = 0;
+    if(regulatorState == 0 || abs(err) < ANGLE_REG_THRESHOLD) 
     {
         #if USE_ANGLE_REGULATOR
         ms->theta_i0 = getThetaIFromAngleReg(s, THETA_0);
@@ -69,7 +71,5 @@ inline void FWD_default(MotionStates* ms, const Sensors* s, const float THETA_0)
         ms->theta_i0 = 0;
         #endif
     }
-
-    
-    ms->theta_i0 += regulatorArray[regulatorState];
+    else ms->theta_i0 += regulatorArray[regulatorState];
 }

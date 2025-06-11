@@ -485,12 +485,13 @@ CYCLOGRAM(SS180SL)
     ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FAST_FORWARD_SPEED / R;
-    constexpr float circleDist = PI * R; // 180 = половина окружности
+    //constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
     static enum SS180SL_S{
         FIRST_ENTRANCE = 0,
         FWD1,
+        // TURN,
         TURN90_1,
         TURN90_2,
         FWD2,
@@ -530,7 +531,10 @@ CYCLOGRAM(SS180SL)
             ss180sl_state = FWD2;
         }
         break;
-
+    // case TURN:
+    //     ms->theta_i0 = theta_i;
+    //     if(s->odometry->getRelativeTheta() < -HALF_PI) ss180sl_state = FWD2;
+    //     break;
     case FWD2:
         FWD_default(ms, s, ms->theta_0 - PI);
         if(s->odometry->getRelativeDist() >= forwDist) ss180sl_state = FINISH;
