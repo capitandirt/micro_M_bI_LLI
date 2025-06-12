@@ -63,10 +63,8 @@ CYCLOGRAM(FWD_HALF)
 
 CYCLOGRAM(FWD_X)
 {
-    #if NEED_FWD_ACCELERATION
     constexpr float acceleration = FWD_ACCELERATION; 
-    #endif
-    constexpr float v0 = FAST_FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
+    constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
     static Integrator v = v0;
     
     static float last_cell_dist = 0; 
@@ -94,7 +92,7 @@ CYCLOGRAM(FWD_X)
     if(cur_dist - last_cell_dist > HALF(CELL_SIZE)){
         CAN_TRY_ALIGN = 1;
     }
-    #if NEED_FWD_ACCELERATION
+
     const bool left_wall = toBool(cell_from_sensors.west_wall);
     const bool right_wall = toBool(cell_from_sensors.east_wall);
     const uint8_t passed_cells = cur_dist / CELL_SIZE;
@@ -102,10 +100,11 @@ CYCLOGRAM(FWD_X)
     const bool left_wall_forward_front = prev_left_wall == 0 && left_wall == 1;
     const bool right_wall_forward_front = prev_right_wall == 0 && right_wall == 1;
 
-    
-    if(left_wall_forward_front || right_wall_forward_front){
-        const float upd_dist = passed_cells * CELL_SIZE + (HALF(CELL_SIZE) + CELL_SIZE - FROM_HI_WALL_TO_SIDE);
-        s->odometry->setRelativeDist(upd_dist);
+    if(CAN_TRY_ALIGN){
+        if(left_wall_forward_front || right_wall_forward_front){
+            const float upd_dist = passed_cells * CELL_SIZE + (HALF(CELL_SIZE) + CELL_SIZE - FROM_HI_WALL_TO_SIDE);
+            s->odometry->setRelativeDist(upd_dist);
+        }
     }
 
     if(cur_dist < HALF(CELL_SIZE * x))
@@ -116,14 +115,8 @@ CYCLOGRAM(FWD_X)
     {
         v.tick(-acceleration);
     }
-    #endif
 
-    #if NEED_FWD_ACC
     ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
-    #else
-    ms->v_f0 = v0;
-    #endif
-
     FWD_default(ms, s, ms->theta_0);
 
     if(cur_dist > CELL_SIZE * x)
