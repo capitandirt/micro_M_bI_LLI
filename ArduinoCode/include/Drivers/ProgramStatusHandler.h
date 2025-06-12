@@ -50,6 +50,7 @@ public:
     void           setNoneStatus()                       noexcept;
 
     void           passMillis(const uint32_t t)          noexcept;
+    bool           getButtonState()                      noexcept;
 
 private:
     void           sense()                               noexcept;
@@ -65,6 +66,8 @@ private:
     uint32_t _timer = 0;
 
     uint16_t _adc_reading = 0;
+
+    bool _but_state = 0; 
     bool _prev_but_state = 0;
     uint8_t _counter = 0;
 };

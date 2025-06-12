@@ -5,7 +5,7 @@ void ProgramStatusHandler::sense(){
 }
 
 void ProgramStatusHandler::plan(){
-    const bool _but_state = _adc_reading >= ADC_THRESHOLD;
+    _but_state = _adc_reading >= ADC_THRESHOLD;
     const bool _back_but_front = _prev_but_state == 1 && _but_state == 0;
 
     if(_slideCatcher->isSlide() && (
@@ -53,4 +53,8 @@ void ProgramStatusHandler::setNoneStatus(){
 
 void ProgramStatusHandler::passMillis(const uint32_t t){
     _cur_millis = t;
+}
+
+bool ProgramStatusHandler::getButtonState(){
+    return _but_state;
 }
