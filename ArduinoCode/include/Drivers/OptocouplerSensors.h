@@ -26,8 +26,7 @@ struct Sense_t{
 
 struct Sense_mask_t{
     bool left;
-    bool forward_l;
-    bool forward_r;
+    bool forward;
     bool right;
 };
 
@@ -81,12 +80,12 @@ public:
     int16_t getRightTreshold()         const;
 
     
-    private:
+private:
     void    calc_sense_mask();
     void    calc_relative_cell();
     
-    private:
-    static constexpr float K_F = 0.99;
+private:
+    static constexpr float LPF_K = 0.2;
     
     Cell _relative_cell;
     Sense_t dark_sense;
@@ -94,7 +93,6 @@ public:
     volatile bool CAN_GET_SENSE = 0;
 
     Sense_mask_t _sense_mask;
-    
     OptocouplerSense _sense;   
     
     int16_t _static_err = 0;

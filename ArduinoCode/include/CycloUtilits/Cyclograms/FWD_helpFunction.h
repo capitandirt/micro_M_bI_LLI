@@ -6,7 +6,7 @@ inline float getThetaIFromAngleReg(const Sensors* s, const float THETA_0)
     const float cur_theta = s->odometry->getTheta();
     
     float theta_err = circle_mod(THETA_0 - cur_theta);
-    return theta_err * ANGLE_REG_KP;
+    return theta_err * ANGLE_SPEED_GYRO_REG_KP;
 }
 
 inline float getThetaIFromWallReg(const Sensors* s) // не используется

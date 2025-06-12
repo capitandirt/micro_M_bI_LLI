@@ -50,7 +50,12 @@ void OptocouplerSensors::tick(){
     _sense[OptocouplerSense::From::LEFT]  = analogRead(REC_LEFT)  - dark_sense.left;
 
     _sense[OptocouplerSense::From::FORWARD_L] = analogRead(REC_FWD_LEFT)  - dark_sense.forward_l;
+        // (analogRead(REC_FWD_LEFT)  - dark_sense.forward_l - _sense[OptocouplerSense::From::FORWARD_L]) * LPF_K;
     _sense[OptocouplerSense::From::FORWARD_R] = analogRead(REC_FWD_RIGHT) - dark_sense.forward_r;
+        // (analogRead(REC_FWD_RIGHT) - dark_sense.forward_r - _sense[OptocouplerSense::From::FORWARD_R]) * LPF_K;
+
+    if(_sense[OptocouplerSense::From::FORWARD_L] < 0) _sense[OptocouplerSense::From::FORWARD_L] = 0;
+    if(_sense[OptocouplerSense::From::FORWARD_R] < 0) _sense[OptocouplerSense::From::FORWARD_R] = 0;
 
     CAN_GET_SENSE = 1;
 
@@ -91,8 +96,7 @@ void OptocouplerSensors::printAbsCell() const{
 
 void OptocouplerSensors::printMask() const{
     Serial.println( String(_sense_mask.left) + " " + 
-                    String(_sense_mask.forward_l) + " " +
-                    String(_sense_mask.forward_r) + " " + 
+                    String(_sense_mask.forward) + " " +
                     String(_sense_mask.right));
 }
 
@@ -107,14 +111,13 @@ void OptocouplerSensors::printSense() const{
 }
 
 void OptocouplerSensors::calc_sense_mask(){
-    _sense_mask.forward_l = _sense[OptocouplerSense::From::FORWARD_L] > SENSE_THRESHOLD_FWD_L;
-    _sense_mask.forward_r = _sense[OptocouplerSense::From::FORWARD_R] > SENSE_THRESHOLD_FWD_R;
+    _sense_mask.forward   = max(_sense[OptocouplerSense::From::FORWARD_L], _sense[OptocouplerSense::From::FORWARD_R]) > SENSE_THRESHOLD_FWD_L;
     _sense_mask.left      = _sense[OptocouplerSense::From::LEFT] > SENSE_THRESHOLD_LEFT;
     _sense_mask.right     = _sense[OptocouplerSense::From::RIGHT] > SENSE_THRESHOLD_RIGHT;
 }
 
 void OptocouplerSensors::calc_relative_cell(){
-    _relative_cell.north_wall = toWallState(_sense_mask.forward_l || _sense_mask.forward_r);
+    _relative_cell.north_wall = toWallState(_sense_mask.forward);
     _relative_cell.east_wall  = toWallState(_sense_mask.right);
     _relative_cell.west_wall  = toWallState(_sense_mask.left);
     _relative_cell.south_wall = toWallState(false);
@@ -128,8 +131,8 @@ void OptocouplerSensors::setStaticError()
     _static_err = right_sense - left_sense;
     _left_sense0 = left_sense;
     _right_sense0 = right_sense;
-    SENSE_THRESHOLD_LEFT = left_sense * 0.6;
-    SENSE_THRESHOLD_RIGHT = right_sense * 0.6;
+    SENSE_THRESHOLD_LEFT = left_sense * 0.4;
+    SENSE_THRESHOLD_RIGHT = right_sense * 0.4;
 }
 int16_t OptocouplerSensors::getStaticError() const
 {

@@ -31,12 +31,12 @@ public:
     Direction needDirection(const Direction cur,  const Direction need);
     
     void loadFasts();
+    void convert_to_fasts();
     
 private:
     PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind); 
 
     void dirs_to_primitives();
-    void convert_to_fasts();
     bool TO_IDLE();
     bool TO_STOP();
     bool TO_FWD_X();

@@ -75,7 +75,7 @@ CYCLOGRAM(DS45SL)
 
 
     // Serial.println(s->odometry->getRelativeTheta() * RAD_TO_DEG);
-    if(s->odometry->getRelativeDist() < forwDist)
+    if(s->odometry->getRelativeDist() < forwDist2)
     {
         ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     }
@@ -107,7 +107,7 @@ CYCLOGRAM(DS45SR)
     const float circleDist = (2 * PI * R) / 8; // 45 = 1/8 окружности
     float theta_i = FAST_FORWARD_SPEED / R;
 
-    if(s->odometry->getRelativeDist() < forwDist)
+    if(s->odometry->getRelativeDist() < forwDist2)
     {
         ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0);
     }
@@ -118,7 +118,8 @@ CYCLOGRAM(DS45SR)
     #endif
     else
     {
-        FWD_default(ms, s, ms->theta_0 - HALF(HALF_PI));
+        ms->theta_i0 = getThetaIFromAngleReg(s, ms->theta_0 - HALF(HALF_PI));
+        //FWD_default(ms, s, ms->theta_0 - HALF(HALF_PI));
     }
 
     if(s->odometry->getRelativeDist() > forwDist + circleDist + forwDist2)
