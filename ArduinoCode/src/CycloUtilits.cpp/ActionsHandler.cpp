@@ -801,8 +801,8 @@ void ActionsHandler::convert_to_fasts()
 void ActionsHandler::loadFasts(){
     _cycloStore->reloadSmarts();
     
-    _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
-    _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
+    // _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+    // _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
     dirs_to_primitives();
     convert_to_fasts();
 }

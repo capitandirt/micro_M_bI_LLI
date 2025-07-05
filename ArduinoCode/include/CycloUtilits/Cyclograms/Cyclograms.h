@@ -63,66 +63,13 @@ CYCLOGRAM(FWD_HALF)
 
 CYCLOGRAM(FWD_X)
 {
-    constexpr float acceleration = FWD_ACCELERATION; 
-    constexpr float v0 = FORWARD_SPEED * FWD_SPEED_MULTIPLIER;
-    static Integrator v = v0;
-    
-    static float last_cell_dist = 0; 
-    static bool FIRST_ENTRANCE = 1;
-    static bool CAN_TRY_ALIGN = 0;
+    ms->v_f0 = FAST_FORWARD_SPEED * FWDE_SPEED_MULTIPLIER;
 
-    static bool prev_left_wall = 0;
-    static bool prev_right_wall = 0;
-    
-    const Cell cell_from_sensors = s->optocoupler->getRelativeCell();
-    const float cur_dist = s->odometry->getRelativeDist();
-
-    if(FIRST_ENTRANCE){
-        last_cell_dist = 0;
-
-        prev_left_wall = 0;
-        prev_right_wall = 0;
-
-        CAN_TRY_ALIGN = 0;
-
-        FIRST_ENTRANCE = 0;
-    }
-
-    // bool NEED_CALC_CAN_TRY_ALIGN = 0;
-    if(cur_dist - last_cell_dist > HALF(CELL_SIZE)){
-        CAN_TRY_ALIGN = 1;
-    }
-
-    const bool left_wall = toBool(cell_from_sensors.west_wall);
-    const bool right_wall = toBool(cell_from_sensors.east_wall);
-    const uint8_t passed_cells = cur_dist / CELL_SIZE;
-
-    const bool left_wall_forward_front = prev_left_wall == 0 && left_wall == 1;
-    const bool right_wall_forward_front = prev_right_wall == 0 && right_wall == 1;
-
-    if(CAN_TRY_ALIGN){
-        if(left_wall_forward_front || right_wall_forward_front){
-            const float upd_dist = passed_cells * CELL_SIZE + (HALF(CELL_SIZE) + CELL_SIZE - FROM_HI_WALL_TO_SIDE);
-            s->odometry->setRelativeDist(upd_dist);
-        }
-    }
-
-    if(cur_dist < HALF(CELL_SIZE * x))
-    {
-        v.tick(acceleration);
-    }
-    else if(v.getOut() > v0)
-    {
-        v.tick(-acceleration);
-    }
-
-    ms->v_f0 = min(v.getOut(), MAX_FWD_SPEED_AFTER_ACC);
     FWD_default(ms, s, ms->theta_0);
 
-    if(cur_dist > CELL_SIZE * x)
+    if(s->odometry->getRelativeDist() > CELL_SIZE * x)
     {
         s->odometry->setTheta(ms->theta_0);
-        FIRST_ENTRANCE = 1;
         ms->isComplete = true;
     }
     else ms->isComplete = false;

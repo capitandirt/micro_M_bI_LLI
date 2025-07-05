@@ -17,14 +17,14 @@ void setup()
 
     // cycloStore.addSmart(SmartCycloAction_t::SS90EL);
     
-    cycloStore.addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
-    cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
-    cycloStore.addSmart(SmartCycloAction_t::FWD_X);
-    cycloStore.addSmart(SmartCycloAction_t::SD45SR);
-    cycloStore.addSmart(SmartCycloAction_t::DD90SL);
-    cycloStore.addSmart(SmartCycloAction_t::DD90SR);
-    cycloStore.addSmart(SmartCycloAction_t::DD90SL);
-    cycloStore.addSmart(SmartCycloAction_t::DS45SR);
+    // cycloStore.addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+    // cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
+    // cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+    // cycloStore.addSmart(SmartCycloAction_t::SD45SR);
+    // cycloStore.addSmart(SmartCycloAction_t::DD90SL);
+    // cycloStore.addSmart(SmartCycloAction_t::DD90SR);
+    // cycloStore.addSmart(SmartCycloAction_t::DD90SL);
+    // cycloStore.addSmart(SmartCycloAction_t::DS45SR);
     // cycloStore.addSmart(SmartCycloAction_t::SD45SR);
     // cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 1);
     // cycloStore.addSmart(SmartCycloAction_t::DS45SR);
@@ -36,7 +36,7 @@ void loop(){
     while(micros() - last_time < Ts_us)
         ;
     last_time = micros();
-    
+
     DEVICES::TICK(last_time / 1000);
 
     // Serial.println("main: " + String(odometry.getTheta() * RAD_TO_DEG)); 
@@ -50,10 +50,7 @@ void loop(){
 
     // optocoupler.printMask();
     // optocoupler.printSense();
-
     cycloWorker.doCyclogram();
-    // robot.stateMachine();
+    robot.stateMachine();
     cycloWorker.tryComplete();
-
-    Serial.println(micros() - last_time);
 }
