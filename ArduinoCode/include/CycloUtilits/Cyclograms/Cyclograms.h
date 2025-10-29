@@ -67,6 +67,7 @@ CYCLOGRAM(FWD_X)
 
     FWD_default(ms, s, ms->theta_0);
 
+    Serial.println(s->odometry->getRelativeDist());
     if(s->odometry->getRelativeDist() > CELL_SIZE * x)
     {
         s->odometry->setTheta(ms->theta_0);

@@ -9,6 +9,7 @@ void CycloWorker::doCyclogram(){
     _cur_time = millis();
     _cyclo_context.s.time = _cur_time - _last_time;
 
+    
     cycloStore->executeSmart(_cur_smart_submis, &_cyclo_context);
     
     // Serial.println(_cyclo_context.ms.theta_0 * RAD_TO_DEG); 
