@@ -26,7 +26,7 @@ void ActionsHandler::dirs_to_primitives(){
     }
 }
 
-void ActionsHandler::loadExplorer(Direction robot_dir){
+void ActionsHandler::loadExplorer(Direction robot_dir, bool is_90e){
     clear();
 
     const auto from_robot_dir = static_cast<int8_t>(robot_dir);
@@ -44,23 +44,39 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
         break;
 
     case PrimitiveCycloAction_t::LEFT:
-        if(maze_command == MazeCommand::ALIGN_IN_TURN){
-            _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
-            _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
-            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
-            _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+        if(!is_90e){
+            if(maze_command == MazeCommand::ALIGN_IN_TURN){
+                _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
+                _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
+                _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+                _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+            }
+            else {
+                _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+                _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+                _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+            }
         }
-        else _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
+        else
+            _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
         break;
 
     case PrimitiveCycloAction_t::RIGHT:
-        if(maze_command == MazeCommand::ALIGN_IN_TURN){
-            _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
-            _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
-            _cycloStore->addSmart(SmartCycloAction_t::IP90R);
-            _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+        if(!is_90e){
+            if(maze_command == MazeCommand::ALIGN_IN_TURN){
+                _cycloStore->addSmart(SmartCycloAction_t::TO_FORWARD_ALIGN);
+                _cycloStore->addSmart(SmartCycloAction_t::FROM_FORWARD_ALIGN_TO_CENTER);
+                _cycloStore->addSmart(SmartCycloAction_t::IP90R);
+                _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+            }
+            else {
+                _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+                _cycloStore->addSmart(SmartCycloAction_t::IP90R);
+                _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+            }
         }
-        else _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+        else
+            _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         break;
 
     case PrimitiveCycloAction_t::BACK:
