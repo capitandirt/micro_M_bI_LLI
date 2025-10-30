@@ -229,7 +229,8 @@ bool ActionsHandler::TO_FWD_X() //тут может быть ошибка см F
     #if OUTPUT_DEBUG
     _cycloStore->printPrimitives();
     #endif
-    if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){ 
+    PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive();
+    if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP){ 
         uint8_t X = 1;
         for
         (
@@ -426,6 +427,9 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
     entryCounter++;
     //=====================================================================================================================
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
+    Serial.println("===");
+    Serial.println(toInt(curPrim));
+    Serial.println("===");
     // SERIAL_PRINTLN("act1: " + String(toInt(curPrim)));
     if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP) // обработка 1 действия
     {
@@ -438,8 +442,13 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
     const PrimitiveCycloAction_t TURN = curPrim; // получение действия и приравнивание его к основному повороту
     const PrimitiveCycloAction_t OP_TURN = toOpposite(TURN);
     
-    //=====================================================================================================================
+    // Serial.println("===");
+    // Serial.println(toInt(curPrim));
+    // Serial.println("===");
     curPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действия
+    // Serial.println("===");
+    // Serial.println(toInt(curPrim));
+    // Serial.println("===");
     //SERIAL_PRINTLN("act2: " + String(toInt(curPrim)));
     if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP) // обработка 2 действия
     {
@@ -516,17 +525,24 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
 
 ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startState)
 {
-    //SERIAL_PRINTLN("DD90");
+    SERIAL_PRINTLN("DD90");
+    // _cycloStore->printPrimitives();
     int X = 1;
 
     const auto TURN = _cycloStore->virtualPopFrontPrimitive();
     const auto OP_TURN = toOpposite(TURN);
     PrimitiveCycloAction_t lastTurn = OP_TURN;
 
+    if(TURN == PrimitiveCycloAction_t::FORWARD)
+    {
+        //Serial.println("imhere31");
+        //это нормальное состояние, тут просто поворот на 135
+        return startState;
+    }
     if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT)
     {
-        Serial.println("imhere3");
-        //SERIAL_PRINTLN("err in EH");
+        //а вот это уже страшно, это ошибка
+        //Serial.println("imhere32");
         return startState;
     };
 
@@ -542,7 +558,8 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
         next2Prim[0] = _cycloStore->virtualPopFrontPrimitive();
         next2Prim[1] = _cycloStore->virtualPopFrontPrimitive();
     }
-    //SERIAL_PRINTLN("end for, X: " + String(X));
+    Serial.print("end for, X: ");
+    Serial.println(X);
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive();
     if((next2Prim[1] == TURN || next2Prim[1] == OP_TURN) && (curPrim != PrimitiveCycloAction_t::LEFT && curPrim != PrimitiveCycloAction_t::RIGHT))
     {
@@ -552,17 +569,23 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
     _cycloStore->virtualGoBack();
     
     //SERIAL_PRINTLN("final X: " + String(X));
+    Serial.print("final X: ");
+    Serial.println(X);
     
     #if OUTPUT_DEBUG 
     _cycloStore->printPrimitives();
     #endif
+    _cycloStore->popFrontPrimitive();
+    _cycloStore->popFrontPrimitive();
     if(TURN == PrimitiveCycloAction_t::LEFT) // добавляем 1 действие, которое определили ещё в entryHandler
     {
+        Serial.println("added DDR");
         _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
         lastTurn = PrimitiveCycloAction_t::RIGHT;
     } 
     else
     {
+        Serial.println("added DDL");
         _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
         lastTurn = PrimitiveCycloAction_t::LEFT;
     }
@@ -572,15 +595,17 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
         _cycloStore->popFrontPrimitive();
         if(TURN == PrimitiveCycloAction_t::LEFT && !(i % 2) || TURN == PrimitiveCycloAction_t::RIGHT && (i % 2))
         {
+            Serial.println("added DDR cycle");
             _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
             lastTurn = PrimitiveCycloAction_t::RIGHT;
         } 
         else
         {
+            Serial.println("added DDL cycle");
             _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
             lastTurn = PrimitiveCycloAction_t::LEFT;
         }
-        #if OUTPUT_DEBUG 
+        #if OUTPUT_DEBUG
         _cycloStore->printPrimitives();
         #endif
     } 
@@ -589,7 +614,7 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
 
 ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startState)
 {
-    //PRINTLN("DIA_X");
+    PRINTLN("DIA_X");
     #if OUTPUT_DEBUG 
     _cycloStore->printPrimitives();
     #endif
@@ -625,6 +650,9 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startSt
         }
     }
     //PRINTLN("final X: " + String(X));
+    Serial.println("==========");
+    Serial.println(X);
+    Serial.println("==========");
     _cycloStore->virtualGoBack();
     for(int i = 0; i < X - 3; i++) _cycloStore->virtualPopFrontPrimitive();
     _cycloStore->virtualPrimitiveRelease();
@@ -642,10 +670,11 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startSt
 ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotState_t startState)
 { 
     SERIAL_PRINTLN("RH start: ");
+    //_cycloStore->printPrimitives();
     if(startState == RobotState_t::FORWARD)
     {
         TO_FWD_X();
-        SERIAL_PRINTLN("exit FWD_X");
+        //SERIAL_PRINTLN("exit FWD_X");
         return RobotState_t::FORWARD;
     }
 
@@ -657,6 +686,7 @@ ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotStat
 
     const auto TURN = curPrim;
     const auto OP_TURN = toOpposite(TURN);
+    //_cycloStore->printPrimitives();
     if(TURN == PrimitiveCycloAction_t::FORWARD)
     {
         //SERIAL_PRINTLN("error in RH");
@@ -666,7 +696,7 @@ ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotStat
     {
         //_cycloStore->virtualPrimitiveRelease();
         // SERIAL_PRINTLN("to DD90S");
-        return TO_DD90X(startState); // на этот момент X = 1
+        return TO_DD90X(startState); // на этот момент X = 1 (может быть что это 135)
     }
     else if(nextPrim == OP_TURN)
     {
@@ -690,23 +720,20 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
     entryCounter++;
     if(startState == RobotState_t::FORWARD) 
     {
-        //SERIAL_PRINTLN("exit FWD");
         return RobotState_t::STOP;
     }
+
+
     PrimitiveCycloAction_t curPrim = _cycloStore->popFrontPrimitive(); // 1 действие
-    // SERIAL_PRINTLN("act1: " + String(toInt(curPrim)));
     const auto TURN = curPrim;
     const auto OP_TURN = toOpposite(TURN);
     if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT)
     {
-        //Serial.println("imhere1");
-        //Serial.println(entryCounter);
-        //SERIAL_PRINTLN("TURN err EXH, counter is: " + String(entryCounter));
         return RobotState_t::NAS; //это ошибка, такого быть не должно
     }
-    _cycloStore->printPrimitives();
+    //_cycloStore->printPrimitives();
     curPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действие
-    _cycloStore->printPrimitives();
+    //_cycloStore->printPrimitives();
     // SERIAL_PRINTLN("act2: " + String(toInt(curPrim)));
     if(curPrim == TURN) // обработка 2 действия
     {
@@ -715,6 +742,7 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
         //SERIAL_PRINTLN("act3: " + String(toInt(curPrim)) + " 2nd action is TURN");
         if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP)
         {
+            //Serial.println("GOOD");
             switch(TURN)
             {
                 case PrimitiveCycloAction_t::LEFT:
@@ -732,7 +760,7 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
         }
         else if(curPrim == TURN) 
         {
-            SERIAL_PRINTLN("error in EXH, counter: " + String(entryCounter));
+            //SERIAL_PRINTLN("error in EXH, counter: " + String(entryCounter));
             return RobotState_t::NAS; // он решил повернуть в стену, это плохо
         }
         else
@@ -767,9 +795,9 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
 
 void ActionsHandler::convert_to_fasts()
 {
-    Serial.println("convert_to_fasts1");
+    //Serial.println("convert_to_fasts1");
     _cycloStore->printPrimitives();
-    Serial.println("convert_to_fasts2");
+    //Serial.println("convert_to_fasts2");
     PrimitiveCycloAction_t curPrim = PrimitiveCycloAction_t::BLANK;
     
     while(curPrim != PrimitiveCycloAction_t::STOP) // пока не стоит остановка
@@ -791,15 +819,15 @@ void ActionsHandler::convert_to_fasts()
         {
             _cycloStore->printPrimitives();
             RobotState_t repeatEndState = repeatActionHandler(repeatStartState);
-            SERIAL_PRINTLN(" exit RH ");
+            //SERIAL_PRINTLN(" exit RH ");
             exitState = exitHandler(repeatEndState);
             if(exitState == RobotState_t::NAS)
             {
-                SERIAL_PRINTLN("Error in RH after RH");
+                //SERIAL_PRINTLN("Error in RH after RH");
                 return; 
             };// вылетел на моменте, когда turn оказался не turn-ом
 
-            SERIAL_PRINTLN(" exit EXH ");
+            //SERIAL_PRINTLN(" exit EXH ");
             repeatStartState = exitState;
         } while (exitState != RobotState_t::STOP);
         
