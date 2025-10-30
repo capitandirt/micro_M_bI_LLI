@@ -50,7 +50,11 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
             _cycloStore->addSmart(SmartCycloAction_t::IP90L);
             _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
         }
-        else _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
+        else {
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+            _cycloStore->addSmart(SmartCycloAction_t::IP90L);
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+        }
         break;
 
     case PrimitiveCycloAction_t::RIGHT:
@@ -60,7 +64,11 @@ void ActionsHandler::loadExplorer(Direction robot_dir){
             _cycloStore->addSmart(SmartCycloAction_t::IP90R);
             _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
         }
-        else _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+        else {
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+            _cycloStore->addSmart(SmartCycloAction_t::IP90R);
+            _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+        }
         break;
 
     case PrimitiveCycloAction_t::BACK:
