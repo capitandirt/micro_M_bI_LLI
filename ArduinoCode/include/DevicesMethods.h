@@ -432,8 +432,16 @@ namespace DEVICES{
             //======TEST MAZE 1======
             // addTestMaze1();
             //======================
-            addTestMaze9();
-            
+            //addTestMaze9();
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
 
             // addTestMaze5();
             

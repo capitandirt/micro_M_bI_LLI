@@ -124,7 +124,7 @@ void Robot::step_flood_fill(const Vec2 end_vec)
     if(try_end(forward_vec, end_vec)) return;
 
     _solver->ExplorerSolveBfsMaze(forward_vec, end_vec);
-    _actionsHandler->loadExplorer(cur_dir);    
+    _actionsHandler->loadExplorer(cur_dir, _functionalSelector->isLever(1));    
     
     const Direction next_robot_dir = _maze->GetPathDir(0);
     _odometry->setDir(next_robot_dir);

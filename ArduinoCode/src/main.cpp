@@ -13,14 +13,6 @@ void setup()
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
     optocoupler.setStaticError();
-
-    
-    // cycloStore.addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
-    // cycloStore.addSmart(SmartCycloAction_t::FWD_HALF);
-    // cycloStore.addSmart(SmartCycloAction_t::SS90EL);
-    // cycloStore.addSmart(SmartCycloAction_t::FWDE);
-    // cycloStore.addSmart(SmartCycloAction_t::SS90ER);
-    // cycloStore.addSmart(SmartCycloAction_t::STOP);
 }
 
 void loop(){
