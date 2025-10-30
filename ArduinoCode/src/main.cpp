@@ -6,7 +6,7 @@
 void setup()
 {
     DEVICES::TEST::SET_SERIAL();
-    DEVICES::INIT();
+    //DEVICES::INIT();
 
     // DEVICES::TEST::CONVERT_TO_SMART();
     // while(true);
@@ -29,9 +29,11 @@ void setup()
     // cycloStore.addSmart(SmartCycloAction_t::DIAG_X, 1);
     // cycloStore.addSmart(SmartCycloAction_t::DS45SR);
     // cycloStore.addSmart(SmartCycloAction_t::FWD_X, 3);
-    cycloStore.addSmart(SmartCycloAction_t::FWD_X);
-    cycloStore.addSmart(SmartCycloAction_t::STOP);
-    cycloStore.printSmarts();
+    // cycloStore.addSmart(SmartCycloAction_t::FWD_X);
+    // cycloStore.addSmart(SmartCycloAction_t::STOP);
+    // cycloStore.printSmarts();
+    DEVICES::TEST::CONVERT_TO_SMART();
+    while(true);
 }
 
 void loop(){
@@ -40,7 +42,7 @@ void loop(){
         ;
     last_time = micros();
 
-    DEVICES::TICK(last_time / 1000);
+    //DEVICES::TICK(last_time / 1000);
 
     // Serial.println("main: " + String(odometry.getTheta() * RAD_TO_DEG)); 
 
@@ -54,7 +56,7 @@ void loop(){
     // optocoupler.printMask();
     // optocoupler.printSense();
     
-    cycloWorker.doCyclogram();
+    //cycloWorker.doCyclogram();
     //robot.stateMachine();
-    cycloWorker.tryComplete();
+    //cycloWorker.tryComplete();
 }
