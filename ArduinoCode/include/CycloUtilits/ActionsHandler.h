@@ -35,7 +35,6 @@ public:
     
 private:
     PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind); 
-
     void dirs_to_primitives();
     bool TO_IDLE();
     bool TO_STOP();

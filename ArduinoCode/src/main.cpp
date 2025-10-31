@@ -2,14 +2,13 @@
 #include "Devices.h"
 #include "DevicesMethods.h"
 
-
 void setup()
 {
     DEVICES::TEST::SET_SERIAL();
-    DEVICES::INIT();
+    //DEVICES::INIT();
 
-    // DEVICES::TEST::CONVERT_TO_SMART();
-    // while(true);
+    DEVICES::TEST::CONVERT_TO_SMART();
+    while(true);
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
     optocoupler.setStaticError();
@@ -21,12 +20,7 @@ void loop(){
         ;
     last_time = micros();
 
-    DEVICES::TICK(last_time / 1000);
-
-    // Serial.print(functionalSelector.isLever(0));
-    // Serial.print(functionalSelector.isLever(1));
-    // Serial.print(functionalSelector.isLever(2));
-    // Serial.println(functionalSelector.isLever(3));
+    //DEVICES::TICK(last_time / 1000);
 
     cycloWorker.doCyclogram();
     robot.stateMachine();

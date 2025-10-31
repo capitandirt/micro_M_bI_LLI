@@ -1,13 +1,13 @@
 #include "CycloUtilits/ActionsHandler.h"
 
-#define OUTPUT_DEBUG 1
+#define OUTPUT_DEBUG 0
 
 #if OUTPUT_DEBUG
-    #define SERIAL_PRINT(x) Serial.print((x))
-    #define SERIAL_PRINTLN(x) Serial.println((x))
+    #define AH_PRINT(x) Serial.print((x))
+    #define AH_PRINTLN(x) Serial.println((x))
 #else
-    #define SERIAL_PRINT(x)
-    #define SERIAL_PRINTLN(x)
+    #define AH_PRINT(x)
+    #define AH_PRINTLN(x)
 #endif
 
 PrimitiveCycloAction_t ActionsHandler::calc_primitive_cyclo_action(const uint8_t ind){
@@ -208,7 +208,6 @@ bool ActionsHandler::TO_STOP(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::STOP){
         _cycloStore->addSmart(SmartCycloAction_t::STOP);
         _cycloStore->virtualPrimitiveRelease();
-        // PRINTLN("add FWD_HALF and STOP");
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -231,7 +230,6 @@ bool ActionsHandler::TO_FWD_X_TEMPLATE()
         
         
         _cycloStore->virtualPrimitiveRelease();
-        // SERIAL_PRINTLN("add FWD with X= " + String(X));
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -241,7 +239,6 @@ bool ActionsHandler::TO_FWD_X_TEMPLATE()
 
 bool ActionsHandler::TO_FWD_X() //тут может быть ошибка см FWD_TEMPLATE
 {
-    //SERIAL_PRINTLN("FWD_X:");
     #if OUTPUT_DEBUG
     _cycloStore->printPrimitives();
     #endif
@@ -263,7 +260,6 @@ bool ActionsHandler::TO_FWD_X() //тут может быть ошибка см F
         _cycloStore->virtualPrimitiveRelease();
         
         _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
-        //SERIAL_PRINTLN(X);
 
         #if OUTPUT_DEBUG
         _cycloStore->printPrimitives();
@@ -279,7 +275,6 @@ bool ActionsHandler::TO_SS90E(bool isStart){
         if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
         _cycloStore->virtualPrimitiveRelease();
-        // PRINTLN("add SS90EL");
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -287,7 +282,6 @@ bool ActionsHandler::TO_SS90E(bool isStart){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
         if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         _cycloStore->virtualPrimitiveRelease();
-        // PRINTLN("add SS90ER");
         return true;
     }
     else _cycloStore->virtualGoBack();
@@ -300,7 +294,6 @@ bool ActionsHandler::TO_SS90S(){
         if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::FORWARD){
             _cycloStore->addSmart(SmartCycloAction_t::SS90SL);
             _cycloStore->virtualPrimitiveRelease();
-            // SERIAL_PRINTLN("add SS90SL");
             return true;
         }
     }
@@ -311,7 +304,7 @@ bool ActionsHandler::TO_SS90S(){
        { 
             _cycloStore->addSmart(SmartCycloAction_t::SS90SR);
             _cycloStore->virtualPrimitiveRelease();
-            // SERIAL_PRINTLN("add SS90SR");
+            // AH_PRINTLN("add SS90SR");
             return true;
        }
     }
@@ -340,7 +333,7 @@ bool ActionsHandler::TO_SD45S_DS45S(bool isStart){
                 }
                 _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                 _cycloStore->virtualPrimitiveRelease();
-                // SERIAL_PRINTLN("add 45chain");
+                // AH_PRINTLN("add 45chain");
                 return true;
             }
         }
@@ -376,7 +369,7 @@ bool ActionsHandler::TO_SD135S_DS45S(bool isStart)
                         }
                         _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
                         _cycloStore->virtualPrimitiveRelease();
-                        // SERIAL_PRINTLN("add 135chain");
+                        // AH_PRINTLN("add 135chain");
                         return true;
                     }   
                 }
@@ -394,26 +387,19 @@ uint8_t ActionsHandler::toIntFromState(const ActionsHandler::RobotState_t rs)
 
 ActionsHandler::RobotState_t ActionsHandler::toState(const PrimitiveCycloAction_t curPrim)
 {
-    // SERIAL_PRINT("to_State: ");
     switch(curPrim)
     {
     case PrimitiveCycloAction_t::LEFT:
-        // SERIAL_PRINTLN("LEFT");
         return RobotState_t::LEFT;
         
     case PrimitiveCycloAction_t::RIGHT:
-        // SERIAL_PRINTLN("RIGHT");
         return RobotState_t::RIGHT;
 
     case PrimitiveCycloAction_t::FORWARD:
-        // SERIAL_PRINTLN("FORWARD");
         return RobotState_t::FORWARD;
     default:
-        // SERIAL_PRINTLN("error in toState");
         return RobotState_t::NAS;// этого не может быть
     }
-
-    // SERIAL_PRINT("\n");
 }
 
 PrimitiveCycloAction_t ActionsHandler::fromState(const RobotState_t rs)
@@ -435,7 +421,7 @@ PrimitiveCycloAction_t ActionsHandler::fromState(const RobotState_t rs)
 
 ActionsHandler::RobotState_t ActionsHandler::entryHandler()
 {
-    SERIAL_PRINTLN("entry handler=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
+    AH_PRINTLN("entry handler=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-");
     #if OUTPUT_DEBUG
     _cycloStore->printPrimitives();
     #endif
@@ -443,14 +429,10 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
     entryCounter++;
     //=====================================================================================================================
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
-    Serial.println("===");
     Serial.println(toInt(curPrim));
-    Serial.println("===");
-    // SERIAL_PRINTLN("act1: " + String(toInt(curPrim)));
     if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP) // обработка 1 действия
     {
         _cycloStore->virtualGoBack(); // это делается чтобы изначально X был равен 0
-        //SERIAL_PRINTLN("exit with FWD");
         return RobotState_t::FORWARD;
     }
     _cycloStore->virtualPrimitiveRelease();
@@ -458,14 +440,7 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
     const PrimitiveCycloAction_t TURN = curPrim; // получение действия и приравнивание его к основному повороту
     const PrimitiveCycloAction_t OP_TURN = toOpposite(TURN);
     
-    // Serial.println("===");
-    // Serial.println(toInt(curPrim));
-    // Serial.println("===");
     curPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действия
-    // Serial.println("===");
-    // Serial.println(toInt(curPrim));
-    // Serial.println("===");
-    //SERIAL_PRINTLN("act2: " + String(toInt(curPrim)));
     if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP) // обработка 2 действия
     {
         if(TURN == PrimitiveCycloAction_t::LEFT)
@@ -476,7 +451,6 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
         {
             _cycloStore->addSmart(SmartCycloAction_t::SS90SR);
         }
-        //SERIAL_PRINTLN("exit with SS90S");
         _cycloStore->virtualGoBack();
         return RobotState_t::STOP;
     }
@@ -492,17 +466,12 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
                 break;
         }
         _cycloStore->virtualGoBack(); //второе действие доказало, что это 45, но далее в обработчике повторов нам оно будет нужно
-        //SERIAL_PRINT("exit with SD45S ");
-        //SERIAL_PRINT(entryCounter);
-        //SERIAL_PRINT(" TURNAACTION: ");
-        //SERIAL_PRINTLN(toInt(TURN));
         return toState(TURN); //вход в какой-то повтор под углом 45 градусов
     } 
     //если 2 действие TURN:
     //=====================================================================================================================
     _cycloStore->virtualPrimitiveRelease(); //вернём его, если будет 135
     curPrim = _cycloStore->virtualPopFrontPrimitive(); // 3 действие
-    //SERIAL_PRINTLN("act3: " + String(toInt(curPrim)));
     if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP) // обработка 3 действия
     {
         if(TURN == PrimitiveCycloAction_t::LEFT)
@@ -514,7 +483,6 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
             _cycloStore->addSmart(SmartCycloAction_t::SS180SR);
         }
         _cycloStore->virtualGoBack();
-        //SERIAL_PRINTLN("exit with SS180S");
         return RobotState_t::STOP;
     }
     else if(curPrim == OP_TURN) // обработка 3 действия 
@@ -528,21 +496,17 @@ ActionsHandler::RobotState_t ActionsHandler::entryHandler()
             _cycloStore->addSmart(SmartCycloAction_t::SD135SR);
         }
         _cycloStore->virtualGoBack(); //третье действие доказало, что это 135, но далее в обработчике повторов нам оно будет нужно
-        //SERIAL_PRINTLN("exit with SD135S " + String(entryCounter) + " primAction: " + toInt(TURN));
-        //SERIAL_PRINTLN("entryHandler " + String(toIntFromState(toState(TURN))) + " 351"); 
         return toState(TURN); //вход в какой-то повтор под углом 135 градусов
     }
     else 
     {
-        //SERIAL_PRINTLN("error in entryHandler, counter is: " + String(entryCounter)); 
         return RobotState_t::NAS; //он решил повернуть в стену, это плохо
     }
 }
 
 ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startState)
 {
-    SERIAL_PRINTLN("DD90");
-    // _cycloStore->printPrimitives();
+    AH_PRINTLN("DD90");
     int X = 1;
 
     const auto TURN = _cycloStore->virtualPopFrontPrimitive();
@@ -551,14 +515,12 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
 
     if(TURN == PrimitiveCycloAction_t::FORWARD)
     {
-        //Serial.println("imhere31");
         //это нормальное состояние, тут просто поворот на 135
         return startState;
     }
     if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT)
     {
         //а вот это уже страшно, это ошибка
-        //Serial.println("imhere32");
         return startState;
     };
 
@@ -568,25 +530,21 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
     
     for(;next2Prim[0] == next2Prim[1] && ((!(X%2) && next2Prim[0] == OP_TURN) || (X%2 && next2Prim[0] == TURN)); X++)
     {
-        // SERIAL_PRINTLN("X: " + String(X));
-        // SERIAL_PRINTLN("next1: " + String(toInt(next2Prim[0])));
-        // SERIAL_PRINTLN("next2: " + String(toInt(next2Prim[1])));
         next2Prim[0] = _cycloStore->virtualPopFrontPrimitive();
         next2Prim[1] = _cycloStore->virtualPopFrontPrimitive();
     }
     Serial.print("end for, X: ");
     Serial.println(X);
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive();
-    if((next2Prim[1] == TURN || next2Prim[1] == OP_TURN) && (curPrim != PrimitiveCycloAction_t::LEFT && curPrim != PrimitiveCycloAction_t::RIGHT))
+    
+    bool exitToForward = next2Prim[0] == PrimitiveCycloAction_t::FORWARD,
+         exitToStop    = next2Prim[0] == PrimitiveCycloAction_t::STOP; 
+    if(exitToForward || exitToStop)
     {
-        //SERIAL_PRINTLN("x--" + String(curPrim == PrimitiveCycloAction_t::LEFT));
         X--; // это выход в DS135S
     }
     _cycloStore->virtualGoBack();
     
-    //SERIAL_PRINTLN("final X: " + String(X));
-    Serial.print("final X: ");
-    Serial.println(X);
     
     #if OUTPUT_DEBUG 
     _cycloStore->printPrimitives();
@@ -595,13 +553,11 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
     _cycloStore->popFrontPrimitive();
     if(TURN == PrimitiveCycloAction_t::LEFT) // добавляем 1 действие, которое определили ещё в entryHandler
     {
-        Serial.println("added DDR");
         _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
         lastTurn = PrimitiveCycloAction_t::RIGHT;
     } 
     else
     {
-        Serial.println("added DDL");
         _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
         lastTurn = PrimitiveCycloAction_t::LEFT;
     }
@@ -611,13 +567,11 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
         _cycloStore->popFrontPrimitive();
         if(TURN == PrimitiveCycloAction_t::LEFT && !(i % 2) || TURN == PrimitiveCycloAction_t::RIGHT && (i % 2))
         {
-            Serial.println("added DDR cycle");
             _cycloStore->addSmart(SmartCycloAction_t::DD90SR);
             lastTurn = PrimitiveCycloAction_t::RIGHT;
         } 
         else
         {
-            Serial.println("added DDL cycle");
             _cycloStore->addSmart(SmartCycloAction_t::DD90SL);
             lastTurn = PrimitiveCycloAction_t::LEFT;
         }
@@ -630,7 +584,7 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DD90X(const RobotState_t startSt
 
 ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startState)
 {
-    PRINTLN("DIA_X");
+    AH_PRINTLN("DIA_X");
     #if OUTPUT_DEBUG 
     _cycloStore->printPrimitives();
     #endif
@@ -640,35 +594,19 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startSt
     PrimitiveCycloAction_t oldPrim = fromState(startState);
     const auto TURN = curPrim;
     const auto OP_TURN = toOpposite(TURN);
-    //PRINTLN("TURN/oldPrim: " + String(toInt(TURN)) + "/" + String(toInt(oldPrim))); 
     if(TURN != PrimitiveCycloAction_t::LEFT && TURN != PrimitiveCycloAction_t::RIGHT)
     {
         _cycloStore->virtualGoBack();
-        //SERIAL_PRINTLN("exit no DIA_X");
     }
     else
     {
-        //PRINT(String(toInt(curPrim)) + " ");
-        //PRINT(String(toInt(oldPrim)) + "    "); 
-        //PRINTLN(String(curPrim == toOpposite(oldPrim)) + " ");
-
-
         while(curPrim == toOpposite(oldPrim))
         {   
             oldPrim = curPrim;
             curPrim = _cycloStore->virtualPopFrontPrimitive();
             X++;
-            //PRINTLN("X: " + String(X));
-
-            //PRINT(String(toInt(curPrim)) + " ");
-            //PRINT(String(toInt(oldPrim)) + "    "); 
-            //PRINTLN(String(curPrim == toOpposite(oldPrim)) + " ");
         }
     }
-    //PRINTLN("final X: " + String(X));
-    Serial.println("==========");
-    Serial.println(X);
-    Serial.println("==========");
     _cycloStore->virtualGoBack();
     for(int i = 0; i < X - 3; i++) _cycloStore->virtualPopFrontPrimitive();
     _cycloStore->virtualPrimitiveRelease();
@@ -685,33 +623,25 @@ ActionsHandler::RobotState_t ActionsHandler::TO_DIA_X(const RobotState_t startSt
 
 ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotState_t startState)
 { 
-    SERIAL_PRINTLN("RH start: ");
-    //_cycloStore->printPrimitives();
+    AH_PRINTLN("RH start: ");
     if(startState == RobotState_t::FORWARD)
     {
         TO_FWD_X();
-        //SERIAL_PRINTLN("exit FWD_X");
         return RobotState_t::FORWARD;
     }
 
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive(); // 1 действие
-    SERIAL_PRINTLN(toInt(curPrim));
     PrimitiveCycloAction_t nextPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действие
-    SERIAL_PRINTLN(toInt(nextPrim));
-
+    AH_PRINTLN("cur: " + String(toInt(curPrim)) + " next: " + String(toInt(nextPrim)));
 
     const auto TURN = curPrim;
     const auto OP_TURN = toOpposite(TURN);
-    //_cycloStore->printPrimitives();
     if(TURN == PrimitiveCycloAction_t::FORWARD)
     {
-        //SERIAL_PRINTLN("error in RH");
         return RobotState_t::NAS; //это ошибка entryHandler-а
     }
     if(nextPrim == TURN)
     {
-        //_cycloStore->virtualPrimitiveRelease();
-        // SERIAL_PRINTLN("to DD90S");
         return TO_DD90X(startState); // на этот момент X = 1 (может быть что это 135)
     }
     else if(nextPrim == OP_TURN)
@@ -720,12 +650,11 @@ ActionsHandler::RobotState_t ActionsHandler::repeatActionHandler(const RobotStat
         _cycloStore->virtualPopFrontPrimitive();
 
         _cycloStore->virtualPrimitiveRelease();
-        // SERIAL_PRINTLN("to DIA");
         return TO_DIA_X(toState(curPrim)); // на этот момент X = 1, там может быть exit специфичный
     } 
     else 
     {
-        SERIAL_PRINTLN("no repeat");
+        AH_PRINTLN("no repeat");
         return startState;
     }
 }
@@ -747,18 +676,12 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
     {
         return RobotState_t::NAS; //это ошибка, такого быть не должно
     }
-    //_cycloStore->printPrimitives();
     curPrim = _cycloStore->virtualPopFrontPrimitive(); // 2 действие
-    //_cycloStore->printPrimitives();
-    // SERIAL_PRINTLN("act2: " + String(toInt(curPrim)));
     if(curPrim == TURN) // обработка 2 действия
     {
-        // SERIAL_PRINTLN("IM");
         curPrim = _cycloStore->virtualPopFrontPrimitive(); // 3 действие
-        //SERIAL_PRINTLN("act3: " + String(toInt(curPrim)) + " 2nd action is TURN");
         if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP)
         {
-            //Serial.println("GOOD");
             switch(TURN)
             {
                 case PrimitiveCycloAction_t::LEFT:
@@ -771,13 +694,11 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
             _cycloStore->virtualGoBack();
             _cycloStore->virtualPopFrontPrimitive();
             _cycloStore->virtualPrimitiveRelease(); //мы записываем все действия, кроме последнего форварда
-            //SERIAL_PRINTLN("exit DS135S");
             return RobotState_t::STOP;
         }
         else if(curPrim == TURN) 
         {
-            //SERIAL_PRINTLN("error in EXH, counter: " + String(entryCounter));
-            return RobotState_t::NAS; // он решил повернуть в стену, это плохо
+           return RobotState_t::NAS; // он решил повернуть в стену, это плохо
         }
         else
         {
@@ -787,7 +708,6 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
     }
     else if(curPrim == PrimitiveCycloAction_t::FORWARD || curPrim == PrimitiveCycloAction_t::STOP) // обработка 2 действия
     {
-        _cycloStore->printPrimitives();
         _cycloStore->virtualGoBack();
         switch(TURN)
         {
@@ -799,7 +719,6 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
                 break;
         }
         _cycloStore->virtualPrimitiveRelease();
-        //SERIAL_PRINTLN("exit DS45S");
         return RobotState_t::STOP;
     }
     else // OP_TURN обработка 2 действия 
@@ -811,39 +730,27 @@ ActionsHandler::RobotState_t ActionsHandler::exitHandler(const RobotState_t star
 
 void ActionsHandler::convert_to_fasts()
 {
-    //Serial.println("convert_to_fasts1");
-    _cycloStore->printPrimitives();
-    //Serial.println("convert_to_fasts2");
     PrimitiveCycloAction_t curPrim = PrimitiveCycloAction_t::BLANK;
     
     while(curPrim != PrimitiveCycloAction_t::STOP) // пока не стоит остановка
     {
         curPrim = _cycloStore->popFrontPrimitive(); // 0 действие [всегда FORWARD]
-        //SERIAL_PRINTLN("act0: " + String(toInt(curPrim)));
-        //SERIAL_PRINTLN("BEFORE ENTRY");
         RobotState_t repeatStartState = entryHandler();
 
         if(repeatStartState == RobotState_t::NAS)
         {
-            //SERIAL_PRINTLN("Error in EH/EXH");
             return;
         };// вход вылетел с ошибкой поворота в стену на 3 действии
-        //SERIAL_PRINTLN("AFTER ENTRY");
         if(repeatStartState == RobotState_t::STOP) continue; // кластер действий был завершён в entryHandler и повтор не нужен
         RobotState_t exitState;
         do
         {
-            _cycloStore->printPrimitives();
             RobotState_t repeatEndState = repeatActionHandler(repeatStartState);
-            //SERIAL_PRINTLN(" exit RH ");
             exitState = exitHandler(repeatEndState);
             if(exitState == RobotState_t::NAS)
             {
-                //SERIAL_PRINTLN("Error in RH after RH");
                 return; 
             };// вылетел на моменте, когда turn оказался не turn-ом
-
-            //SERIAL_PRINTLN(" exit EXH ");
             repeatStartState = exitState;
         } while (exitState != RobotState_t::STOP);
         
@@ -851,9 +758,6 @@ void ActionsHandler::convert_to_fasts()
 }
 void ActionsHandler::loadFasts(){
     _cycloStore->reloadSmarts();
-    
-    // _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
-    // _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
     dirs_to_primitives();
     convert_to_fasts();
 }

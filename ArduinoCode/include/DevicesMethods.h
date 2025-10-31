@@ -4,6 +4,11 @@
 #include "Drivers/ProgramStatusHandler.h"
 #include "TIM2_HANDLER.h"
 
+
+#include "CycloUtilits/ConvertToFasts.h"
+
+ConverterToFasts converterToFasts(&cycloStore);
+
 extern Encoder leftEncoder;
 extern Encoder rightEncoder;
 
@@ -265,7 +270,10 @@ namespace DEVICES{
             cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
+
+            // SD45SL DS45SR SD180SL FWD_X1 SS90SL SD135SR DD90SL DD90SR DS135SL
         }
 
         void addTestMaze2()
@@ -291,7 +299,10 @@ namespace DEVICES{
             cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
+
+            // SS90SL SS90SR SS90SR SS90SL SD135SL DS45SR SD45SR DIAG_X1 DS45SR SD135SR DIAG_X1 DS34SR
         }
 
         void addTestMaze3()
@@ -339,7 +350,7 @@ namespace DEVICES{
             
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
 
-            //FWD_X1 SD45SL DIAG_X3 DS45SL SS90SL SD90SL DIAG_X3 DS45SL
+            //FWD_X1 SD45SL DIAG_X3 DS45SL SS90SL SD45SL DIAG_X3 DS45SL
         }
         void addTestMaze5()
         {
@@ -417,18 +428,18 @@ namespace DEVICES{
             cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
 
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
             
@@ -470,13 +481,14 @@ namespace DEVICES{
             //======TEST MAZE 1======
             // addTestMaze1();
             //======================
-            addTestMaze3();
+            addTestMaze1();
             
             
             // addTestMaze5();
             
-            //cycloStore.printPrimitives();
-            actionsHandler.convert_to_fasts();
+            cycloStore.printPrimitives();
+            converterToFasts.convert();
+            //actionsHandler.convert_to_fasts();
             cycloStore.printSmarts();
         }
 
