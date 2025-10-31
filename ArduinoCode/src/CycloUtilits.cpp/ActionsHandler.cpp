@@ -97,7 +97,6 @@ void ActionsHandler::loadExplorer(Direction robot_dir, bool is_90e){
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
-/*useless code*/
 void ActionsHandler::primitivesToFasts()
 {
     _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
