@@ -15,9 +15,8 @@ void setup()
     optocoupler.setStaticError();
 
     // cycloStore.addSmart(SmartCycloAction_t::FWD_X, 2);
-    // DEVICES::TEST::CONVERT_TO_SMART();
+    DEVICES::TEST::CONVERT_TO_SMART();
 
-    Serial.println("start");
     while(true);
 }
 
