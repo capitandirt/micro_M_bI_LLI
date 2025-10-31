@@ -12,6 +12,11 @@ void setup()
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
     optocoupler.setStaticError();
+
+    // cycloStore.addSmart(SmartCycloAction_t::FWD_X, 2);
+    DEVICES::TEST::CONVERT_TO_SMART();
+
+    while(true);
 }
 
 void loop(){
@@ -23,6 +28,6 @@ void loop(){
     //DEVICES::TICK(last_time / 1000);
 
     cycloWorker.doCyclogram();
-    robot.stateMachine();
+    // robot.stateMachine();
     cycloWorker.tryComplete();
 }

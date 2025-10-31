@@ -10,7 +10,7 @@
 
 #define NEED_FWD_ACC 1
 #if NEED_FWD_ACC
-    #define FWD_ACCELERATION 0.1
+    #define FWD_ACCELERATION 0.15
 #endif
 
 #define MAX_FWD_SPEED_AFTER_ACC 0.6

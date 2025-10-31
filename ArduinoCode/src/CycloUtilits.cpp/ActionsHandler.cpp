@@ -97,23 +97,25 @@ void ActionsHandler::loadExplorer(Direction robot_dir, bool is_90e){
     _cycloStore->addSmart(SmartCycloAction_t::CLUSTER_DOT);
 }
 
-/*useless code*/
 void ActionsHandler::primitivesToFasts()
 {
+    _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
+    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
+
     dirs_to_primitives();
-    bool isStart = true;
     _cycloStore->popFrontPrimitive();
+
+
     while(_cycloStore->virtualPopFrontPrimitive() != PrimitiveCycloAction_t::STOP){
         _cycloStore->virtualGoBack();
-        if(TO_SD45S_DS45S(isStart));
-        else if (TO_SD135S_DS45S(isStart));
+             if (TO_SS90E());
         else if (TO_FWD_X_TEMPLATE());
-        else if (TO_SS90E(isStart));
         else if (TO_STOP());
         else if (TO_IDLE());
-        isStart = false;
     }
-    PRINTLN("finish convert");
+
+    _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
 }
 
 void ActionsHandler::clear(){
@@ -270,9 +272,8 @@ bool ActionsHandler::TO_FWD_X() //тут может быть ошибка см F
     return false;
 }
 
-bool ActionsHandler::TO_SS90E(bool isStart){
+bool ActionsHandler::TO_SS90E(){
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::LEFT){
-        if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::FWD_HALF);
         _cycloStore->addSmart(SmartCycloAction_t::SS90EL);
         _cycloStore->virtualPrimitiveRelease();
         return true;
@@ -280,7 +281,7 @@ bool ActionsHandler::TO_SS90E(bool isStart){
     else _cycloStore->virtualGoBack();
 
     if(_cycloStore->virtualPopFrontPrimitive() == PrimitiveCycloAction_t::RIGHT){
-        if(!isStart) _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
+        _cycloStore->addSmart(SmartCycloAction_t::SS90ER);
         _cycloStore->virtualPrimitiveRelease();
         return true;
     }
@@ -759,7 +760,7 @@ void ActionsHandler::convert_to_fasts()
 void ActionsHandler::loadFasts(){
     _cycloStore->reloadSmarts();
     dirs_to_primitives();
-    convert_to_fasts();
+    primitivesToFasts();
 }
 
 
