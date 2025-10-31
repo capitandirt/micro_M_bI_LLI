@@ -9,6 +9,9 @@
 #include "MazeObserver.h"
 #include "Drivers/FunctionalSelector.h"
 #include "Drivers/Gyro.h"
+#include "CycloUtilits/ConvertToFasts.h"
+
+
 
 void left_encoder_ISR();
 void right_encoder_ISR();
@@ -181,6 +184,8 @@ ProgramStatusHandler programStatusSelector(&sscp);
 
 FunctionalSelector functionalSelector(FUNCTION_PIN);
 
+ConverterToFasts converterToFasts(&cycloStore);
+
 RobotConnectionParams rcp{
     ._cycloWorker = &cycloWorker,
     ._actionsHandler = &actionsHandler,
@@ -189,9 +194,9 @@ RobotConnectionParams rcp{
     ._optocoupler = &optocoupler,
     ._odometry = &odometry,
     ._programStatusSelector = &programStatusSelector,
-    ._functionalSelector = &functionalSelector
+    ._functionalSelector = &functionalSelector,
+    ._converterToFasts = &converterToFasts
 };
 Robot robot(&rcp);
 
 #endif // !_DEVICES_H_
-

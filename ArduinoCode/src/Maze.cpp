@@ -243,7 +243,7 @@ void Maze::PrintDirPath() const{
         _buf_path_direction_store = static_cast<Direction>(
                                    (static_cast<uint8_t>(_cell_blocks[i * 2].path_dir) << 1) |
                                     static_cast<uint8_t>(_cell_blocks[i * 2 + 1].path_dir));
-              
+                      
         switch (_buf_path_direction_store)
         {
         case Direction::N:
@@ -261,7 +261,6 @@ void Maze::PrintDirPath() const{
         case Direction::W:
             Serial.print("W");
             break;
-            
         }
         Serial.print(" ");
     }

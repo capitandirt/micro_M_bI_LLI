@@ -90,9 +90,6 @@ CYCLOGRAM(FWD_X)
     const bool left_wall_forward_front = prev_left_wall == 0 && left_wall == 1;
     const bool right_wall_forward_front = prev_right_wall == 0 && right_wall == 1;
 
-    Serial.print(left_wall_forward_front);
-    Serial.println(right_wall_forward_front);
-
     if(left_wall_forward_front || right_wall_forward_front){
         const float upd_dist = passed_cells * CELL_SIZE + (HALF(CELL_SIZE) + CELL_SIZE - FROM_HI_WALL_TO_SIDE);
         s->odometry->setRelativeDist(upd_dist);
@@ -445,15 +442,14 @@ CYCLOGRAM(SS180SL)
     ms->v_f0 = FAST_FORWARD_SPEED;
     constexpr float R = CELL_SIZE / 2;
     constexpr float theta_i = FAST_FORWARD_SPEED / R;
-    //constexpr float circleDist = PI * R; // 180 = половина окружности
+    constexpr float circleDist = PI * R; // 180 = половина окружности
     constexpr float forwDist = SS180S_FORW_DIST;
 
-    static enum SS180SL_S{
+    static enum SS180SR_S{
         FIRST_ENTRANCE = 0,
         FWD1,
-        TURN,
-        // TURN90_1,
-        // TURN90_2,
+        TURN90_1,
+        TURN90_2,
         FWD2,
         FINISH
     } ss180sl_state = FWD1;
@@ -473,30 +469,27 @@ CYCLOGRAM(SS180SL)
     case FWD1:
         FWD_default(ms, s, ms->theta_0);
         if(cur_dist >= forwDist) {
-            ss180sl_state = TURN;//90_1;
+            ss180sl_state = TURN90_1;
         }   
         else break;
-    // case TURN90_1:
-    //     ms->theta_i0 = theta_i;
-    //     if(abs(cur_angle) >= HALF_PI){
-    //         s->odometry->updateRelative();
-    //         ss180sl_state = TURN90_2;
-    //     }
-    //     break;
-
-    // case TURN90_2:
-    //     ms->theta_i0 = theta_i;
-    //     if(abs(cur_angle) >= HALF_PI){
-    //         s->odometry->updateRelative();
-    //         ss180sl_state = FWD2;
-    //     }
-    //     break;
-    case TURN:
+    case TURN90_1:
         ms->theta_i0 = theta_i;
-        if(s->odometry->getRelativeTheta() < -HALF_PI) ss180sl_state = FWD2;
+        if(abs(cur_angle) >= HALF_PI){
+            s->odometry->updateRelative();
+            ss180sl_state = TURN90_2;
+        }
         break;
+
+    case TURN90_2:
+        ms->theta_i0 = theta_i;
+        if(abs(cur_angle) >= HALF_PI){
+            s->odometry->updateRelative();
+            ss180sl_state = FWD2;
+        }
+        break;
+
     case FWD2:
-        FWD_default(ms, s, ms->theta_0 - PI);
+        FWD_default(ms, s, ms->theta_0 + PI);
         if(s->odometry->getRelativeDist() >= forwDist) ss180sl_state = FINISH;
         break;
 
@@ -508,8 +501,9 @@ CYCLOGRAM(SS180SL)
 
     default:
         break;
-    }
+    }    
 }
+
 CYCLOGRAM(SS180SR)
 {
     ms->v_f0 = FAST_FORWARD_SPEED;
@@ -574,32 +568,7 @@ CYCLOGRAM(SS180SR)
 
     default:
         break;
-    }
-
-    // if(s->odometry->getRelativeDist() < forwDist)
-    // {
-    //     FWD_default(ms, s, ms->theta_0);
-    //     start_theta = s->odometry->getRelativeTheta();
-    // }
-    // #if USE_ANGLE
-    // else if(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI))) > 0.04) 
-    // #else
-    // else if(s->odometry->getRelativeDist() > forwDist && s->odometry->getRelativeDist() < forwDist + circleDist)
-    // #endif
-    // {
-    //     ms->theta_i0 = -theta_i;
-    // }
-    // else
-    // {
-    //     FWD_default(ms, s, ms->theta_0 - PI);
-    // }
-    // if(s->odometry->getRelativeDist() > 2 * forwDist + circleDist)
-    // {
-    //     ms->isComplete = true;
-    //     ms->theta_0 -= PI;
-    // }
-    // else ms->isComplete = false;
-    //Serial.println("ss180sr: rel_ang: " + String(s->odometry->getRelativeTheta() *  RAD_TO_DEG) + " if: " + String(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI)))) + " bool: " + String(abs(circle_mod(s->odometry->getRelativeTheta() - circle_mod(start_theta - PI))) > 0.04));   
+    }    
 }
 
 CYCLOGRAM(IP180)
@@ -625,6 +594,7 @@ CYCLOGRAM(IP180)
     {
         ms->isComplete = true;
         ms->theta_0 += PI;
+        I = 0;
     }
     else ms->isComplete = false;
 }
@@ -652,6 +622,7 @@ CYCLOGRAM(IP90L)
     {
         ms->isComplete = true;
         ms->theta_0 += HALF_PI;
+        I = 0;
     }
     else ms->isComplete = false;
 }
@@ -680,6 +651,7 @@ CYCLOGRAM(IP90R)
     {
         ms->isComplete = true;
         ms->theta_0 -= HALF_PI;
+        I = 0;
     }
     else ms->isComplete = false;
 }

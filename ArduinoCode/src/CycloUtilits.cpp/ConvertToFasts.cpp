@@ -1,7 +1,7 @@
 #include "CycloUtilits/ConvertToFasts.h"
 
 
-#define CONVERTER_OUTPUT 1
+#define CONVERTER_OUTPUT 0
 
 #if CONVERTER_OUTPUT
     #define CONVERTER_PRINT(x) Serial.print((x))
@@ -13,6 +13,10 @@
 
 void ConverterToFasts::convert()
 {
+    _cycloStore->printPrimitives();
+    _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
+    _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
+
     PrimitiveCycloAction_t curPrim = PrimitiveCycloAction_t::BLANK;
     
     curPrim = _cycloStore->popFrontPrimitive(); // 0 действие всея конвертера (всегда FORWARD)
@@ -28,18 +32,20 @@ void ConverterToFasts::convert()
             curPrim = _cycloStore->popFrontPrimitive(); // 0 действие следующего кластера(всегда FORWARD или STOP)
             continue; // кластер действий был завершён в entryHandler и repeatHandler не нужен
         }
-        _cycloStore->printPrimitives();
+        //_cycloStore->printPrimitives();
 
         RobotState_t exitStartState = _repeatActionHandler(repeatStartState);
         CONVERTER_PRINTLN("repeat done");
-        _cycloStore->printPrimitives();
+        //_cycloStore->printPrimitives();
 
         _exitHandler(exitStartState);
         CONVERTER_PRINTLN("exit done");
-        _cycloStore->printPrimitives();
+        //_cycloStore->printPrimitives();
         
         curPrim = _cycloStore->popFrontPrimitive(); // 0 действие следующего кластера(всегда FORWARD или STOP)
     }
+    _cycloStore->printPrimitives();
+    _cycloStore->printSmarts();
 }
 
 
@@ -83,11 +89,11 @@ void ConverterToFasts::_EH_FWD_X_handler()
     }
     CONVERTER_PRINTLN("FWD X:" + String(X));
     _cycloStore->virtualGoBack();
-    _cycloStore->printPrimitives();
+    //_cycloStore->printPrimitives();
     // релизим все примитивы кроме последнего FWD т.к. он будет взят в начале следующего кластера
     for(uint8_t i = 0; i < X - 1; i++) _cycloStore->virtualPopFrontPrimitive(); 
     _cycloStore->virtualPrimitiveRelease();
-    _cycloStore->printPrimitives();
+    //_cycloStore->printPrimitives();
     
     _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
 }
@@ -116,7 +122,7 @@ bool ConverterToFasts::_EH_SS90S_handler(PrimitiveCycloAction_t* nextPrim)
     }
     _cycloStore->virtualGoBack();
     _cycloStore->popFrontPrimitive(); //мы обработали 2 действия, но второе нужно далее, так что что релизим первое
-    _cycloStore->printPrimitives();
+    //_cycloStore->printPrimitives();
     return true;
 }
 
@@ -279,7 +285,7 @@ bool ConverterToFasts::_RH_DD90S_handler()
 bool ConverterToFasts::_RH_DIAG_X_handler()
 {
     CONVERTER_PRINTLN("RH DIAG_X");
-    _cycloStore->printPrimitives();
+    //_cycloStore->printPrimitives();
     PrimitiveCycloAction_t oldPrim = _cycloStore->virtualPopFrontPrimitive();
     PrimitiveCycloAction_t curPrim = _cycloStore->virtualPopFrontPrimitive();
     //CONVERTER_PRINTLN("cur: " + String(toInt(curPrim)) + " old: " + String(toInt(oldPrim)));

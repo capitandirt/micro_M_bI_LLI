@@ -5,9 +5,7 @@
 #include "TIM2_HANDLER.h"
 
 
-#include "CycloUtilits/ConvertToFasts.h"
 
-ConverterToFasts converterToFasts(&cycloStore);
 
 extern Encoder leftEncoder;
 extern Encoder rightEncoder;
@@ -116,6 +114,26 @@ namespace DEVICES{
     namespace TEST{
         void SET_SERIAL(){
             Serial.begin(115200);
+        }
+
+        void FUCKING_MAZE(){
+            maze.Clear();
+
+            maze.SetCell({WallState::HI, WallState::LO, WallState::HI, WallState::HI}, {0, 0});
+            maze.SetCell({WallState::HI, WallState::LO, WallState::HI, WallState::LO}, {1, 0});
+            maze.SetCell({WallState::HI, WallState::HI, WallState::LO, WallState::LO}, {2, 0});
+            maze.SetCell({WallState::HI, WallState::LO, WallState::LO, WallState::HI}, {0, 1});
+            maze.SetCell({WallState::HI, WallState::LO, WallState::HI, WallState::LO}, {1, 1});
+            maze.SetCell({WallState::LO, WallState::HI, WallState::HI, WallState::LO}, {2, 1});
+            maze.SetCell({WallState::LO, WallState::LO, WallState::HI, WallState::HI}, {0, 2});
+            maze.SetCell({WallState::HI, WallState::LO, WallState::HI, WallState::LO}, {1, 2});
+            maze.SetCell({WallState::HI, WallState::HI, WallState::HI, WallState::LO}, {2, 2});
+
+            maze.Print();
+            solver.FastSolveBfsMaze({0, 0}, {2, 2});
+            maze.Print();
+            maze.PrintDirPath();
+            Serial.println(maze.GetPathSize());
         }
 
         void BFS(){
@@ -491,7 +509,6 @@ namespace DEVICES{
             cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
             cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
-            
             
             // addTestMaze5();
             

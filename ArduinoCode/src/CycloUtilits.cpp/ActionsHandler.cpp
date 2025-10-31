@@ -22,7 +22,7 @@ PrimitiveCycloAction_t ActionsHandler::calc_primitive_cyclo_action(const uint8_t
 void ActionsHandler::dirs_to_primitives(){
     _cycloStore->addPrimitive(PrimitiveCycloAction_t::FORWARD);
     for(uint8_t i = 0; i < _maze->GetPathSize(); i++){
-        _cycloStore->addPrimitive(calc_primitive_cyclo_action(i));
+        _cycloStore->addPrimitive(calc_primitive_cyclo_action(i));;
     }
 }
 
@@ -297,10 +297,9 @@ PrimitiveCycloAction_t ActionsHandler::fromState(const RobotState_t rs)
     }
 }
 
-void ActionsHandler::loadFasts(){
+void ActionsHandler::DirsToPrimitives(){
     _cycloStore->reloadSmarts();
     dirs_to_primitives();
-    primitivesToFasts();
 }
 
 

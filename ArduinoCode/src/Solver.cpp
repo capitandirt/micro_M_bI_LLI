@@ -18,8 +18,12 @@ void Solver::calc_path(const uint8_t ind_s, const uint8_t ind_f){
 
         _maze->GetCellDir(_buf_cell_dir, {cur_x, cur_y});  
         _maze->PushBackPathDir(_buf_cell_dir.cell_dir);
+        Serial.print((int)_buf_cell_dir.cell_dir);
+        Serial.print(' ');
 
-        switch (_buf_cell_dir.cell_dir)
+        Serial.print(cur_cell_ind);
+        Serial.print(' ');
+        switch(_buf_cell_dir.cell_dir)
         {
         case Direction::N:
             cur_cell_ind -= MAZE_SIDE_LENGTH;
@@ -37,6 +41,7 @@ void Solver::calc_path(const uint8_t ind_s, const uint8_t ind_f){
             cur_cell_ind--;
             break;
         }
+        Serial.println(cur_cell_ind);
     }
 
     if(!WAS_UNDEF_CELL){

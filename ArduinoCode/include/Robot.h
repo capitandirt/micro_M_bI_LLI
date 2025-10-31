@@ -9,6 +9,7 @@
 #include "Drivers/OptocouplerSensors.h"
 #include "Drivers/ProgramStatusHandler.h"
 #include "Drivers/FunctionalSelector.h"
+#include "CycloUtilits/ConvertToFasts.h"
 
 struct RobotConnectionParams{
     CycloWorker* _cycloWorker;
@@ -19,6 +20,7 @@ struct RobotConnectionParams{
     Odometry* _odometry;
     ProgramStatusHandler* _programStatusSelector;
     FunctionalSelector* _functionalSelector;
+    ConverterToFasts* _converterToFasts;
 };
 
 
@@ -34,6 +36,8 @@ private:
         TO_START,
         TO_FINISH
     } explorer_status = TO_START;
+
+    bool _is_90e = false;
 
     void start_explorer(const ExplorerStatus expl_status);
     void step_flood_fill(const Vec2 end_cell);

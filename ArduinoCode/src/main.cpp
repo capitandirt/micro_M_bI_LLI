@@ -5,18 +5,18 @@
 void setup()
 {
     DEVICES::TEST::SET_SERIAL();
-    //DEVICES::INIT();
+    DEVICES::INIT();
 
-    DEVICES::TEST::CONVERT_TO_SMART();
-    while(true);
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
     optocoupler.setStaticError();
-
-    // cycloStore.addSmart(SmartCycloAction_t::FWD_X, 2);
-    DEVICES::TEST::CONVERT_TO_SMART();
-
-    while(true);
+    // cycloStore.addSmart(SmartCycloAction_t::IP90L, 10);
+    // cycloStore.addSmart(SmartCycloAction_t::IP90R, 1);
+    // cycloStore.addSmart(SmartCycloAction_t::IP180, 1);
+    // cycloStore.addSmart(SmartCycloAction_t::DELAY_025S, 10);
+    // cycloStore.addSmart(SmartCycloAction_t::SS180SL);
+    // DEVICES::TEST::CONVERT_TO_SMART();
+    
 }
 
 void loop(){
@@ -25,9 +25,9 @@ void loop(){
         ;
     last_time = micros();
 
-    //DEVICES::TICK(last_time / 1000);
+    DEVICES::TICK(last_time / 1000);    
 
     cycloWorker.doCyclogram();
-    // robot.stateMachine();
+    robot.stateMachine();
     cycloWorker.tryComplete();
 }
