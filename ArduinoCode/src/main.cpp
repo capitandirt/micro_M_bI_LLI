@@ -13,6 +13,10 @@ void setup()
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
     optocoupler.setStaticError();
+
+    // DEVICES::TEST::CONVERT_TO_SMART();
+
+    // while(true)
 }
 
 void loop(){

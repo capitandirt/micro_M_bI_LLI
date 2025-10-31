@@ -470,13 +470,13 @@ namespace DEVICES{
             //======TEST MAZE 1======
             // addTestMaze1();
             //======================
-            addTestMaze3();
+            addTestMaze10();
             
             
             // addTestMaze5();
             
             //cycloStore.printPrimitives();
-            actionsHandler.convert_to_fasts();
+            actionsHandler.primitivesToFasts();
             cycloStore.printSmarts();
         }
 
