@@ -31,19 +31,14 @@ public:
     Direction needDirection(const Direction cur,  const Direction need);
     
     void loadFasts();
-    void convert_to_fasts();
     
 private:
     PrimitiveCycloAction_t calc_primitive_cyclo_action(const uint8_t ind); 
     void dirs_to_primitives();
     bool TO_IDLE();
     bool TO_STOP();
-    bool TO_FWD_X();
     bool TO_FWD_X_TEMPLATE();
     bool TO_SS90E();
-    bool TO_SS90S();
-    bool TO_SD45S_DS45S(bool isStart);
-    bool TO_SD135S_DS45S(bool isStart);
 
     enum class RobotState_t : uint8_t
     {
@@ -58,13 +53,6 @@ private:
     RobotState_t toState(const PrimitiveCycloAction_t curPrim);
     PrimitiveCycloAction_t fromState(const RobotState_t rs);
     uint8_t toIntFromState(const RobotState_t rs);
-
-    RobotState_t TO_DD90X(const RobotState_t startState); 
-    RobotState_t TO_DIA_X(const RobotState_t startState); 
-    
-    RobotState_t entryHandler(); //возвращает состояние робота на конец входа. Stop если кластер обработан
-    RobotState_t repeatActionHandler(const RobotState_t startState); 
-    RobotState_t exitHandler(const RobotState_t startState);
 };
 
 #endif
