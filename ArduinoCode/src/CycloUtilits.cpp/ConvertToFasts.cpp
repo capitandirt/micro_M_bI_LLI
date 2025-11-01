@@ -13,7 +13,9 @@
 
 void ConverterToFasts::convert()
 {
+    #if CONVERTER_OUTPUT
     _cycloStore->printPrimitives();
+    #endif
     _cycloStore->addSmart(SmartCycloAction_t::TO_BACK_ALIGN);
     _cycloStore->addSmart(SmartCycloAction_t::FROM_BACK_ALIGN_TO_CENTER);
 
@@ -44,8 +46,10 @@ void ConverterToFasts::convert()
         
         curPrim = _cycloStore->popFrontPrimitive(); // 0 действие следующего кластера(всегда FORWARD или STOP)
     }
+    #if CONVERTER_OUTPUT
     _cycloStore->printPrimitives();
     _cycloStore->printSmarts();
+    #endif
 }
 
 
@@ -89,11 +93,9 @@ void ConverterToFasts::_EH_FWD_X_handler()
     }
     CONVERTER_PRINTLN("FWD X:" + String(X));
     _cycloStore->virtualGoBack();
-    //_cycloStore->printPrimitives();
     // релизим все примитивы кроме последнего FWD т.к. он будет взят в начале следующего кластера
     for(uint8_t i = 0; i < X - 1; i++) _cycloStore->virtualPopFrontPrimitive(); 
     _cycloStore->virtualPrimitiveRelease();
-    //_cycloStore->printPrimitives();
     
     _cycloStore->addSmart(SmartCycloAction_t::FWD_X, X);
 }
@@ -122,7 +124,6 @@ bool ConverterToFasts::_EH_SS90S_handler(PrimitiveCycloAction_t* nextPrim)
     }
     _cycloStore->virtualGoBack();
     _cycloStore->popFrontPrimitive(); //мы обработали 2 действия, но второе нужно далее, так что что релизим первое
-    //_cycloStore->printPrimitives();
     return true;
 }
 

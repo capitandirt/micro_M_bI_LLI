@@ -85,17 +85,17 @@ Cell OptocouplerSensors::getCell(Direction robot_dir) const{
 }
 
 void OptocouplerSensors::printAbsCell() const{
-    Serial.print((int)_relative_cell.north_wall);
-    Serial.print(" ");
-    Serial.print((int)_relative_cell.east_wall);
-    Serial.print(" ");
-    Serial.print((int)_relative_cell.south_wall);
-    Serial.print(" ");
-    Serial.println((int)_relative_cell.west_wall);
+    PRINT((int)_relative_cell.north_wall);
+    PRINT(" ");
+    PRINT((int)_relative_cell.east_wall);
+    PRINT(" ");
+    PRINT((int)_relative_cell.south_wall);
+    PRINT(" ");
+    PRINTLN((int)_relative_cell.west_wall);
 }
 
 void OptocouplerSensors::printMask() const{
-    Serial.println( String(_sense_mask.left) + " " + 
+    PRINTLN( String(_sense_mask.left) + " " + 
                     String(_sense_mask.forward) + " " +
                     String(_sense_mask.right));
 }
@@ -104,7 +104,7 @@ void OptocouplerSensors::printSense() const{
     while (!CAN_GET_SENSE)
         ;    
 
-    Serial.println( String(_sense.get().left) + " " + 
+    PRINTLN( String(_sense.get().left) + " " + 
                     String(_sense.get().forward_l) + " " +
                     String(_sense.get().forward_r) + " " + 
                     String(_sense.get().right));

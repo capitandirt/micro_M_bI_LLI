@@ -33,7 +33,7 @@ public:
     }
     void init() 
     {
-        Serial.println("GyroBase init start");
+        //Serial.println("GyroBase init start");
 
         Wire.begin();
         Wire.setClock(400000);
@@ -125,11 +125,11 @@ public:
         kalman_y_angle = kalman_y.getAngle(acc_y_angle, gyro_y_rate, Ts_s);
         kalman_z_angle = (kalman_z.getAngle(acc_z_angle, gyro_z_rate, Ts_s) - kalman_z_angle) * 0.30;
 
-        Serial.print(kalman_x_angle);
-        Serial.print('\t'); 
-        Serial.print(kalman_y_angle);
-        Serial.print('\t');
-        Serial.println(kalman_z_angle);
+        // Serial.print(kalman_x_angle);
+        // Serial.print('\t'); 
+        // Serial.print(kalman_y_angle);
+        // Serial.print('\t');
+        // Serial.println(kalman_z_angle);
     }
 };
 

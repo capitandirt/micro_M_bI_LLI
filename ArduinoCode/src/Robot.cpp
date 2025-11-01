@@ -83,8 +83,8 @@ void Robot::stateMachine(){
         break;
     }
 
-    Serial.print("status: ");
-    Serial.println((int)_programStatusSelector->getStatus());
+    PRINT("status: ");
+    PRINTLN((int)_programStatusSelector->getStatus());
 }
 
 void Robot::start_explorer(const ExplorerStatus expl_status){
@@ -166,7 +166,7 @@ void Robot::statusConvertToSmart()
     // _maze->Print();
     // _maze->PrintDirPath();
     // _actionsHandler->primitivesToFasts();
-    // _converterToFasts->convert();
+    _converterToFasts->convert();
 }
 
 

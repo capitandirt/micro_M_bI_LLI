@@ -86,7 +86,7 @@ void CycloStore::executeSmart(SmartSubmission smart_submis, CycloContext* cyclo_
 }
 
 void CycloStore::printSmarts() const{
-    Serial.println("Smarts:");
+    PRINTLN("Smarts:");
     for(uint8_t i = _smart_cyc_act_counter; i < _smart_cyc_act_end; i++){
         SmartCycloAction_t smart_action = _cyclo_program[i].smart;
         Serial.print(Str_SmartCyclogramAction[toInt(smart_action)]);
@@ -99,12 +99,12 @@ void CycloStore::printSmarts() const{
 
         Serial.print(' ');
     }
-    Serial.println();
-    Serial.println();
+    PRINTLN();
+    PRINTLN();
 }
 
 void CycloStore::printPrimitives() const{
-    Serial.println("Primitives:");
+    PRINTLN("Primitives:");
     for(uint8_t i = _primitive_cyc_act_counter; i < _primitive_cyc_act_end; i++){
     switch(_cyclo_program[i].primitive){
         case PrimitiveCycloAction_t::FORWARD:
@@ -128,8 +128,8 @@ void CycloStore::printPrimitives() const{
         };
         Serial.print(' ');
     }
-    Serial.println();
-    Serial.println();
+    PRINTLN();
+    PRINTLN();
 }
 
 void CycloStore::load_cyclograms(){

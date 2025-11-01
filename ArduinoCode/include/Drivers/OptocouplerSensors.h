@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 #include "CellsTypes.h"
+#include "Config.h"
 
 struct OprocouplerConnectionParams{
     const uint16_t EMITERS_FWD;

@@ -133,7 +133,7 @@ namespace DEVICES{
             solver.FastSolveBfsMaze({0, 0}, {2, 2});
             maze.Print();
             maze.PrintDirPath();
-            Serial.println(maze.GetPathSize());
+            //Serial.println(maze.GetPathSize());
         }
 
         void BFS(){
@@ -159,9 +159,9 @@ namespace DEVICES{
             // need {0, 1}
             maze.Print();
 
-            Serial.print(v.x);
-            Serial.print(' ');
-            Serial.println(v.y);
+            // Serial.print(v.x);
+            // Serial.print(' ');
+            // Serial.println(v.y);
         }
 
         void CYCLOGRAMS(){
@@ -182,14 +182,14 @@ namespace DEVICES{
             cycloStore.printSmarts();
 
             SmartSubmission ss = cycloStore.popFrontSmartSubmission();
-            Serial.print((int)ss.smart);
-            Serial.print(' ');
-            Serial.println((int)ss.x);
+            // Serial.print((int)ss.smart);
+            // Serial.print(' ');
+            // Serial.println((int)ss.x);
 
             ss = cycloStore.popFrontSmartSubmission();
-            Serial.print((int)ss.smart);
-            Serial.print(' ');
-            Serial.println((int)ss.x);
+            // Serial.print((int)ss.smart);
+            // Serial.print(' ');
+            // Serial.println((int)ss.x);
 
             cycloStore.reloadPrimitives();
             cycloStore.reloadSmarts();

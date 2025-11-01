@@ -80,25 +80,25 @@ void Odometry::setDir(Direction dir_) noexcept{
 }
 
 void Odometry::printMazeCoords() const{
-    Serial.print(mazeCoords.x);
-    Serial.print(" ");
-    Serial.println(mazeCoords.y);
+    PRINT(mazeCoords.x);
+    PRINT(" ");
+    PRINTLN(mazeCoords.y);
 }
 
 void Odometry::printDir() const{
     switch (dir)
     {
     case Direction::N:
-        Serial.println("N");
+        PRINTLN("N");
         break;
     case Direction::S:
-        Serial.println("S");
+        PRINTLN("S");
         break;
     case Direction::E:
-        Serial.println("E");
+        PRINTLN("E");
         break;
     case Direction::W:
-        Serial.println("W");
+        PRINTLN("W");
         break;
     }
 }

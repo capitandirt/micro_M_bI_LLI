@@ -265,7 +265,7 @@ void Maze::PrintDirPath() const{
         }
         Serial.print(" ");
     }
-    Serial.println();
+    PRINTLN();
 }
 
 void Maze::PrintCell(const Vec2 v) const{
@@ -278,7 +278,7 @@ void Maze::PrintCell(const Vec2 v) const{
         Serial.print(BLANK_HORIZ_WALL);
     }
 
-    Serial.println(ANGLE);
+    PRINTLN(ANGLE);
 
     /*print west wall front*/
     if(_cell_blocks[MAZE_SIDE_LENGTH + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].e_wall == WallState::HI){
@@ -292,10 +292,10 @@ void Maze::PrintCell(const Vec2 v) const{
 
     /*print east wall front*/
     if(_cell_blocks[MAZE_SIDE_LENGTH_ADD_ONE + v.x + v.y * MAZE_SIDE_LENGTH_ADD_ONE].e_wall == WallState::HI){
-        Serial.println(VERTIC_WALL);
+        PRINTLN(VERTIC_WALL);
     }
     else{
-        Serial.println(BLANK_VERTIC_WALL);
+        PRINTLN(BLANK_VERTIC_WALL);
     }
 
     Serial.print(ANGLE);
@@ -308,7 +308,7 @@ void Maze::PrintCell(const Vec2 v) const{
         Serial.print(BLANK_HORIZ_WALL);
     }
 
-    Serial.println(ANGLE);
+    PRINTLN(ANGLE);
 }
 
 void Maze::Print() const{
@@ -317,14 +317,14 @@ void Maze::Print() const{
         Serial.print("   " + String(i) + "  ");
     }
 
-    Serial.println();
+    PRINTLN();
     Serial.print(VOID);
     for(uint8_t x = 0; x < MAZE_SIDE_LENGTH; x++){
         print_cell_north_wall({x, 0});
     }
 
     Serial.print(ANGLE);
-    Serial.println();
+    PRINTLN();
 
     for(uint8_t y = 0; y < MAZE_SIDE_LENGTH; y++){
         PRINT_N_SPACES(3 - String(y).length());
@@ -338,16 +338,16 @@ void Maze::Print() const{
         }            
         
         print_cell_middle_walls({MAZE_SIDE_LENGTH, y});
-        Serial.println();
+        PRINTLN();
 
         Serial.print(VOID);
         for(uint8_t x = 0; x < MAZE_SIDE_LENGTH; x++){
             print_cell_south_wall({x, y});
         }
         Serial.print(ANGLE);
-        Serial.println();
+        PRINTLN();
     }
-    Serial.println();
+    PRINTLN();
 }
 
 uint8_t Maze::Vec2ToInd(Vec2 v){
