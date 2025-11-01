@@ -9,14 +9,20 @@ void setup()
 
 
     delay(25); // ставлю delay чтобы датчики успели прочитать значение хотя бы раз
-    optocoupler.setStaticError();
+    // optocoupler.setStaticError();
     // cycloStore.addSmart(SmartCycloAction_t::IP90L, 10);
     // cycloStore.addSmart(SmartCycloAction_t::IP90R, 1);
     // cycloStore.addSmart(SmartCycloAction_t::IP180, 1);
     // cycloStore.addSmart(SmartCycloAction_t::DELAY_025S, 10);
+    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 3);
+    cycloStore.addSmart(SmartCycloAction_t::SS90SL);
+    cycloStore.addSmart(SmartCycloAction_t::FWD_X, 2);
+    cycloStore.addSmart(SmartCycloAction_t::SS90SR);
+    cycloStore.addSmart(SmartCycloAction_t::SS180SL);
+
     // cycloStore.addSmart(SmartCycloAction_t::SS180SL);
     // DEVICES::TEST::CONVERT_TO_SMART();
-
+    // while(true);
     
 }
 
@@ -29,6 +35,6 @@ void loop(){
     DEVICES::TICK(last_time / 1000);    
 
     cycloWorker.doCyclogram();
-    robot.stateMachine();
+    // robot.stateMachine();
     cycloWorker.tryComplete();
 }

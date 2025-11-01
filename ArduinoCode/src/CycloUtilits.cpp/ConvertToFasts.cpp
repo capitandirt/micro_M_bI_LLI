@@ -46,6 +46,7 @@ void ConverterToFasts::convert()
         
         curPrim = _cycloStore->popFrontPrimitive(); // 0 действие следующего кластера(всегда FORWARD или STOP)
     }
+    _cycloStore->printSmarts();
     #if CONVERTER_OUTPUT
     _cycloStore->printPrimitives();
     _cycloStore->printSmarts();

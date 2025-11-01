@@ -494,27 +494,47 @@ namespace DEVICES{
 
             //SD135SL DS135SR SS90SR FWD_X1
         }
+        void addTestMaze12()
+        {
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+
+            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
+
+            //FWD_X3 SS90SL FWD_X2 SS90SR SS180SL
+        }
         void CONVERT_TO_SMART()
         {
             //======TEST MAZE 1======
             // addTestMaze1();
             //======================
 
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
-            cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::RIGHT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::LEFT);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::FORWARD);
+            // cycloStore.addPrimitive(PrimitiveCycloAction_t::STOP);
             
-            // addTestMaze5();
+            addTestMaze12();
             
             //cycloStore.printPrimitives();
-            actionsHandler.primitivesToFasts();
-            cycloStore.printSmarts();
+            converterToFasts.convert();
+            // actionsHandler.primitivesToFasts();
+            // cycloStore.printSmarts();
         }
 
 
