@@ -165,8 +165,8 @@ void Robot::statusConvertToSmart()
     _actionsHandler->DirsToPrimitives();
     // _maze->Print();
     // _maze->PrintDirPath();
-    // _actionsHandler->primitivesToFasts();
-    _converterToFasts->convert();
+    _actionsHandler->primitivesToFasts();
+    // _converterToFasts->convert();
 }
 
 
