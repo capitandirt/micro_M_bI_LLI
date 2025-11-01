@@ -87,13 +87,13 @@
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
 // total number of cells are 15, but informal numbers of cells are 9 (3x3)
 
-#define MAZE_SIDE_LENGTH 3
+#define MAZE_SIDE_LENGTH 11
 
 #define MAZE_SIDE_LENGTH_ADD_ONE (MAZE_SIDE_LENGTH + 1)
 #define MAZE_TOTAL_SIZE (MAZE_SIDE_LENGTH * 2 + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH)
 #define MAZE_MEM_SIZE (((MAZE_SIDE_LENGTH + MAZE_SIDE_LENGTH) + MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH))
 
-#define MAZE_PATH_SIZE ((MAZE_SIDE_LENGTH * MAZE_SIDE_LENGTH) * 2)
+#define MAZE_PATH_SIZE (MAZE_TOTAL_SIZE - (MAZE_TOTAL_SIZE % 2))
 /*==MAZE END==*/
 
 /*==QUEUE BEGIN==*/
@@ -107,8 +107,8 @@
 
 
 /*==ROBOT FINISH PLACE BEGIN==*/
-#define FINISH_ROBOT_COORDS_X (0)
-#define FINISH_ROBOT_COORDS_Y (2)
+#define FINISH_ROBOT_COORDS_X (5)
+#define FINISH_ROBOT_COORDS_Y (5)
 
 #define FINISH_ROBOT_COORDS {FINISH_ROBOT_COORDS_X, FINISH_ROBOT_COORDS_Y}
 /*==ROBOT FINISH PLACE END==*/

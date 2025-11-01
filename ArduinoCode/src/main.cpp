@@ -16,6 +16,7 @@ void setup()
     // cycloStore.addSmart(SmartCycloAction_t::DELAY_025S, 10);
     // cycloStore.addSmart(SmartCycloAction_t::SS180SL);
     // DEVICES::TEST::CONVERT_TO_SMART();
+
     
 }
 

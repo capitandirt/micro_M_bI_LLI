@@ -45,6 +45,7 @@ void Robot::stateMachine(){
 
     case ProgramStatus::GO_FINISH:
         step_flood_fill(FINISH_ROBOT_COORDS);
+
         break;
 
     case ProgramStatus::DELAY_BEFORE_GO_START:
@@ -81,6 +82,9 @@ void Robot::stateMachine(){
     default:
         break;
     }
+
+    Serial.print("status: ");
+    Serial.println((int)_programStatusSelector->getStatus());
 }
 
 void Robot::start_explorer(const ExplorerStatus expl_status){
@@ -132,6 +136,8 @@ void Robot::step_flood_fill(const Vec2 end_vec)
 
     const Direction next_robot_dir = _maze->GetPathDir(0);
     _odometry->setDir(next_robot_dir);
+
+    // _maze->Print();
 }
 
 bool Robot::try_end(const Vec2& cur, const Vec2& end){
@@ -157,10 +163,10 @@ void Robot::statusConvertToSmart()
 {
     _solver->FastSolveBfsMaze(START_ROBOT_COORDS, FINISH_ROBOT_COORDS);
     _actionsHandler->DirsToPrimitives();
-    _maze->Print();
-    _maze->PrintDirPath();
+    // _maze->Print();
+    // _maze->PrintDirPath();
     // _actionsHandler->primitivesToFasts();
-    _converterToFasts->convert();
+    // _converterToFasts->convert();
 }
 
 

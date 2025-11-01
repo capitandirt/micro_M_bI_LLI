@@ -24,12 +24,12 @@ CYCLOGRAM(SS90AL)
 
     X.tick(ms->v_f0 * cos(s->odometry->getTheta()));
 
-    Serial.println("t: " + String(s->time) + " omega: " + String(omega.getOut()) + " theta: " + String(s->odometry->getTheta()));
+    // Serial.println("t: " + String(s->time) + " omega: " + String(omega.getOut()) + " theta: " + String(s->odometry->getTheta()));
     ms->theta_i0 = omega.getOut();
     if(s->time / 1000 > T)
     {
         ms->isComplete = true;
-        Serial.println(X.getOut());
+        // Serial.println(X.getOut());
         ms->theta_0 += HALF_PI;
     }
     else ms->isComplete = false;
