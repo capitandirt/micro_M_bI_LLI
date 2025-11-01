@@ -62,7 +62,7 @@ namespace DEVICES{
             need_align = 1;
         }
         indicator.on();
-        while(need_align && millis() < 15000) 
+        while(need_align && millis() < 30000) 
         {
             // static uint16_t time0 = millis();
             // uint16_t time = millis();
