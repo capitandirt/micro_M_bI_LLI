@@ -85,7 +85,7 @@
 //        | 11| 12| 13| 14|
 //         === === === ===
 // here 0, 1, 2, 3, 7, 11 cells are utility. important for west and north fronts of maze
-// total number of cells are 15, but informal numbers of cells are 9 (3x3)
+// total number of cells arme 15, but informal numbers of cells are 9 (3x3)
 
 #define MAZE_SIDE_LENGTH 11
 
