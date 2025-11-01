@@ -2,7 +2,7 @@
 #define _CONFIG_H_
 
 /*==GLOBAL SERIAL SHUT DEFINE BEGIN==*/
-#define GLOBAL_OUTPUT 0
+#define GLOBAL_OUTPUT 1
 #if GLOBAL_OUTPUT
 
 #define PRINT(x) Serial.print(x)
